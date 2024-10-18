@@ -1,0 +1,8 @@
+certifi==2024.6.2
+charset-normalizer==3.4.0
+idna==3.10
+pytz==2024.2
+requests==2.32.3
+setuptools==70.2.0
+urllib3==2.2.3
+wheel==0.43.0
