@@ -27,79 +27,123 @@
 </div>
 
 <div class="section">
-    <h2>Settings</h2>
-    <form id="settingsForm">
-        <div>
-            <label for="weight">Weight (lbs):</label>
-            <input type="number" step="0.1" id="weight" name="weight" value="{{ weight }}">
-        </div>
-        <div>
-            <label for="ratio">Protein Ratio (g/kg of body weight):</label>
-            <input type="number" step="0.1" id="ratio" name="ratio" value="{{ ratio }}">
-        </div>
-        <button type="button" onclick="updateSettings()">Update Settings</button>
-    </form>
+    <div class="section-header" onclick="toggleSettings()">
+        <h2>Settings <span id="settings-arrow">▼</span></h2>
+    </div>
+    <div id="settings-content" class="settings-content">
+        <form id="settingsForm">
+            <div>
+                <label for="weight">Weight (lbs):</label>
+                <input type="number" step="0.1" id="weight" name="weight" value="{{ weight }}">
+            </div>
+            <div>
+                <label for="ratio">Protein Ratio (g/kg of body weight):</label>
+                <input type="number" step="0.1" id="ratio" name="ratio" value="{{ ratio }}">
+            </div>
+            <button type="button" onclick="updateSettings()">Update Settings</button>
+        </form>
+    </div>
 </div>
 
+<style>
+.section-header {
+    cursor: pointer;
+    user-select: none;
+}
+
+.section-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+#settings-arrow {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.settings-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.settings-content.expanded {
+    max-height: 500px;  
+}
+
+.section-header:hover {
+    background-color: #f9f9f9;
+}
+</style>
+
 <script>
-    function checkIngredient() {
-        const ingredient = document.getElementById('ingredient').value;
-        fetch('/add_protein', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ ingredient: ingredient })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                document.getElementById('result').textContent = data.error;
-            } else {
-                document.getElementById('result').textContent = data.message;
-                document.getElementById('amount').value = data.protein;
-            }
-        });
-    }
+function checkIngredient() {
+    const ingredient = document.getElementById('ingredient').value;
+    fetch('/add_protein', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ingredient: ingredient })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            document.getElementById('result').textContent = data.error;
+        } else {
+            document.getElementById('result').textContent = data.message;
+            document.getElementById('amount').value = data.protein;
+        }
+    });
+}
 
-    function addProtein() {
-        const amount = document.getElementById('amount').value;
-        fetch('/add_protein', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ amount: amount })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                document.getElementById('result').textContent = data.error;
-            } else {
-                document.getElementById('result').textContent = "Added " + data.amount + "g of protein";
-                location.reload();
-            }
-        });
-    }
+function addProtein() {
+    const amount = document.getElementById('amount').value;
+    fetch('/add_protein', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ amount: amount })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            document.getElementById('result').textContent = data.error;
+        } else {
+            document.getElementById('result').textContent = "Added " + data.amount + "g of protein";
+            location.reload();
+        }
+    });
+}
 
-    function updateSettings() {
-        const weight = document.getElementById('weight').value;
-        const ratio = document.getElementById('ratio').value;
-        fetch('/update_settings', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ weight: weight, ratio: ratio })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                alert(data.error);
-            } else {
-                location.reload();
-            }
-        });
-    }
+function updateSettings() {
+    const weight = document.getElementById('weight').value;
+    const ratio = document.getElementById('ratio').value;
+    fetch('/update_settings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ weight: weight, ratio: ratio })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            location.reload();
+        }
+    });
+}
+
+function toggleSettings() {
+    const content = document.getElementById('settings-content');
+    const arrow = document.getElementById('settings-arrow');
+    content.classList.toggle('expanded');
+    arrow.style.transform = content.classList.contains('expanded') ? 'rotate(180deg)' : 'rotate(0deg)';
+}
 </script>
 {% endblock %}

@@ -122,6 +122,13 @@ def log_workout():
     db.session.commit()
     return jsonify({"message": "Workout logged successfully"}), 201
 
+@app.route('/delete_workout/<int:workout_id>', methods=['POST'])
+def delete_workout(workout_id):
+    workout = Workout.query.get_or_404(workout_id)
+    db.session.delete(workout)
+    db.session.commit()
+    return jsonify({"message": "Workout deleted successfully"}), 200
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
