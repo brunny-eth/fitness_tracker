@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template
+import json
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 import requests
@@ -16,6 +17,12 @@ class ProteinEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
     amount = db.Column(db.Float, nullable=False)
+
+class Workout(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    type = db.Column(db.String(50), nullable=False)
+    exercises = db.Column(db.Text, nullable=False)  # Store as JSON string
 
 def get_protein_from_wger(ingredient_name):
     url = "https://wger.de/api/v2/ingredient/"
@@ -44,7 +51,8 @@ def home():
     total_protein = sum(entry.amount for entry in ProteinEntry.query.filter_by(date=today).all())
     goal_reached = total_protein >= protein_goal
     
-    return render_template('home.html', 
+    return render_template('nutrition.html', 
+                           active_tab='nutrition', 
                            date=today.strftime("%B %d, %Y"),
                            total_protein=total_protein,
                            goal_amount=round(protein_goal, 1),
@@ -95,7 +103,28 @@ def update_settings():
     db.session.commit()
     return jsonify({"message": "Settings updated successfully"}), 200
 
+@app.route('/workouts')
+def workouts():
+    workouts = Workout.query.order_by(Workout.date.desc()).limit(10).all()
+    return render_template('workouts.html', 
+                         active_tab='workouts', 
+                         workouts=workouts,
+                         json=json)  
+
+@app.route('/log_workout', methods=['POST'])
+def log_workout():
+    data = request.json
+    new_workout = Workout(
+        type=data['type'],
+        exercises=json.dumps(data['exercises'])
+    )
+    db.session.add(new_workout)
+    db.session.commit()
+    return jsonify({"message": "Workout logged successfully"}), 201
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
+
+    

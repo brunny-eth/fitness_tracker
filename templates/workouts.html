@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="section">
+    <h2>Log Workout</h2>
+    <form id="workoutForm">
+        <div>
+            <label for="workout_type">Workout Type:</label>
+            <select id="workout_type" name="workout_type">
+                <option value="chest">Chest Day</option>
+                <option value="back">Back Day</option>
+                <option value="legs">Leg Day</option>
+                <option value="shoulders">Shoulder Day</option>
+                <option value="arms">Arm Day</option>
+            </select>
+        </div>
+        <div id="exercises">
+            <div class="exercise-entry">
+                <h3>Exercise 1</h3>
+                <label for="exercise1">Exercise:</label>
+                <input type="text" id="exercise1" name="exercise1"><br>
+                
+                <label for="weight1">Weight (lbs):</label>
+                <input type="number" id="weight1" name="weight1"><br>
+                
+                <label for="sets1">Sets:</label>
+                <input type="number" id="sets1" name="sets1"><br>
+                
+                <label for="reps1">Reps:</label>
+                <input type="number" id="reps1" name="reps1">
+            </div>
+        </div>
+        <button type="button" onclick="addExercise()">Add Another Exercise</button>
+        <button type="button" onclick="submitWorkout()">Log Workout</button>
+    </form>
+</div>
+
+<div class="section">
+    <h2>Recent Workouts</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Exercises</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for workout in workouts %}
+            <tr>
+                <td>{{ workout.date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ workout.type }}</td>
+                <td>
+                    {% for exercise in json.loads(workout.exercises) %}
+                        {{ exercise.name }}: {{ exercise.weight }}lbs x {{ exercise.sets }}x{{ exercise.reps }}<br>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+let exerciseCount = 1;
+
+function addExercise() {
+    exerciseCount++;
+    const exerciseHtml = `
+        <div class="exercise-entry">
+            <h3>Exercise ${exerciseCount}</h3>
+            <label for="exercise${exerciseCount}">Exercise:</label>
+            <input type="text" id="exercise${exerciseCount}" name="exercise${exerciseCount}"><br>
+            
+            <label for="weight${exerciseCount}">Weight (lbs):</label>
+            <input type="number" id="weight${exerciseCount}" name="weight${exerciseCount}"><br>
+            
+            <label for="sets${exerciseCount}">Sets:</label>
+            <input type="number" id="sets${exerciseCount}" name="sets${exerciseCount}"><br>
+            
+            <label for="reps${exerciseCount}">Reps:</label>
+            <input type="number" id="reps${exerciseCount}" name="reps${exerciseCount}">
+        </div>
+    `;
+    document.getElementById('exercises').insertAdjacentHTML('beforeend', exerciseHtml);
+}
+
+function submitWorkout() {
+    const exercises = [];
+    for (let i = 1; i <= exerciseCount; i++) {
+        exercises.push({
+            name: document.getElementById(`exercise${i}`).value,
+            weight: document.getElementById(`weight${i}`).value,
+            sets: document.getElementById(`sets${i}`).value,
+            reps: document.getElementById(`reps${i}`).value
+        });
+    }
+    
+    fetch('/log_workout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            type: document.getElementById('workout_type').value,
+            exercises: exercises
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            location.reload();
+        }
+    });
+}
+</script>
+{% endblock %}
