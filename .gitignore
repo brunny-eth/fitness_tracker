@@ -1,6 +1,23 @@
-*.pyc
-__pycache__
 venv/
-*.db
-.DS_Store
+env/
+
+# python
+__pycache__/
+*.py[cod]
+*.so
+
+# flask
 instance/
+*.db
+
+# env
+.env
+.flaskenv
+
+# vscode files
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store

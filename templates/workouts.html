@@ -5,8 +5,9 @@
     <h2>Log Workout</h2>
     <form id="workoutForm">
         <div>
-            <label for="workout_type">Workout Type:</label>
-            <select id="workout_type" name="workout_type">
+            <label for="workout_day">Workout Day:</label>
+            <select id="workout_day" name="workout_day" onchange="updateExerciseOptions()">
+                <option value="">Select Workout Day</option>
                 <option value="chest">Chest Day</option>
                 <option value="back">Back Day</option>
                 <option value="legs">Leg Day</option>
@@ -18,16 +19,18 @@
             <div class="exercise-entry">
                 <h3>Exercise 1</h3>
                 <label for="exercise1">Exercise:</label>
-                <input type="text" id="exercise1" name="exercise1"><br>
+                <select id="exercise1" name="exercise1">
+                    <option value="">Select Exercise</option>
+                </select><br>
                 
                 <label for="weight1">Weight (lbs):</label>
-                <input type="number" id="weight1" name="weight1"><br>
+                <input type="number" id="weight1" name="weight1" min="0"><br>
                 
                 <label for="sets1">Sets:</label>
-                <input type="number" id="sets1" name="sets1"><br>
+                <input type="number" id="sets1" name="sets1" min="1"><br>
                 
                 <label for="reps1">Reps:</label>
-                <input type="number" id="reps1" name="reps1">
+                <input type="number" id="reps1" name="reps1" min="1">
             </div>
         </div>
         <button type="button" onclick="addExercise()">Add Another Exercise</button>
@@ -52,7 +55,10 @@
                 <td>{{ workout.type }}</td>
                 <td>
                     {% for exercise in json.loads(workout.exercises) %}
-                        {{ exercise.name }}: {{ exercise.weight }}lbs x {{ exercise.sets }}x{{ exercise.reps }}<br>
+                        <div class="workout-entry">
+                            <strong>{{ exercise.name }}</strong><br>
+                            {{ exercise.weight }}lbs × {{ exercise.sets }}×{{ exercise.reps }}
+                        </div>
                     {% endfor %}
                 </td>
             </tr>
@@ -62,7 +68,75 @@
 </div>
 
 <script>
+
+const exercisesByType = {
+    chest: [
+        "Bench Press",
+        "Incline Bench Press",
+        "Decline Bench Press",
+        "Dumbbell Flyes",
+        "Cable Flyes",
+        "Push-Ups"
+    ],
+    back: [
+        "Deadlift",
+        "Pull-Ups",
+        "Barbell Rows",
+        "Lat Pulldowns",
+        "T-Bar Rows",
+        "Face Pulls"
+    ],
+    legs: [
+        "Squats",
+        "Romanian Deadlift",
+        "Leg Press",
+        "Leg Extensions",
+        "Leg Curls",
+        "Calf Raises"
+    ],
+    shoulders: [
+        "Overhead Press",
+        "Lateral Raises",
+        "Front Raises",
+        "Reverse Flyes",
+        "Shrugs",
+        "Face Pulls"
+    ],
+    arms: [
+        "Bicep Curls",
+        "Tricep Extensions",
+        "Hammer Curls",
+        "Skull Crushers",
+        "Preacher Curls",
+        "Rope Pushdowns"
+    ]
+};
+
 let exerciseCount = 1;
+
+function updateExerciseOptions() {
+    const workoutType = document.getElementById('workout_day').value;
+    const exercises = exercisesByType[workoutType] || [];
+    
+    for (let i = 1; i <= exerciseCount; i++) {
+        const select = document.getElementById(`exercise${i}`);
+        if (select) {
+            const currentValue = select.value;
+            
+            select.innerHTML = '<option value="">Select Exercise</option>';
+            
+            exercises.forEach(exercise => {
+                const option = document.createElement('option');
+                option.value = exercise;
+                option.textContent = exercise;
+                if (exercise === currentValue) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+        }
+    }
+}
 
 function addExercise() {
     exerciseCount++;
@@ -70,30 +144,45 @@ function addExercise() {
         <div class="exercise-entry">
             <h3>Exercise ${exerciseCount}</h3>
             <label for="exercise${exerciseCount}">Exercise:</label>
-            <input type="text" id="exercise${exerciseCount}" name="exercise${exerciseCount}"><br>
+            <select id="exercise${exerciseCount}" name="exercise${exerciseCount}">
+                <option value="">Select Exercise</option>
+            </select><br>
             
             <label for="weight${exerciseCount}">Weight (lbs):</label>
-            <input type="number" id="weight${exerciseCount}" name="weight${exerciseCount}"><br>
+            <input type="number" id="weight${exerciseCount}" name="weight${exerciseCount}" min="0"><br>
             
             <label for="sets${exerciseCount}">Sets:</label>
-            <input type="number" id="sets${exerciseCount}" name="sets${exerciseCount}"><br>
+            <input type="number" id="sets${exerciseCount}" name="sets${exerciseCount}" min="1"><br>
             
             <label for="reps${exerciseCount}">Reps:</label>
-            <input type="number" id="reps${exerciseCount}" name="reps${exerciseCount}">
+            <input type="number" id="reps${exerciseCount}" name="reps${exerciseCount}" min="1">
         </div>
     `;
     document.getElementById('exercises').insertAdjacentHTML('beforeend', exerciseHtml);
+    updateExerciseOptions();  
 }
 
 function submitWorkout() {
     const exercises = [];
     for (let i = 1; i <= exerciseCount; i++) {
-        exercises.push({
-            name: document.getElementById(`exercise${i}`).value,
-            weight: document.getElementById(`weight${i}`).value,
-            sets: document.getElementById(`sets${i}`).value,
-            reps: document.getElementById(`reps${i}`).value
-        });
+        const exercise = document.getElementById(`exercise${i}`).value;
+        const weight = document.getElementById(`weight${i}`).value;
+        const sets = document.getElementById(`sets${i}`).value;
+        const reps = document.getElementById(`reps${i}`).value;
+        
+        if (exercise && weight && sets && reps) {
+            exercises.push({
+                name: exercise,
+                weight: weight,
+                sets: sets,
+                reps: reps
+            });
+        }
+    }
+    
+    if (exercises.length === 0) {
+        alert('Please fill in at least one exercise completely');
+        return;
     }
     
     fetch('/log_workout', {
@@ -102,7 +191,7 @@ function submitWorkout() {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            type: document.getElementById('workout_type').value,
+            type: document.getElementById('workout_day').value,
             exercises: exercises
         })
     })
@@ -116,4 +205,34 @@ function submitWorkout() {
     });
 }
 </script>
+
+<style>
+.exercise-entry {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+
+.workout-entry {
+    margin-bottom: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.workout-entry:last-child {
+    border-bottom: none;
+}
+
+select, input {
+    margin: 5px 0;
+    padding: 5px;
+    width: 200px;
+}
+
+button {
+    margin: 10px 5px;
+    padding: 8px 15px;
+}
+</style>
 {% endblock %}
