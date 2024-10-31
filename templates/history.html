@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="section">
+    <h2>Fitness History</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Nutrition</th>
+                <th>Workout</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in history %}
+            <tr>
+                <td>{{ entry.date.strftime('%B %d, %Y') }}</td>
+                <td>
+                    {% if entry.nutrition %}
+                        <strong>Protein:</strong> {{ entry.nutrition.protein }}g
+                        <br>
+                        <strong>Calories:</strong> {{ entry.nutrition.calories }}
+                        <br>
+                        <strong>Goal Status:</strong>
+                        {% if entry.nutrition.protein >= entry.nutrition.protein_goal %}
+                            ✅ 
+                        {% else %}
+                            {{ entry.nutrition.protein }}g/{{ entry.nutrition.protein_goal }}g
+                        {% endif %}
+                    {% else %}
+                        No nutrition data
+                    {% endif %}
+                </td>
+                <td>
+                    {% if entry.workout %}
+                        <strong>{{ entry.workout.type }}</strong>
+                        <br>
+                        {% for exercise in entry.workout.exercises %}
+                            {{ exercise.name }}: {{ exercise.weight }}lbs × {{ exercise.sets }}×{{ exercise.reps }}
+                            <br>
+                        {% endfor %}
+                    {% else %}
+                        No workout logged
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

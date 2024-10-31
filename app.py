@@ -187,6 +187,42 @@ def delete_workout(workout_id):
     db.session.commit()
     return jsonify({"message": "Workout deleted successfully"}), 200
 
+from datetime import datetime, date, timedelta
+import json
+
+@app.route('/history')
+def history():
+    today = date.today()
+    
+    nutrition_entries = NutritionEntry.query.filter_by(date=today).all()
+    protein_total = sum(entry.protein_amount for entry in nutrition_entries)
+    calorie_total = sum(entry.calorie_amount for entry in nutrition_entries)
+    
+    settings = UserSettings.query.first()
+    protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
+    
+    workout = Workout.query.filter(
+        Workout.date >= datetime.combine(today, datetime.min.time()),
+        Workout.date < datetime.combine(today + timedelta(days=1), datetime.min.time())
+    ).first()
+    
+    history = [{
+        'date': today,
+        'nutrition': {
+            'protein': protein_total,
+            'calories': calorie_total,
+            'protein_goal': protein_goal
+        } if nutrition_entries else None,
+        'workout': {
+            'type': workout.type,
+            'exercises': json.loads(workout.exercises)
+        } if workout else None
+    }]
+    
+    return render_template('history.html',
+                         active_tab='history',
+                         history=history)
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
