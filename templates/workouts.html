@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<div class="section">
+    <h2>{{ date }}</h2>
+    <div style="color: {% if worked_out_today %}green{% else %}black{% endif %}">
+        {% if worked_out_today %}
+        <p>Worked out today! 💪</p>
+        {% else %}
+        <p>No workout logged yet today</p>
+        {% endif %}
+    </div>
+</div>
+
 <div class="section">
     <h2>Log Workout</h2>
     <form id="workoutForm">

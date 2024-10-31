@@ -155,11 +155,19 @@ def update_settings():
 
 @app.route('/workouts')
 def workouts():
+    today = date.today()
+    worked_out_today = Workout.query.filter(
+        Workout.date >= today,
+        Workout.date < datetime.combine(today, datetime.max.time())
+    ).first() is not None
+
     workouts = Workout.query.order_by(Workout.date.desc()).limit(10).all()
     return render_template('workouts.html', 
-                         active_tab='workouts', 
+                         active_tab='workouts',
+                         date=today.strftime("%B %d, %Y"),
+                         worked_out_today=worked_out_today,
                          workouts=workouts,
-                         json=json)  
+                         json=json)
 
 @app.route('/log_workout', methods=['POST'])
 def log_workout():
