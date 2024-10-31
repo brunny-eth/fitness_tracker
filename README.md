@@ -14,7 +14,7 @@ Simple Flask-based web app for tracking protein intake, calorie intake, and work
 * View workout history
 * Daily workout status indicator
 
-## Setup
+### Setup
 1. Clone the repository
 2. Install dependencies: `pip install -r requirements.txt`
 3. Initialize the database: 
@@ -23,5 +23,4 @@ Simple Flask-based web app for tracking protein intake, calorie intake, and work
    flask db init
    flask db migrate
    flask db upgrade
-
 4. Run the application: `python app.py`
