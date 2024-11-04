@@ -92,21 +92,6 @@
     margin: 0;
 }
 
-#settings-arrow {
-    font-size: 12px;
-    transition: transform 0.3s ease;
-}
-
-.settings-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}
-
-.settings-content.expanded {
-    max-height: 500px;  
-}
-
 .section-header:hover {
     background-color: #f9f9f9;
 }
@@ -216,34 +201,5 @@ function saveMeal() {
     });
 }
 
-function updateSettings() {
-    const weight = document.getElementById('weight').value;
-    const ratio = document.getElementById('ratio').value;
-    fetch('/update_settings', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-            weight: weight, 
-            ratio: ratio
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            alert(data.error);
-        } else {
-            location.reload();
-        }
-    });
-}
-
-function toggleSettings() {
-    const content = document.getElementById('settings-content');
-    const arrow = document.getElementById('settings-arrow');
-    content.classList.toggle('expanded');
-    arrow.style.transform = content.classList.contains('expanded') ? 'rotate(180deg)' : 'rotate(0deg)';
-}
 </script>
 {% endblock %}

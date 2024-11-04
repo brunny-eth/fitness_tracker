@@ -44,6 +44,64 @@
         th {
             background-color: #f5f5f5;
         }
+
+        button {
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #e5e5e5;
+        }
+
+        .settings-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .section-header {
+            cursor: pointer;
+            user-select: none;
+        }
+        .section-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+        .section-header:hover {
+            background-color: #f9f9f9;
+        }
+        .meal-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .saved-meals {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
@@ -54,10 +112,10 @@
             <a href="/" class="tab {% if active_tab == 'nutrition' %}active{% endif %}">Nutrition</a>
             <a href="/workouts" class="tab {% if active_tab == 'workouts' %}active{% endif %}">Workouts</a>
             <a href="/history" class="tab {% if active_tab == 'history' %}active{% endif %}">History</a>
+            <a href="/settings" class="tab {% if active_tab == 'settings' %}active{% endif %}">Settings</a>
         </div>
 
         {% block content %}{% endblock %}
     </div>
 </body>
 </html>
-

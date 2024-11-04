@@ -192,36 +192,69 @@ import json
 
 @app.route('/history')
 def history():
-    today = date.today()
-    
-    nutrition_entries = NutritionEntry.query.filter_by(date=today).all()
-    protein_total = sum(entry.protein_amount for entry in nutrition_entries)
-    calorie_total = sum(entry.calorie_amount for entry in nutrition_entries)
+    end_date = date.today()
+    start_date = end_date - timedelta(days=29)  
     
     settings = UserSettings.query.first()
+    if not settings:
+        settings = UserSettings(weight_lbs=195, protein_ratio=1.5)
+        db.session.add(settings)
+        db.session.commit()
+    
+    nutrition_entries = NutritionEntry.query.filter(
+        NutritionEntry.date >= start_date,
+        NutritionEntry.date <= end_date
+    ).order_by(NutritionEntry.date.desc()).all()
+    
+    workouts = Workout.query.filter(
+        Workout.date >= datetime.combine(start_date, datetime.min.time()),
+        Workout.date <= datetime.combine(end_date, datetime.max.time())
+    ).order_by(Workout.date.desc()).all()
+    
     protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
     
-    workout = Workout.query.filter(
-        Workout.date >= datetime.combine(today, datetime.min.time()),
-        Workout.date < datetime.combine(today + timedelta(days=1), datetime.min.time())
-    ).first()
-    
-    history = [{
-        'date': today,
-        'nutrition': {
-            'protein': protein_total,
-            'calories': calorie_total,
-            'protein_goal': protein_goal
-        } if nutrition_entries else None,
-        'workout': {
-            'type': workout.type,
-            'exercises': json.loads(workout.exercises)
-        } if workout else None
-    }]
+    history = []
+    current_date = end_date
+    while current_date >= start_date:
+        day_nutrition = [entry for entry in nutrition_entries if entry.date == current_date]
+        protein_total = sum(entry.protein_amount for entry in day_nutrition)
+        calorie_total = sum(entry.calorie_amount for entry in day_nutrition)
+        
+        day_workout = next((
+            w for w in workouts 
+            if w.date.date() == current_date
+        ), None)
+        
+        history.append({
+            'date': current_date,
+            'nutrition': {
+                'protein': protein_total,
+                'calories': calorie_total,
+                'protein_goal': protein_goal  
+            } if day_nutrition else None,
+            'workout': {
+                'type': day_workout.type,
+                'exercises': json.loads(day_workout.exercises)
+            } if day_workout else None
+        })
+        current_date -= timedelta(days=1)
     
     return render_template('history.html',
                          active_tab='history',
                          history=history)
+
+@app.route('/settings')
+def settings():
+    settings = UserSettings.query.first()
+    if not settings:
+        settings = UserSettings(weight_lbs=195, protein_ratio=1.5)
+        db.session.add(settings)
+        db.session.commit()
+    
+    return render_template('settings.html',
+                         active_tab='settings',
+                         weight=settings.weight_lbs,
+                         ratio=settings.protein_ratio)
 
 if __name__ == '__main__':
     with app.app_context():

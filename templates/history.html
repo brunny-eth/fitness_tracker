@@ -20,12 +20,14 @@
                         <strong>Protein:</strong> {{ entry.nutrition.protein }}g
                         <br>
                         <strong>Calories:</strong> {{ entry.nutrition.calories }}
-                        <br>
-                        <strong>Goal Status:</strong>
-                        {% if entry.nutrition.protein >= entry.nutrition.protein_goal %}
-                            ✅ 
-                        {% else %}
-                            {{ entry.nutrition.protein }}g/{{ entry.nutrition.protein_goal }}g
+                        {% if entry.nutrition.protein_goal %}
+                            <br>
+                            <strong>Goal Status:</strong>
+                            {% if entry.nutrition.protein >= entry.nutrition.protein_goal %}
+                                <span style="color: green">✅ Goal reached!</span>
+                            {% else %}
+                                <span style="color: red">{{ entry.nutrition.protein }}g/{{ entry.nutrition.protein_goal }}g</span>
+                            {% endif %}
                         {% endif %}
                     {% else %}
                         No nutrition data
