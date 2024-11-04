@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, render_template
 import json
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import requests
 
 app = Flask(__name__)
@@ -187,9 +187,6 @@ def delete_workout(workout_id):
     db.session.commit()
     return jsonify({"message": "Workout deleted successfully"}), 200
 
-from datetime import datetime, date, timedelta
-import json
-
 @app.route('/history')
 def history():
     end_date = date.today()
@@ -198,33 +195,50 @@ def history():
     nutrition_entries = NutritionEntry.query.filter(
         NutritionEntry.date >= start_date,
         NutritionEntry.date <= end_date
-    ).order_by(NutritionEntry.date.asc()).all()
+    ).order_by(NutritionEntry.date.asc()).all()  
     
     workouts = Workout.query.filter(
         Workout.date >= datetime.combine(start_date, datetime.min.time()),
         Workout.date <= datetime.combine(end_date, datetime.max.time())
-    ).order_by(Workout.date.desc()).all()
+    ).order_by(Workout.date.desc()).all()  
     
     settings = UserSettings.query.first()
     protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
     
-    history = []
+    first_activity_date = start_date
+    for entry in nutrition_entries:
+        if entry.protein_amount > 0 or entry.calorie_amount > 0:
+            first_activity_date = entry.date
+            break
+    
     chart_data = []
     day_counter = 1
-    
-    current_date = start_date
+    current_date = first_activity_date
     while current_date <= end_date:
         day_nutrition = [e for e in nutrition_entries if e.date == current_date]
         protein_total = sum(entry.protein_amount for entry in day_nutrition)
         calorie_total = sum(entry.calorie_amount for entry in day_nutrition)
-        
-        day_workout = next((w for w in workouts if w.date.date() == current_date), None)
         
         chart_data.append({
             'day': day_counter,
             'protein': protein_total if protein_total > 0 else None,
             'calories': calorie_total if calorie_total > 0 else None
         })
+        
+        current_date += timedelta(days=1)
+        day_counter += 1
+    
+    history = []
+    current_date = end_date
+    while current_date >= start_date:
+        day_nutrition = [e for e in nutrition_entries if e.date == current_date]
+        protein_total = sum(entry.protein_amount for entry in day_nutrition)
+        calorie_total = sum(entry.calorie_amount for entry in day_nutrition)
+        
+        day_workout = next((
+            w for w in workouts 
+            if w.date.date() == current_date
+        ), None)
         
         history.append({
             'date': current_date,
@@ -238,16 +252,13 @@ def history():
                 'exercises': json.loads(day_workout.exercises)
             } if day_workout else None
         })
-        
-        current_date += timedelta(days=1)
-        day_counter += 1
+        current_date -= timedelta(days=1)
     
     return render_template('history.html',
                          active_tab='history',
                          history=history,
                          chart_data=chart_data,
                          protein_goal=protein_goal)
-
 @app.route('/settings')
 def settings():
     settings = UserSettings.query.first()
@@ -260,6 +271,28 @@ def settings():
                          active_tab='settings',
                          weight=settings.weight_lbs,
                          ratio=settings.protein_ratio)
+
+@app.route('/update_nutrition', methods=['POST'])
+def update_nutrition():
+    data = request.json
+    entry_date = datetime.strptime(data['date'], '%Y-%m-%d').date()
+    
+    entries = NutritionEntry.query.filter_by(date=entry_date).all()
+    
+    for entry in entries:
+        db.session.delete(entry)
+    
+    new_entry = NutritionEntry(
+        date=entry_date,
+        protein_amount=float(data['protein']),
+        calorie_amount=int(data['calories']),
+        meal_name='Manual update'
+    )
+    
+    db.session.add(new_entry)
+    db.session.commit()
+    
+    return jsonify({"message": "Nutrition updated successfully"}), 200
 
 if __name__ == '__main__':
     with app.app_context():
