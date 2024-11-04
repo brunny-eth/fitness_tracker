@@ -5,7 +5,7 @@
     <h2>{{ date }}</h2>
     <div class="{{ 'goal-met' if total_protein >= goal_amount else 'goal-not-met' }}">
         <h3>Protein Progress: {{ total_protein }}g / {{ goal_amount }}g</h3>
-        <p>{{ 'Daily goal reached! 💪' if total_protein >= goal_amount else 'Still working toward daily goal' }}</p>
+        <p>{{ 'Daily goal reached' if total_protein >= goal_amount else 'Still working toward daily goal' }}</p>
     </div>
     <div style="color: black">  
         <h3>Calories: {{ total_calories }}</h3>
@@ -56,26 +56,6 @@
             <button type="button" onclick="addSavedMeal({{ meal.id }})">Add</button>
         </div>
         {% endfor %}
-    </div>
-</div>
-
-
-<div class="section">
-    <div class="section-header" onclick="toggleSettings()">
-        <h2>Settings <span id="settings-arrow">▼</span></h2>
-    </div>
-    <div id="settings-content" class="settings-content">
-        <form id="settingsForm">
-            <div>
-                <label for="weight">Weight (lbs):</label>
-                <input type="number" step="0.1" id="weight" name="weight" value="{{ weight }}">
-            </div>
-            <div>
-                <label for="ratio">Protein Ratio (g/kg of body weight):</label>
-                <input type="number" step="0.1" id="ratio" name="ratio" value="{{ ratio }}">
-            </div>
-            <button type="button" onclick="updateSettings()">Update Settings</button>
-        </form>
     </div>
 </div>
 
