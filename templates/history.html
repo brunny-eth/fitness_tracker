@@ -2,6 +2,11 @@
 
 {% block content %}
 <div class="section">
+    <h2>Nutrition Trends</h2>
+    <canvas id="nutritionChart"></canvas>
+</div>
+
+<div class="section">
     <h2>Fitness History</h2>
     <table>
         <thead>
@@ -50,4 +55,99 @@
         </tbody>
     </table>
 </div>
+
+<!-- Add Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('nutritionChart').getContext('2d');
+    
+    // Get data from Flask
+    const chartData = {{ chart_data|tojson|safe }};
+    const proteinGoal = {{ protein_goal }};
+    const calorieLimit = 2000; // Make configurable if needed
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartData.map(d => `Day ${d.day}`),
+            datasets: [
+                {
+                    label: 'Protein (g)',
+                    data: chartData.map(d => d.protein),
+                    borderColor: '#4caf50',
+                    yAxisID: 'y-protein',
+                    tension: 0.1
+                },
+                {
+                    label: 'Calories',
+                    data: chartData.map(d => d.calories),
+                    borderColor: '#f44336',
+                    yAxisID: 'y-calories',
+                    tension: 0.1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            scales: {
+                'y-protein': {
+                    type: 'linear',
+                    position: 'left',
+                    grid: {
+                        drawOnChartArea: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Protein (g)'
+                    }
+                },
+                'y-calories': {
+                    type: 'linear',
+                    position: 'right',
+                    grid: {
+                        drawOnChartArea: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Calories'
+                    }
+                }
+            },
+            plugins: {
+                annotation: {
+                    annotations: {
+                        proteinGoalLine: {
+                            type: 'line',
+                            yMin: proteinGoal,
+                            yMax: proteinGoal,
+                            borderColor: '#4caf50',
+                            borderDash: [5, 5],
+                            borderWidth: 1,
+                            label: {
+                                content: 'Protein Goal'
+                            }
+                        },
+                        calorieGoalLine: {
+                            type: 'line',
+                            yMin: calorieLimit,
+                            yMax: calorieLimit,
+                            borderColor: '#f44336',
+                            borderDash: [5, 5],
+                            borderWidth: 1,
+                            label: {
+                                content: 'Calorie Limit'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
 {% endblock %}

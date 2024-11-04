@@ -193,55 +193,60 @@ import json
 @app.route('/history')
 def history():
     end_date = date.today()
-    start_date = end_date - timedelta(days=29)  
-    
-    settings = UserSettings.query.first()
-    if not settings:
-        settings = UserSettings(weight_lbs=195, protein_ratio=1.5)
-        db.session.add(settings)
-        db.session.commit()
+    start_date = end_date - timedelta(days=29)
     
     nutrition_entries = NutritionEntry.query.filter(
         NutritionEntry.date >= start_date,
         NutritionEntry.date <= end_date
-    ).order_by(NutritionEntry.date.desc()).all()
+    ).order_by(NutritionEntry.date.asc()).all()
     
     workouts = Workout.query.filter(
         Workout.date >= datetime.combine(start_date, datetime.min.time()),
         Workout.date <= datetime.combine(end_date, datetime.max.time())
     ).order_by(Workout.date.desc()).all()
     
+    settings = UserSettings.query.first()
     protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
     
     history = []
-    current_date = end_date
-    while current_date >= start_date:
-        day_nutrition = [entry for entry in nutrition_entries if entry.date == current_date]
+    chart_data = []
+    day_counter = 1
+    
+    current_date = start_date
+    while current_date <= end_date:
+        day_nutrition = [e for e in nutrition_entries if e.date == current_date]
         protein_total = sum(entry.protein_amount for entry in day_nutrition)
         calorie_total = sum(entry.calorie_amount for entry in day_nutrition)
         
-        day_workout = next((
-            w for w in workouts 
-            if w.date.date() == current_date
-        ), None)
+        day_workout = next((w for w in workouts if w.date.date() == current_date), None)
+        
+        chart_data.append({
+            'day': day_counter,
+            'protein': protein_total if protein_total > 0 else None,
+            'calories': calorie_total if calorie_total > 0 else None
+        })
         
         history.append({
             'date': current_date,
             'nutrition': {
                 'protein': protein_total,
                 'calories': calorie_total,
-                'protein_goal': protein_goal  
+                'protein_goal': protein_goal
             } if day_nutrition else None,
             'workout': {
                 'type': day_workout.type,
                 'exercises': json.loads(day_workout.exercises)
             } if day_workout else None
         })
-        current_date -= timedelta(days=1)
+        
+        current_date += timedelta(days=1)
+        day_counter += 1
     
     return render_template('history.html',
                          active_tab='history',
-                         history=history)
+                         history=history,
+                         chart_data=chart_data,
+                         protein_goal=protein_goal)
 
 @app.route('/settings')
 def settings():
