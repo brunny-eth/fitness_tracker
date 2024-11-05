@@ -20,4 +20,4 @@ instance/
 *.swp
 
 # OS
-.DS_Store
+.DS_Store.env

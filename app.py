@@ -4,6 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime, date, timedelta
 import requests
+from anthropic import Anthropic
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+print("API Key loaded:", os.getenv('ANTHROPIC_API_KEY')[:5] if os.getenv('ANTHROPIC_API_KEY') else "No API key found")
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fitness_tracker.db'
@@ -52,6 +58,74 @@ def get_protein_from_wger(ingredient_name):
 def calculate_protein_goal(weight_lbs, ratio):
     weight_kg = weight_lbs * 0.453592  
     return weight_kg * ratio
+
+def get_llm_nutrition_estimate(meal_description):
+    anthropic = Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
+    
+    prompt = f"""You are analyzing a meal to estimate its nutritional content. Break down each component and provide protein and calorie estimates.
+
+    Meal: {meal_description}
+
+    Rules:
+    1. Always provide realistic estimates even with vague portions
+    2. Round protein to nearest 0.5g
+    3. Round calories to nearest 10
+    4. If portion is unclear, assume a typical serving size
+
+    Provide your response in this exact JSON format:
+    {{
+        "total": {{
+            "protein": 0,
+            "calories": 0
+        }},
+        "breakdown": [
+            {{
+                "item": "food name",
+                "portion": "amount",
+                "protein": 0,
+                "calories": 0
+            }}
+        ]
+    }}"""
+
+    try:
+        message = anthropic.messages.create(
+            model="claude-3-sonnet-20240229",
+            max_tokens=1000,
+            temperature=0,
+            messages=[{
+                "role": "user",
+                "content": prompt
+            }]
+        )
+        
+        response_text = message.content[0].text
+        return json.loads(response_text)
+        
+    except Exception as e:
+        print(f"Error getting nutrition estimate: {e}")
+        return None
+
+@app.route('/analyze_meal', methods=['POST'])
+def analyze_meal():
+    try:
+        meal_description = request.json.get('description')
+        if not meal_description:
+            return jsonify({"error": "No meal description provided"}), 400
+            
+        print("Attempting to analyze meal:", meal_description)  
+        nutrition_data = get_llm_nutrition_estimate(meal_description)
+        
+        if nutrition_data:
+            return jsonify({
+                "message": "Meal analyzed successfully",
+                "nutrition": nutrition_data
+            }), 200
+        else:
+            return jsonify({"error": "Could not analyze meal"}), 500
+    except Exception as e:
+        print("Error in analyze_meal:", str(e))  
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/')
 def home():

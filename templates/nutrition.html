@@ -14,13 +14,27 @@
 
 <div class="section">
     <h2>Add Nutrition Entry</h2>
-    <div>
-        <label for="ingredient">Ingredient Name:</label>
-        <input type="text" id="ingredient" name="ingredient">
-        <button type="button" onclick="checkIngredient()">Check Ingredient</button>
+    <div style="margin-bottom: 15px;">  
+        <label for="entry_type">Select Entry Type:</label>  
+        <select id="entry_type" onchange="toggleEntryType()" style="width: 200px; padding: 5px;">  
+            <option value="manual">Manual Entry</option>
+            <option value="claude">Ask Claude</option>
+        </select>
     </div>
-    <div>
-        <label for="amount">Or enter nutrition directly:</label>
+
+    <div id="claude_input" style="display: none;">
+        <textarea 
+            id="meal_description" 
+            placeholder="Describe what you ate (e.g., '2 eggs with toast and a banana')"
+            rows="3" 
+            style="width: 100%; margin: 10px 0;"
+        ></textarea>
+        <button type="button" onclick="analyzeMeal()" id="analyze_button">Analyze Meal</button>
+        <div id="analysis_result" style="margin-top: 10px;"></div>
+    </div>
+
+    <div id="manual_input">
+        <label for="amount">Enter nutrition directly:</label>
         <input type="number" step="0.1" id="protein_amount" name="protein_amount" placeholder="Protein (g)">
         <input type="number" id="calorie_amount" name="calorie_amount" placeholder="Calories">
         <button type="button" onclick="addNutrition()">Add</button>
@@ -88,6 +102,33 @@
     margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    padding: 10px;
+}
+
+#meal_description {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#analyze_button {
+    width: 100%;
+    padding: 8px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#analyze_button:disabled {
+    background-color: #cccccc;
+}
+
+#analysis_result {
+    margin-top: 10px;
     padding: 10px;
 }
 </style>
@@ -180,6 +221,68 @@ function saveMeal() {
         }
     });
 }
+
+function toggleEntryType() {
+    const entryType = document.getElementById('entry_type').value;
+    const claudeInput = document.getElementById('claude_input');
+    const manualInput = document.getElementById('manual_input');
+    
+    console.log('Toggle type:', entryType);  
+    console.log('Claude input:', claudeInput);  
+    console.log('Manual input:', manualInput);  
+    
+    if (entryType === 'claude') {
+        claudeInput.style.display = 'block';
+        manualInput.style.display = 'none';
+    } else {
+        claudeInput.style.display = 'none';
+        manualInput.style.display = 'block';
+    }
+}
+
+function analyzeMeal() {
+    const description = document.getElementById('meal_description').value;
+    const button = document.getElementById('analyze_button');
+    const result = document.getElementById('analysis_result');
+    
+    button.disabled = true;
+    button.textContent = 'Analyzing...';
+    
+    fetch('/analyze_meal', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ description: description })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            result.innerHTML = `<p style="color: red;">${data.error}</p>`;
+        } else {
+            let breakdownHtml = '<div style="margin-top: 10px; padding: 10px; background-color: #f5f5f5; border-radius: 4px;">';
+            breakdownHtml += '<h4>Breakdown:</h4>';
+            data.nutrition.breakdown.forEach(item => {
+                breakdownHtml += `<p>${item.item} (${item.portion}): ${item.protein}g protein, ${item.calories} calories</p>`;
+            });
+            breakdownHtml += `<p><strong>Total: ${data.nutrition.total.protein}g protein, ${data.nutrition.total.calories} calories</strong></p>`;
+            breakdownHtml += '</div>';
+            
+            result.innerHTML = breakdownHtml;
+            
+            document.getElementById('protein_amount').value = data.nutrition.total.protein;
+            document.getElementById('calorie_amount').value = data.nutrition.total.calories;
+        }
+    })
+    .catch(error => {
+        result.innerHTML = '<p style="color: red;">Error connecting to server</p>';
+    })
+    .finally(() => {
+        button.disabled = false;
+        button.textContent = 'Analyze Meal';
+    });
+}
+
 
 </script>
 {% endblock %}
