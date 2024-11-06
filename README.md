@@ -6,17 +6,25 @@ Simple Flask-based web app for tracking protein intake, calorie intake, and work
 * Daily protein goal calculation based on body weight
 * Daily protein intake tracking with progress indicator
 * Daily calorie tracking
-* Integration with the [wger API](https://github.com/wger-project/wger) for nutritional information
++ Integration with Claude for using Claude to estimate nutrition content of meals quickly and logging those meals
 * Save and quickly add commonly eaten meals
 
-* Log workouts with customized exercises for different workout types, like Back Day or Leg Day
+* Log workouts with weights, set, reps for each exericse
+* CUstomizable workout categories and exercises
 * Track exercises with weights, sets, and reps
 * View workout history
 * Daily workout status indicator
+* Track exercise progress over time
+
 
 ### Setup
 1. Clone the repository
-2. Install dependencies: `pip install -r requirements.txt`
+2. Create an activate virtual environment
+   '''bash
+   python -m venv venv
+   source venv/bin/activate  # On Unix/macOS
+3. Install dependencies: `pip install -r requirements.txt`
+4. Set up env variables
 3. Initialize the database: 
    ```bash
    export FLASK_APP=app.py
