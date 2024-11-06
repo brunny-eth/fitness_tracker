@@ -16,7 +16,7 @@
     <h2>Add Nutrition Entry</h2>
     <div style="margin-bottom: 15px;">  
         <label for="entry_type">Select Entry Type:</label>  
-        <select id="entry_type" onchange="toggleEntryType()" style="width: 200px; padding: 5px;">  
+        <select id="entry_type" onchange="toggleEntryType()" value="{{ entry_type }}" style="width: 200px; padding: 5px;">  
             <option value="manual">Manual Entry</option>
             <option value="claude">Ask Claude</option>
         </select>
@@ -29,7 +29,8 @@
             rows="3" 
             style="width: 100%; margin: 10px 0;"
         ></textarea>
-        <button type="button" onclick="analyzeMeal()" id="analyze_button">Analyze Meal</button>
+        <button type="button" onclick="analyzeMeal()" id="analyze_button" 
+            style="width: auto; padding: 8px 16px;">Analyze Meal</button>
         <div id="analysis_result" style="margin-top: 10px;"></div>
     </div>
 
@@ -113,23 +114,9 @@
     border-radius: 4px;
 }
 
-#analyze_button {
-    width: 100%;
-    padding: 8px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#analyze_button:disabled {
+button:disabled {
     background-color: #cccccc;
-}
-
-#analysis_result {
-    margin-top: 10px;
-    padding: 10px;
+    cursor: not-allowed;
 }
 </style>
 
@@ -227,9 +214,9 @@ function toggleEntryType() {
     const claudeInput = document.getElementById('claude_input');
     const manualInput = document.getElementById('manual_input');
     
-    console.log('Toggle type:', entryType);  
-    console.log('Claude input:', claudeInput);  
-    console.log('Manual input:', manualInput);  
+    console.log('Toggle called with entry type:', entryType);
+    console.log('Claude input element:', claudeInput);
+    console.log('Manual input element:', manualInput);
     
     if (entryType === 'claude') {
         claudeInput.style.display = 'block';
@@ -238,7 +225,26 @@ function toggleEntryType() {
         claudeInput.style.display = 'none';
         manualInput.style.display = 'block';
     }
+    
+    const url = new URL(window.location);
+    url.searchParams.set('entry_type', entryType);
+    window.history.pushState({}, '', url);
+    
+    console.log('URL updated to:', url.toString());
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const entryType = urlParams.get('entry_type') || 'manual';
+    
+    console.log('Page loaded, setting entry type to:', entryType);
+    
+    const selectElement = document.getElementById('entry_type');
+    if (selectElement) {
+        selectElement.value = entryType;
+        toggleEntryType();
+    }
+});
 
 function analyzeMeal() {
     const description = document.getElementById('meal_description').value;
@@ -260,12 +266,18 @@ function analyzeMeal() {
         if (data.error) {
             result.innerHTML = `<p style="color: red;">${data.error}</p>`;
         } else {
+            const nutritionData = JSON.stringify(data.nutrition).replace(/"/g, '&quot;');
+            
             let breakdownHtml = '<div style="margin-top: 10px; padding: 10px; background-color: #f5f5f5; border-radius: 4px;">';
             breakdownHtml += '<h4>Breakdown:</h4>';
             data.nutrition.breakdown.forEach(item => {
                 breakdownHtml += `<p>${item.item} (${item.portion}): ${item.protein}g protein, ${item.calories} calories</p>`;
             });
             breakdownHtml += `<p><strong>Total: ${data.nutrition.total.protein}g protein, ${data.nutrition.total.calories} calories</strong></p>`;
+            breakdownHtml += `<div style="margin-top: 15px; display: flex; gap: 10px;">
+                <button onclick="toggleManualEdit('${nutritionData}')">Edit Manually</button>
+                <button onclick='postAnalyzedMeal(${nutritionData})'>Post Meal</button>
+            </div>`;
             breakdownHtml += '</div>';
             
             result.innerHTML = breakdownHtml;
@@ -283,6 +295,47 @@ function analyzeMeal() {
     });
 }
 
+function toggleManualEdit(nutritionData) {
+    const manualInput = document.getElementById('manual_input');
+    manualInput.style.display = 'block';
+    
+    const data = typeof nutritionData === 'string' ? JSON.parse(nutritionData) : nutritionData;
+    
+    document.getElementById('protein_amount').value = data.total.protein;
+    document.getElementById('calorie_amount').value = data.total.calories;
+}
+
+function postAnalyzedMeal(nutritionData) {
+    fetch('/add_nutrition', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            protein_amount: nutritionData.total.protein,
+            calorie_amount: nutritionData.total.calories,
+            meal_name: document.getElementById('meal_description').value
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            document.getElementById('result').textContent = data.error;
+        } else {
+            const url = new URL(window.location);
+            url.searchParams.set('entry_type', 'claude');
+            window.location.href = url.toString();
+        }
+    });
+}
+
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const entryType = urlParams.get('entry_type') || 'manual';
+    
+    document.getElementById('entry_type').value = entryType;
+    toggleEntryType();
+}
 
 </script>
 {% endblock %}
