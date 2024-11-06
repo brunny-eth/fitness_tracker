@@ -5,6 +5,7 @@ env/
 __pycache__/
 *.py[cod]
 *.so
+*.pyc
 
 # flask
 instance/

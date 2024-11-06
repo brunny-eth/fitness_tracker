@@ -102,7 +102,7 @@ def home():
     protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
     today = date.today()
     
-    entries = NutritionEntry.query.filter_by(date=today).all()
+    entries = NutritionEntry.query.filter_by(date=today).order_by(NutritionEntry.id.asc()).all()
     total_protein = sum(entry.protein_amount for entry in entries)
     total_calories = sum(entry.calorie_amount for entry in entries)
     
@@ -118,6 +118,7 @@ def home():
                          weight=settings.weight_lbs,
                          ratio=settings.protein_ratio,
                          saved_meals=saved_meals,
+                         entries=entries,  
                          entry_type=request.args.get('entry_type', 'manual'))
 
 @app.route('/analyze_meal', methods=['POST'])
