@@ -40,6 +40,17 @@ class Workout(db.Model):
     type = db.Column(db.String(50), nullable=False)
     exercises = db.Column(db.Text, nullable=False)
 
+class WorkoutCategory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False) 
+    exercises = db.Column(db.Text, nullable=False) 
+
+    def get_exercises(self):
+        return json.loads(self.exercises)
+
+    def set_exercises(self, exercises_list):
+        self.exercises = json.dumps(exercises_list)
+
 def calculate_protein_goal(weight_lbs, ratio):
     weight_kg = weight_lbs * 0.453592
     return weight_kg * ratio
@@ -176,11 +187,14 @@ def workouts():
     ).first() is not None
     
     workouts = Workout.query.order_by(Workout.date.desc()).limit(10).all()
+    workout_categories = WorkoutCategory.query.all()  
+    
     return render_template('workouts.html',
                          active_tab='workouts',
                          date=today.strftime("%B %d, %Y"),
                          worked_out_today=worked_out_today,
                          workouts=workouts,
+                         workout_categories=workout_categories,  
                          json=json)
 
 @app.route('/log_workout', methods=['POST'])
@@ -255,19 +269,6 @@ def history():
                          protein_goal=protein_goal,
                          chart_data=chart_data)  
 
-@app.route('/settings')
-def settings():
-    settings = UserSettings.query.first()
-    if not settings:
-        settings = UserSettings(weight_lbs=195, protein_ratio=1.5)
-        db.session.add(settings)
-        db.session.commit()
-    
-    return render_template('settings.html',
-                         active_tab='settings',
-                         weight=settings.weight_lbs,
-                         ratio=settings.protein_ratio)
-
 @app.route('/saved_meals', methods=['GET', 'POST'])
 def saved_meals():
     if request.method == 'POST':
@@ -314,6 +315,68 @@ def update_settings():
         db.session.add(settings)
     db.session.commit()
     return jsonify({"message": "Settings updated successfully"}), 200
+
+@app.route('/delete_nutrition/<int:entry_id>', methods=['POST'])
+def delete_nutrition(entry_id):
+    entry = NutritionEntry.query.get_or_404(entry_id)
+    db.session.delete(entry)
+    db.session.commit()
+    return jsonify({"message": "Entry deleted successfully"}), 200
+
+@app.route('/get_workout_categories')
+def get_workout_categories():
+    categories = WorkoutCategory.query.all()
+    return jsonify([{
+        'name': cat.name,
+        'exercises': cat.get_exercises()  
+    } for cat in categories])
+
+@app.route('/update_workout_category', methods=['POST'])
+def update_workout_category():
+    data = request.json
+    if not data.get('name') or not data.get('exercises'):
+        return jsonify({"error": "Name and exercises are required"}), 400
+        
+    category = WorkoutCategory.query.filter_by(name=data['name']).first()
+    
+    try:
+        if category:
+            category.exercises = json.dumps(data['exercises'])
+        else:
+            category = WorkoutCategory(
+                name=data['name'],
+                exercises=json.dumps(data['exercises'])
+            )
+            db.session.add(category)
+        
+        db.session.commit()
+        return jsonify({"success": True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/delete_workout_category/<int:category_id>', methods=['POST'])
+def delete_workout_category(category_id):
+    category = WorkoutCategory.query.get_or_404(category_id)
+    db.session.delete(category)
+    db.session.commit()
+    return jsonify({"success": True})
+
+@app.route('/settings')
+def settings():
+    settings = UserSettings.query.first()
+    if not settings:
+        settings = UserSettings(weight_lbs=195, protein_ratio=1.5)
+        db.session.add(settings)
+        db.session.commit()
+    
+    workout_categories = WorkoutCategory.query.all()
+    
+    return render_template('settings.html',
+                         active_tab='settings',
+                         weight=settings.weight_lbs,
+                         ratio=settings.protein_ratio,
+                         workout_categories=workout_categories)
 
 if __name__ == '__main__':
     with app.app_context():

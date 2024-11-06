@@ -15,12 +15,18 @@
         <h3>Today's Meals</h3>
         {% if entries %}
             {% for entry in entries %}
-                <div class="meal-entry" style="margin: 5px 0; padding: 5px 0; border-bottom: 1px solid #eee;">
-                    {{ entry.meal_name or 'Manual entry' }} 
-                    <span style="color: #666;">
-                        ({{ entry.protein_amount }}g protein, {{ entry.calorie_amount }} cal)
-                    </span>
-                </div>
+            <div class="meal-entry" style="margin: 5px 0; padding: 5px 0; border-bottom: 1px solid #eee;">
+                {{ entry.meal_name or 'Manual entry' }} 
+                <span style="color: #666;">
+                    ({{ entry.protein_amount }}g protein, {{ entry.calorie_amount }} cal)
+                    <button 
+                        onclick="deleteMeal({{ entry.id }})" 
+                        style="margin-left: 10px; opacity: 0.5; border: none; background: none; cursor: pointer;"
+                    >
+                        ×
+                    </button>
+                </span>
+            </div>
             {% endfor %}
         {% else %}
             <p>No meals logged today</p>
@@ -39,7 +45,6 @@
         </select>
     </div>
 
-    <!-- The input sections -->
     <div id="manual_input">
         <label for="amount">Enter nutrition directly:</label>
         <input type="number" step="0.1" id="protein_amount" name="protein_amount" placeholder="Protein (g)">
@@ -161,6 +166,7 @@ function checkIngredient() {
 function addNutrition() {
     const protein_amount = document.getElementById('protein_amount').value;
     const calorie_amount = document.getElementById('calorie_amount').value;
+    const mealDescription = document.getElementById('meal_description')?.value || 'Manual entry';
     fetch('/add_nutrition', {
         method: 'POST',
         headers: {
@@ -168,7 +174,8 @@ function addNutrition() {
         },
         body: JSON.stringify({ 
             protein_amount: protein_amount,
-            calorie_amount: calorie_amount
+            calorie_amount: calorie_amount,
+            meal_name: mealDescription
         })
     })
     .then(response => response.json())
@@ -242,13 +249,27 @@ function toggleEntryType() {
         case 'saved':
             savedMealsInput.style.display = 'block';
             break;
-        default: // 'manual'
+        default:
             manualInput.style.display = 'block';
     }
     
     const url = new URL(window.location);
     url.searchParams.set('entry_type', entryType);
     window.history.pushState({}, '', url);
+}
+
+function deleteMeal(entryId) {
+    if (confirm('Are you sure you want to delete this meal?')) {
+        fetch(`/delete_nutrition/${entryId}`, {
+            method: 'POST',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                location.reload();
+            }
+        });
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {

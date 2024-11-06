@@ -20,11 +20,9 @@
             <label for="workout_day">Workout Day:</label>
             <select id="workout_day" name="workout_day" onchange="updateExerciseOptions()">
                 <option value="">Select Workout Day</option>
-                <option value="chest">Chest Day</option>
-                <option value="back">Back Day</option>
-                <option value="legs">Leg Day</option>
-                <option value="shoulders">Shoulder Day</option>
-                <option value="arms">Arm Day</option>
+                {% for category in workout_categories %}
+                    <option value="{{ category.name }}">{{ category.name }}</option>
+                {% endfor %}
             </select>
         </div>
         <div id="exercises">
@@ -85,48 +83,17 @@
 
 <script>
 
-const exercisesByType = {
-    chest: [
-        "Bench Press",
-        "Incline Bench Press",
-        "Decline Bench Press",
-        "Dumbbell Flyes",
-        "Cable Flyes",
-        "Push-Ups"
-    ],
-    back: [
-        "Deadlift",
-        "Pull-Ups",
-        "Barbell Rows",
-        "Lat Pulldowns",
-        "T-Bar Rows",
-        "Face Pulls"
-    ],
-    legs: [
-        "Squats",
-        "Romanian Deadlift",
-        "Leg Press",
-        "Leg Extensions",
-        "Leg Curls",
-        "Calf Raises"
-    ],
-    shoulders: [
-        "Overhead Press",
-        "Lateral Raises",
-        "Front Raises",
-        "Reverse Flyes",
-        "Shrugs",
-        "Face Pulls"
-    ],
-    arms: [
-        "Bicep Curls",
-        "Tricep Extensions",
-        "Hammer Curls",
-        "Skull Crushers",
-        "Preacher Curls",
-        "Rope Pushdowns"
-    ]
-};
+let exercisesByType = {};
+
+fetch('/get_workout_categories')
+    .then(response => response.json())
+    .then(categories => {
+        categories.forEach(category => {
+            exercisesByType[category.name] = category.exercises; 
+        });
+        updateExerciseOptions();
+    })
+    .catch(error => console.error('Error loading categories:', error));
 
 let exerciseCount = 1;
 
