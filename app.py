@@ -267,6 +267,34 @@ def settings():
                          weight=settings.weight_lbs,
                          ratio=settings.protein_ratio)
 
+@app.route('/saved_meals', methods=['GET', 'POST'])
+def saved_meals():
+    if request.method == 'POST':
+        data = request.json
+        if not all(key in data for key in ['name', 'protein_per_serving', 'calories_per_serving']):
+            return jsonify({"error": "Missing required fields"}), 400
+        
+        try:
+            new_meal = SavedMeal(
+                name=data['name'],
+                protein_per_serving=float(data['protein_per_serving']),
+                calories_per_serving=int(data['calories_per_serving'])
+            )
+            db.session.add(new_meal)
+            db.session.commit()
+            return jsonify({"message": "Meal saved successfully", "id": new_meal.id}), 201
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"error": str(e)}), 500
+            
+    saved_meals = SavedMeal.query.all()
+    return jsonify([{
+        "id": meal.id,
+        "name": meal.name,
+        "protein_per_serving": meal.protein_per_serving,
+        "calories_per_serving": meal.calories_per_serving
+    } for meal in saved_meals])
+
 @app.route('/update_settings', methods=['POST'])
 def update_settings():
     data = request.json
