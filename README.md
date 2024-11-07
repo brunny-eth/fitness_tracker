@@ -5,19 +5,19 @@ Simple Flask-based web app for tracking protein intake, calorie intake, and work
 ### Features
 
 #### Nutrition
-* Daily protein goal calculation based on body weight
-* Daily protein intake tracking with progress indicator
-* Daily calorie tracking
++ Daily protein goal calculation based on body weight
++ Daily protein intake tracking with progress indicator
++ Daily calorie tracking
 + Integration with Claude for using Claude to estimate nutrition content of meals quickly and logging those meals
-* Save and quickly add commonly eaten meals
++ Save and quickly add commonly eaten meals
 
 #### Workouts
-* Log workouts with weights, set, reps for each exericse
-* CUstomizable workout categories and exercises
-* Track exercises with weights, sets, and reps
-* View workout history
-* Daily workout status indicator
-* Track exercise progress over time
++ Log workouts with weights, set, reps for each exericse
++ Customizable workout categories and exercises
++ Track exercises with weights, sets, and reps
++ View workout history
++ Daily workout status indicator
++ Track exercise progress over time
 
 
 ### Setup
