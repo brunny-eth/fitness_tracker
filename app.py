@@ -12,7 +12,7 @@ load_dotenv()
 print("API Key loaded:", os.getenv('ANTHROPIC_API_KEY')[:5] if os.getenv('ANTHROPIC_API_KEY') else "No API key found")
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fitness_tracker.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fitness-tracker.db'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
