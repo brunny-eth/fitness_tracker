@@ -3,116 +3,206 @@
 <head>
     <title>Fitness Tracker</title>
     <style>
+        /* Reset and base styles */
+        body {
+            background-color: #f9fafb;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #111827;
+            line-height: 1.5;
+        }
+
+        /* Container and layout */
         .container { 
             max-width: 800px; 
             margin: 0 auto; 
-            padding: 20px;
+            padding: 32px 20px;
         }
-        .section {
-            margin-bottom: 30px;
-            padding: 15px;
-            border: 1px solid #ddd;
+
+        .header {
+            margin-bottom: 32px;
         }
+
+        .header h1 {
+            margin: 0;
+            margin-bottom: 24px;
+            font-size: 28px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        /* Navigation tabs */
         .tabs {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
+            display: flex;
+            gap: 32px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0;
         }
+
         .tab {
-            display: inline-block;
-            padding: 10px 20px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            margin-bottom: -1px;
+            text-decoration: none;
+            color: #4b5563;
+            font-size: 14px;
+            font-weight: 500;
+            padding-bottom: 12px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
         }
+
+        .tab:hover {
+            color: #111827;
+        }
+
         .tab.active {
-            border: 1px solid #ddd;
-            border-bottom: 1px solid white;
-            background-color: white;
+            color: #111827;
+            border-bottom: 2px solid #111827;
         }
-        .goal-met { color: green; }
-        .goal-not-met { color: red; }
+
+        /* Content sections */
+        .section {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        /* Table styles */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f5f5f5;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background-color: #f9fafb;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        /* Button styles */
         button {
-            background-color: #f5f5f5;
-            color: #333;
+            background-color: #f9fafb;
+            color: #374151;
             padding: 8px 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-        }
-        button:hover {
-            background-color: #e5e5e5;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
+        button:hover {
+            background-color: #f3f4f6;
+            border-color: #d1d5db;
+        }
+
+        /* Form styles */
         .settings-form {
             max-width: 400px;
             margin: 0 auto;
         }
+
         .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            margin-bottom: 16px;
         }
 
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #9ca3af;
+        }
+
+        /* Status colors */
+        .goal-met { 
+            color: #059669; 
+        }
+
+        .goal-not-met { 
+            color: #dc2626; 
+        }
+
+        /* Entry styles */
         .section-header {
             cursor: pointer;
             user-select: none;
+            padding: 12px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
         }
+
         .section-header h2 {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             margin: 0;
+            font-size: 18px;
+            font-weight: 500;
         }
+
         .section-header:hover {
-            background-color: #f9f9f9;
+            background-color: #f9fafb;
         }
+
         .meal-entry {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px;
-            border-bottom: 1px solid #eee;
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
         }
+
+        .meal-entry:last-child {
+            border-bottom: none;
+        }
+
         .saved-meals {
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
+            margin-bottom: 24px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            background: white;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Fitness Tracker</h1>
-        
-        <div class="tabs">
-            <a href="/" class="tab {% if active_tab == 'nutrition' %}active{% endif %}">Nutrition</a>
-            <a href="/workouts" class="tab {% if active_tab == 'workouts' %}active{% endif %}">Workouts</a>
-            <a href="/history" class="tab {% if active_tab == 'history' %}active{% endif %}">History</a>
-            <a href="/settings" class="tab {% if active_tab == 'settings' %}active{% endif %}">Settings</a>
+        <div class="header">
+            <h1>Fitness Tracker</h1>
+            
+            <div class="tabs">
+                <a href="/" class="tab {% if active_tab == 'nutrition' %}active{% endif %}">Nutrition</a>
+                <a href="/workouts" class="tab {% if active_tab == 'workouts' %}active{% endif %}">Workouts</a>
+                <a href="/history" class="tab {% if active_tab == 'history' %}active{% endif %}">History</a>
+                <a href="/settings" class="tab {% if active_tab == 'settings' %}active{% endif %}">Settings</a>
+            </div>
         </div>
 
         {% block content %}{% endblock %}
