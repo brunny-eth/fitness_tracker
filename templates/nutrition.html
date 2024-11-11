@@ -4,15 +4,21 @@
 <div class="section">
    <h2>{{ date }}</h2>
    
-   <div class="progress-container">
-       <span>Protein Progress: {{ total_protein }}g / {{ goal_amount }}g</span>
-       <div class="progress-bar-container">
-           <div class="progress-bar" style="width: {{ (total_protein/goal_amount) * 100 }}%"></div>
-       </div>
-       <p class="{{ 'success-text' if total_protein >= goal_amount else 'warning-text' }}">
-           {{ 'Daily goal reached' if total_protein >= goal_amount else 'Still working toward daily goal' }}
-       </p>
-   </div>
+   <div class="stats-container">
+    <div class="calories-display">
+        <span>Calories: {{ total_calories }}</span>
+    </div>
+    
+    <div class="progress-container">
+        <span>Protein Progress: {{ total_protein }}g / {{ goal_amount }}g</span>
+        <div class="progress-bar-container">
+            <div class="progress-bar" style="width: {{ (total_protein/goal_amount) * 100 }}%"></div>
+        </div>
+        <p class="{{ 'success-text' if total_protein >= goal_amount else 'warning-text' }}">
+            {{ 'Daily goal reached' if total_protein >= goal_amount else 'Still working toward daily goal' }}
+        </p>
+    </div>
+    </div>
 
    <div class="calories-display">
        <span>Calories: {{ total_calories }}</span>
@@ -74,37 +80,61 @@
    </div>
 
    <div id="saved_meals_input" class="input-group hidden">
-       <div class="saved-meals-list">
-           <h3>Quick Add Saved Meals</h3>
-           {% for meal in saved_meals %}
-           <div class="meal-entry">
-               <span>{{ meal.name }} ({{ meal.protein_per_serving }}g protein, {{ meal.calories_per_serving }} cal)</span>
-               <button type="button" onclick="addSavedMeal({{ meal.id }})">Add</button>
-           </div>
-           {% endfor %}
-       </div>
+    <div class="collapsible-section">
+        <div class="section-header" onclick="toggleSection('quick-add')">
+            <h3>Quick Add Saved Meals</h3>
+            <span class="toggle-icon">▼</span>
+        </div>
+        <div id="quick-add-content" class="section-content">
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="meal_search" 
+                    placeholder="Search saved meals..."
+                    oninput="searchMeals(this.value)"
+                    class="search-input"
+                >
+            </div>
+            <div id="meals_container">
+                {% for meal in saved_meals %}
+                <div class="meal-entry" data-meal-name="{{ meal.name.lower() }}">
+                    <div class="meal-content">
+                        <span class="meal-name">{{ meal.name }}</span>
+                        <span class="meal-nutrition">({{ meal.protein_per_serving }}g protein, {{ meal.calories_per_serving }} cal)</span>
+                    </div>
+                    <button type="button" onclick="addSavedMeal({{ meal.id }})" class="add-button">Add</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
-       <div class="new-meal-form">
-           <h3>Add New Saved Meal</h3>
-           <div class="form-fields">
-               <div class="form-group">
-                   <label for="new_meal_name">Meal Name</label>
-                   <input type="text" id="new_meal_name">
-               </div>
-               <div class="form-group">
-                   <label for="new_meal_protein">Protein per Serving (g)</label>
-                   <input type="number" step="0.1" id="new_meal_protein">
-               </div>
-               <div class="form-group">
-                   <label for="new_meal_calories">Calories per Serving</label>
-                   <input type="number" id="new_meal_calories">
-               </div>
-               <button type="button" onclick="saveMeal()">Save Meal</button>
-           </div>
-       </div>
-   </div>
-   
-   <p id="result"></p>
+    <div class="section-divider"></div>
+
+    <div class="collapsible-section">
+        <div class="section-header" onclick="toggleSection('add-new')">
+            <h3>Add New Saved Meal</h3>
+            <span class="toggle-icon">▼</span>
+        </div>
+        <div id="add-new-content" class="section-content">
+            <div class="form-fields">
+                <div class="form-group">
+                    <label for="new_meal_name">Meal Name</label>
+                    <input type="text" id="new_meal_name">
+                </div>
+                <div class="form-group">
+                    <label for="new_meal_protein">Protein per Serving (g)</label>
+                    <input type="number" step="0.1" id="new_meal_protein">
+                </div>
+                <div class="form-group">
+                    <label for="new_meal_calories">Calories per Serving</label>
+                    <input type="number" id="new_meal_calories">
+                </div>
+                <button type="button" onclick="saveMeal()">Save Meal</button>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 
 <style>
@@ -117,8 +147,19 @@
    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.calories-display {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+}
+
 .progress-container {
-   margin: 16px 0;
+    margin: 0;
 }
 
 .progress-bar-container {
@@ -127,7 +168,7 @@
    background-color: #f3f4f6;
    border-radius: 4px;
    overflow: hidden;
-   margin: 8px 0;
+   margin: 8px 0 4px 0;
 }
 
 .progress-bar {
@@ -148,6 +189,13 @@
    justify-content: space-between;
    padding: 8px 0;
    position: relative;
+   opacity: 1;
+   transition: opacity 0.2s ease;
+}
+
+.meal-entry.hidden {
+    display: none;
+    opacity: 0;
 }
 
 .meal-entry:not(:last-child):after {
@@ -174,18 +222,26 @@
    color: #666;
 }
 
-.delete-button {
-   color: #999;
-   font-size: 18px;
-   cursor: pointer;
-   padding: 0 12px;
-   opacity: 0;
-   transition: opacity 0.2s;
-   align-self: center;
+.search-container {
+    margin-bottom: 16px;
+    width: 100%;
 }
 
-.meal-entry:hover .delete-button {
-   opacity: 1;
+.search-input {
+    width: 100%;
+    max-width: calc(100% - 24px); 
+    padding: 8px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box; 
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #9ca3af;
+    box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.2);
 }
 
 .input-group {
@@ -201,6 +257,20 @@
    margin-bottom: 16px;
 }
 
+.delete-button {
+   color: #999;
+   font-size: 18px;
+   cursor: pointer;
+   padding: 0 12px;
+   opacity: 0;
+   transition: opacity 0.2s;
+   align-self: center;
+}
+
+.meal-entry:hover .delete-button {
+   opacity: 1;
+}
+
 .hidden {
    display: none;
 }
@@ -211,14 +281,130 @@
 
 .warning-text {
    color: #dc2626;
+   margin-top: 2px;
+   font-size: 0.9em;
 }
 
 .empty-state {
    color: #666;
 }
+
+.section-divider {
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 20px 0;
+}
+
+.collapsible-section {
+    margin-bottom: 16px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    cursor: pointer;
+    user-select: none;
+}
+
+.section-header h3 {
+    margin: 0;
+}
+
+.toggle-icon {
+    font-size: 12px;
+    color: #666;
+    transition: transform 0.2s ease;
+}
+
+.section-header.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+}
+
+.section-content {
+    max-height: 1000px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.section-content.collapsed {
+    max-height: 0;
+}
+
+#meal_description {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+#meal_description:focus {
+    outline: none;
+    border-color: #9ca3af;
+    box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.2);
+}
+
+#analyze_button {
+    background-color: #f9fafb;
+    color: #374151;
+    padding: 8px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+#analyze_button:hover {
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+}
+
+#analyze_button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#analysis_result {
+    margin-top: 16px;
+}
 </style>
 
 <script>
+function searchMeals(query) {
+    query = query.toLowerCase().trim();
+    const mealEntries = document.querySelectorAll('[data-meal-name]');
+    
+    console.log(`Searching for: "${query}"`); 
+    
+    mealEntries.forEach(entry => {
+        const mealName = entry.getAttribute('data-meal-name').toLowerCase();
+        console.log(`Checking meal: "${mealName}"`); 
+        
+        if (mealName.includes(query)) {
+            entry.style.display = '';
+        } else {
+            entry.style.display = 'none';
+        }
+    });
+
+    const noResults = document.getElementById('no-results-message');
+    if (!noResults) {
+        const container = document.getElementById('meals_container');
+        container.insertAdjacentHTML('beforeend', '<p id="no-results-message" style="display: none; color: #666; text-align: center; padding: 10px;">No meals found</p>');
+    }
+    document.getElementById('no-results-message').style.display = foundAny ? 'none' : 'block';
+}
+
 function checkIngredient() {
     const ingredient = document.getElementById('ingredient').value;
     fetch('/add_nutrition', {
@@ -288,6 +474,12 @@ function saveMeal() {
     const name = document.getElementById('new_meal_name').value;
     const protein = document.getElementById('new_meal_protein').value;
     const calories = document.getElementById('new_meal_calories').value;
+    
+    if (!name || !protein || !calories) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
     fetch('/saved_meals', {
         method: 'POST',
         headers: {
@@ -302,12 +494,36 @@ function saveMeal() {
     .then(response => response.json())
     .then(data => {
         if (data.error) {
-            document.getElementById('result').textContent = data.error;
+            alert(data.error);
         } else {
-            location.reload();
+            document.getElementById('new_meal_name').value = '';
+            document.getElementById('new_meal_protein').value = '';
+            document.getElementById('new_meal_calories').value = '';
+            
+            const mealsContainer = document.getElementById('meals_container');
+            const newMealHtml = `
+                <div class="meal-entry" data-meal-name="${name.toLowerCase()}">
+                    <span>${name} (${protein}g protein, ${calories} cal)</span>
+                    <button type="button" onclick="addSavedMeal(${data.id})">Add</button>
+                </div>
+            `;
+            mealsContainer.insertAdjacentHTML('afterbegin', newMealHtml);
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving meal');
     });
 }
+
+function toggleSection(sectionId) {
+    const header = document.querySelector(`[onclick="toggleSection('${sectionId}')"]`);
+    const content = document.getElementById(`${sectionId}-content`);
+    
+    header.classList.toggle('collapsed');
+    content.classList.toggle('collapsed');
+}
+
 
 function toggleEntryType() {
     const entryType = document.getElementById('entry_type').value;
@@ -452,6 +668,9 @@ window.onload = function() {
     document.getElementById('entry_type').value = entryType;
     toggleEntryType();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+});
 
 </script>
 {% endblock %}
