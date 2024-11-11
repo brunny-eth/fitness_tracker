@@ -194,6 +194,9 @@
                 <a href="/workouts" class="tab {% if active_tab == 'workouts' %}active{% endif %}">Workouts</a>
                 <a href="/history" class="tab {% if active_tab == 'history' %}active{% endif %}">History</a>
                 <a href="/settings" class="tab {% if active_tab == 'settings' %}active{% endif %}">Settings</a>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('logout') }}" class="tab">Logout</a>
+                {% endif %}
             </div>
         </div>
 

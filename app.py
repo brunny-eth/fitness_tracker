@@ -1,6 +1,8 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date, timedelta
 import json
 import requests
@@ -12,23 +14,52 @@ load_dotenv()
 print("API Key loaded:", os.getenv('ANTHROPIC_API_KEY')[:5] if os.getenv('ANTHROPIC_API_KEY') else "No API key found")
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fitness-tracker.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fitness_tracker.db'
+app.config['SECRET_KEY'] = 'your-secret-key-here'  
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    settings = db.relationship('UserSettings', backref='user', uselist=False)
+    saved_meals = db.relationship('SavedMeal', backref='user')
+    nutrition_entries = db.relationship('NutritionEntry', backref='user')
+    workouts = db.relationship('Workout', backref='user')
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
 class UserSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     weight_lbs = db.Column(db.Float, nullable=False)
     protein_ratio = db.Column(db.Float, nullable=False)
 
 class SavedMeal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     protein_per_serving = db.Column(db.Float, nullable=False)
     calories_per_serving = db.Column(db.Integer, nullable=False)
 
 class NutritionEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     date = db.Column(db.Date, nullable=False)
     protein_amount = db.Column(db.Float, nullable=False)
     calorie_amount = db.Column(db.Integer, nullable=False)
@@ -36,14 +67,17 @@ class NutritionEntry(db.Model):
 
 class Workout(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     type = db.Column(db.String(50), nullable=False)
     exercises = db.Column(db.Text, nullable=False)
 
 class WorkoutCategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(50), nullable=False) 
     exercises = db.Column(db.Text, nullable=False) 
+    user = db.relationship('User', backref='workout_categories')
 
     def get_exercises(self):
         return json.loads(self.exercises)
@@ -103,22 +137,27 @@ def get_llm_nutrition_estimate(meal_description):
         return None
 
 @app.route('/')
+@login_required
 def home():
-    settings = UserSettings.query.first()
+    settings = UserSettings.query.filter_by(user_id=current_user.id).first()
     if not settings:
-        settings = UserSettings(weight_lbs=195, protein_ratio=1.5)
+        settings = UserSettings(user_id=current_user.id, weight_lbs=195, protein_ratio=1.5)
         db.session.add(settings)
         db.session.commit()
     
     protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
     today = date.today()
     
-    entries = NutritionEntry.query.filter_by(date=today).order_by(NutritionEntry.id.asc()).all()
+    entries = NutritionEntry.query.filter_by(
+        user_id=current_user.id,
+        date=today
+    ).order_by(NutritionEntry.id.asc()).all()
+    
+    saved_meals = SavedMeal.query.filter_by(user_id=current_user.id).all()
+    
     total_protein = sum(entry.protein_amount for entry in entries)
     total_calories = sum(entry.calorie_amount for entry in entries)
-    
-    saved_meals = SavedMeal.query.all()
-    
+
     return render_template('nutrition.html',
                          active_tab='nutrition',
                          date=today.strftime("%B %d, %Y"),
@@ -133,6 +172,7 @@ def home():
                          entry_type=request.args.get('entry_type', 'manual'))
 
 @app.route('/analyze_meal', methods=['POST'])
+@login_required
 def analyze_meal():
     try:
         meal_description = request.json.get('description')
@@ -153,40 +193,46 @@ def analyze_meal():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/add_nutrition', methods=['POST'])
+@login_required
 def add_nutrition():
     data = request.json
     
     if data.get('saved_meal_id'):
-        meal = SavedMeal.query.get_or_404(data['saved_meal_id'])
+        meal = SavedMeal.query.filter_by(
+            id=data['saved_meal_id'],
+            user_id=current_user.id
+        ).first_or_404()
         new_entry = NutritionEntry(
+            user_id=current_user.id,
             date=date.today(),
             protein_amount=meal.protein_per_serving,
             calorie_amount=meal.calories_per_serving,
             meal_name=meal.name
         )
     else:
-        if not data.get('protein_amount') or not data.get('calorie_amount'):
-            return jsonify({"error": "Both protein and calorie amounts must be provided"}), 400
         new_entry = NutritionEntry(
+            user_id=current_user.id,
             date=date.today(),
             protein_amount=float(data['protein_amount']),
             calorie_amount=int(data['calorie_amount']),
             meal_name=data.get('meal_name', 'Manual entry')
         )
-    
+
     db.session.add(new_entry)
     db.session.commit()
     return jsonify({"message": "Nutrition entry added successfully"}), 201
 
 @app.route('/workouts')
+@login_required
 def workouts():
     today = date.today()
     worked_out_today = Workout.query.filter(
+        Workout.user_id == current_user.id,
         Workout.date >= today,
         Workout.date < datetime.combine(today, datetime.max.time())
     ).first() is not None
     
-    workouts = Workout.query.order_by(Workout.date.desc()).limit(10).all()
+    workouts = Workout.query.filter_by(user_id=current_user.id).order_by(Workout.date.desc()).limit(10).all()
     workout_categories = WorkoutCategory.query.all()  
     
     return render_template('workouts.html',
@@ -198,9 +244,11 @@ def workouts():
                          json=json)
 
 @app.route('/log_workout', methods=['POST'])
+@login_required
 def log_workout():
     data = request.json
     new_workout = Workout(
+        user_id=current_user.id,
         type=data['type'],
         exercises=json.dumps(data['exercises'])
     )
@@ -208,21 +256,52 @@ def log_workout():
     db.session.commit()
     return jsonify({"message": "Workout logged successfully"}), 201
 
+@app.route('/saved_meals', methods=['GET', 'POST'])
+@login_required
+def saved_meals():
+    if request.method == 'POST':
+        data = request.json
+        try:
+            new_meal = SavedMeal(
+                user_id=current_user.id,
+                name=data['name'],
+                protein_per_serving=float(data['protein_per_serving']),
+                calories_per_serving=int(data['calories_per_serving'])
+            )
+            db.session.add(new_meal)
+            db.session.commit()
+            return jsonify({"message": "Meal saved successfully", "id": new_meal.id}), 201
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"error": str(e)}), 500
+            
+    saved_meals = SavedMeal.query.filter_by(user_id=current_user.id).all()
+    return jsonify([{
+        "id": meal.id,
+        "name": meal.name,
+        "protein_per_serving": meal.protein_per_serving,
+        "calories_per_serving": meal.calories_per_serving
+    } for meal in saved_meals])
+
+
 @app.route('/history')
+@login_required
 def history():
     end_date = date.today()
     start_date = end_date - timedelta(days=29)
     
     nutrition_entries = NutritionEntry.query.filter(
+        NutritionEntry.user_id == current_user.id,
         NutritionEntry.date >= start_date,
         NutritionEntry.date <= end_date
     ).order_by(NutritionEntry.date.asc()).all()
-    
+
     workouts = Workout.query.filter(
+        Workout.user_id == current_user.id,
         Workout.date >= datetime.combine(start_date, datetime.min.time()),
         Workout.date <= datetime.combine(end_date, datetime.max.time())
     ).order_by(Workout.date.desc()).all()
-    
+
     settings = UserSettings.query.first()
     protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
     
@@ -269,46 +348,65 @@ def history():
                          protein_goal=protein_goal,
                          chart_data=chart_data)  
 
-@app.route('/saved_meals', methods=['GET', 'POST'])
-def saved_meals():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
-        data = request.json
-        if not all(key in data for key in ['name', 'protein_per_serving', 'calories_per_serving']):
-            return jsonify({"error": "Missing required fields"}), 400
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user = User.query.filter_by(email=email).first()
         
-        try:
-            new_meal = SavedMeal(
-                name=data['name'],
-                protein_per_serving=float(data['protein_per_serving']),
-                calories_per_serving=int(data['calories_per_serving'])
-            )
-            db.session.add(new_meal)
-            db.session.commit()
-            return jsonify({"message": "Meal saved successfully", "id": new_meal.id}), 201
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({"error": str(e)}), 500
-            
-    saved_meals = SavedMeal.query.all()
-    return jsonify([{
-        "id": meal.id,
-        "name": meal.name,
-        "protein_per_serving": meal.protein_per_serving,
-        "calories_per_serving": meal.calories_per_serving
-    } for meal in saved_meals])
+        if user and user.check_password(password):
+            login_user(user)
+            return redirect(url_for('home'))
+        
+        flash('Invalid email or password')
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        if User.query.filter_by(email=email).first():
+            flash('Email already registered')
+            return redirect(url_for('register'))
+        
+        user = User(email=email)
+        user.set_password(password)
+        
+        settings = UserSettings(
+            user=user,
+            weight_lbs=150,  
+            protein_ratio=1.0  
+        )
+        
+        db.session.add(user)
+        db.session.add(settings)
+        db.session.commit()
+        
+        login_user(user)
+        return redirect(url_for('home'))
+    
+    return render_template('register.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 @app.route('/update_settings', methods=['POST'])
+@login_required
 def update_settings():
     data = request.json
-    if not all(key in data for key in ['weight', 'ratio']):
-        return jsonify({"error": "Weight and ratio must be provided"}), 400
-    
-    settings = UserSettings.query.first()
+    settings = UserSettings.query.filter_by(user_id=current_user.id).first()
     if settings:
         settings.weight_lbs = float(data['weight'])
         settings.protein_ratio = float(data['ratio'])
     else:
         settings = UserSettings(
+            user_id=current_user.id,
             weight_lbs=float(data['weight']),
             protein_ratio=float(data['ratio'])
         )
@@ -317,33 +415,43 @@ def update_settings():
     return jsonify({"message": "Settings updated successfully"}), 200
 
 @app.route('/delete_nutrition/<int:entry_id>', methods=['POST'])
+@login_required
 def delete_nutrition(entry_id):
-    entry = NutritionEntry.query.get_or_404(entry_id)
+    entry = NutritionEntry.query.filter_by(
+        id=entry_id,
+        user_id=current_user.id
+    ).first_or_404()
     db.session.delete(entry)
     db.session.commit()
     return jsonify({"message": "Entry deleted successfully"}), 200
 
 @app.route('/get_workout_categories')
+@login_required 
 def get_workout_categories():
-    categories = WorkoutCategory.query.all()
+    categories = WorkoutCategory.query.filter_by(user_id=current_user.id).all()
     return jsonify([{
         'name': cat.name,
         'exercises': cat.get_exercises()  
     } for cat in categories])
 
 @app.route('/update_workout_category', methods=['POST'])
+@login_required  
 def update_workout_category():
-    data = request.json
+    data = request.json  
     if not data.get('name') or not data.get('exercises'):
         return jsonify({"error": "Name and exercises are required"}), 400
         
-    category = WorkoutCategory.query.filter_by(name=data['name']).first()
+    category = WorkoutCategory.query.filter_by(
+        name=data['name'],
+        user_id=current_user.id
+    ).first()
     
     try:
         if category:
             category.exercises = json.dumps(data['exercises'])
         else:
             category = WorkoutCategory(
+                user_id=current_user.id,  
                 name=data['name'],
                 exercises=json.dumps(data['exercises'])
             )
@@ -356,21 +464,27 @@ def update_workout_category():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/delete_workout_category/<int:category_id>', methods=['POST'])
+@login_required  
 def delete_workout_category(category_id):
-    category = WorkoutCategory.query.get_or_404(category_id)
-    db.session.delete(category)
-    db.session.commit()
-    return jsonify({"success": True})
+    category = WorkoutCategory.query.filter_by(
+        id=category_id,
+        user_id=current_user.id
+    ).first_or_404()
 
 @app.route('/settings')
+@login_required  
 def settings():
-    settings = UserSettings.query.first()
+    settings = UserSettings.query.filter_by(user_id=current_user.id).first()
     if not settings:
-        settings = UserSettings(weight_lbs=195, protein_ratio=1.5)
+        settings = UserSettings(
+            user_id=current_user.id,
+            weight_lbs=195, 
+            protein_ratio=1.5
+        )
         db.session.add(settings)
         db.session.commit()
     
-    workout_categories = WorkoutCategory.query.all()
+    workout_categories = WorkoutCategory.query.filter_by(user_id=current_user.id).all()
     
     return render_template('settings.html',
                          active_tab='settings',
