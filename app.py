@@ -1,3 +1,5 @@
+import os
+import logging
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -8,14 +10,22 @@ import json
 import requests
 from anthropic import Anthropic
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 print("API Key loaded:", os.getenv('ANTHROPIC_API_KEY')[:5] if os.getenv('ANTHROPIC_API_KEY') else "No API key found")
 
+if not os.path.exists('logs'):
+    os.mkdir('logs')
+logging.basicConfig(
+    filename='logs/app.log',
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s: %(message)s'
+)
+logging.info("Application startup")
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fitness_tracker.db'
-app.config['SECRET_KEY'] = 'your-secret-key-here'  
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
