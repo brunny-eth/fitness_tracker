@@ -463,6 +463,18 @@ def update_workout_category():
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
+@app.route('/delete_saved_meal/<int:meal_id>', methods=['POST'])
+@login_required
+def delete_saved_meal(meal_id):
+    meal = SavedMeal.query.filter_by(
+        id=meal_id,
+        user_id=current_user.id
+    ).first_or_404()
+    
+    db.session.delete(meal)
+    db.session.commit()
+    return jsonify({"message": "Meal deleted successfully"}), 200
+
 @app.route('/delete_workout_category/<int:category_id>', methods=['POST'])
 @login_required  
 def delete_workout_category(category_id):
