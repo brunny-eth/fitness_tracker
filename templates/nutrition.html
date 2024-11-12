@@ -5,10 +5,6 @@
    <h2>{{ date }}</h2>
    
    <div class="stats-container">
-    <div class="calories-display">
-        <span>Calories: {{ total_calories }}</span>
-    </div>
-    
     <div class="progress-container">
         <span>Protein Progress: {{ total_protein }}g / {{ goal_amount }}g</span>
         <div class="progress-bar-container">
@@ -18,11 +14,23 @@
             {{ 'Daily goal reached' if total_protein >= goal_amount else 'Still working toward daily goal' }}
         </p>
     </div>
+    
+    <div class="progress-container">
+        <span>Calorie Progress: {{ total_calories }} / {{ max_calories }}</span>
+        <div class="progress-bar-container">
+            <div class="progress-bar" style="width: {{ (total_calories/max_calories) * 100 }}%; 
+                                          background-color: {% if total_calories > max_calories %}#ef4444{% else %}#3b82f6{% endif %};">
+            </div>
+        </div>
+        <p class="{{ 'warning-text' if total_calories > max_calories else 'success-text' }}">
+            {% if total_calories > max_calories %}
+                Over calorie target by {{ total_calories - max_calories }} calories
+            {% else %}
+                {{ max_calories - total_calories }} calories remaining
+            {% endif %}
+        </p>
     </div>
-
-   <div class="calories-display">
-       <span>Calories: {{ total_calories }}</span>
-   </div>
+</div>
 
    <div class="meals-section">
        <h3>Today's Meals</h3>
@@ -61,13 +69,14 @@
    </div>
 
    <div id="manual_input" class="input-group">
-       <label for="amount">Enter nutrition directly:</label>
-       <div class="input-row">
-           <input type="number" step="0.1" id="protein_amount" placeholder="Protein (g)">
-           <input type="number" id="calorie_amount" placeholder="Calories">
-           <button type="button" onclick="addNutrition()">Add</button>
-       </div>
-   </div>
+    <label for="amount">Enter nutrition directly:</label>
+    <div class="input-row">
+        <input type="text" id="manual_meal_name" placeholder="Meal name">
+        <input type="number" step="0.1" id="protein_amount" placeholder="Protein (g)">
+        <input type="number" id="calorie_amount" placeholder="Calories">
+        <button type="button" onclick="addNutrition()">Add</button>
+    </div>
+    </div>  
 
    <div id="claude_input" class="input-group hidden">
        <textarea 
@@ -380,6 +389,20 @@
 #analysis_result {
     margin-top: 16px;
 }
+
+.input-row input[type="text"] {
+    flex: 2; 
+}
+
+.input-row input[type="number"] {
+    flex: 1;
+}
+
+.input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
 </style>
 
 <script>
@@ -432,7 +455,14 @@ function checkIngredient() {
 function addNutrition() {
     const protein_amount = document.getElementById('protein_amount').value;
     const calorie_amount = document.getElementById('calorie_amount').value;
-    const mealDescription = document.getElementById('meal_description')?.value || 'Manual entry';
+    const meal_name = document.getElementById('manual_meal_name').value || 'Manual entry';  // Default if empty
+
+    console.log('Sending nutrition data:', { 
+        protein_amount, 
+        calorie_amount, 
+        meal_name 
+    });
+
     fetch('/add_nutrition', {
         method: 'POST',
         headers: {
@@ -441,17 +471,27 @@ function addNutrition() {
         body: JSON.stringify({ 
             protein_amount: protein_amount,
             calorie_amount: calorie_amount,
-            meal_name: mealDescription
+            meal_name: meal_name
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw new Error(err.error || 'Server error');
+            });
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.error) {
-            document.getElementById('result').textContent = data.error;
+            alert(data.error);
         } else {
-            document.getElementById('result').textContent = data.message;
             location.reload();
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error adding nutrition: ' + error.message);
     });
 }
 

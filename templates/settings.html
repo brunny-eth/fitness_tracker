@@ -15,6 +15,11 @@
             <input type="number" id="protein-ratio" value="{{ ratio }}" step="0.1">
         </div>
 
+        <div class="form-group">
+            <label for="max-calories">Daily Calorie Target:</label>
+            <input type="number" id="max-calories" value="{{ max_calories }}">
+        </div>
+
         <button onclick="updateSettings()">Update Settings</button>
     </div>
 </div>
@@ -27,8 +32,10 @@
         <div class="category-entry" data-id="{{ category.id }}">
             <div class="category-header">
                 <h3>{{ category.name }}</h3>
-                <button onclick="editCategory({{ category.id }})" class="edit-btn">Edit</button>
-                <button onclick="deleteCategory({{ category.id }})" class="delete-btn">Delete</button>
+                <div class="button-group">
+                    <button onclick="editCategory({{ category.id }})" class="edit-btn">Edit</button>
+                    <button onclick="deleteCategory({{ category.id }})" class="delete-btn">Delete</button>
+                </div>
             </div>
             <div class="exercises-list">
                 <h4>Exercises:</h4>
@@ -106,6 +113,25 @@
         margin: 5px 0;
         width: 100%;
     }
+
+    .button-group {
+    display: flex;
+    gap: 10px;
+    }
+
+    .edit-btn, .delete-btn {
+    background-color: #f5f5f5;
+    color: #666;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    }
+
+    .edit-btn:hover, .delete-btn:hover {
+    background-color: #e0e0e0;
+    color: #333;
+    }
 </style>
     
 
@@ -114,13 +140,14 @@
 function updateSettings() {
     const weight = document.getElementById('weight').value;
     const ratio = document.getElementById('protein-ratio').value;
+    const maxCalories = document.getElementById('max-calories').value;
     
     fetch('/update_settings', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ weight, ratio })
+        body: JSON.stringify({ weight, ratio, max_calories: maxCalories })
     })
     .then(response => response.json())
     .then(data => {
@@ -211,6 +238,90 @@ function deleteCategory(categoryId) {
             alert('Error deleting category');
         });
     }
+}
+
+let editingCategoryId = null;
+
+function editCategory(categoryId) {
+    editingCategoryId = categoryId;
+    
+    fetch(`/get_workout_category/${categoryId}`)
+        .then(response => response.json())
+        .then(category => {
+            // Set modal title and category name
+            document.getElementById('modalTitle').textContent = 'Edit Category';
+            document.getElementById('categoryName').value = category.name;
+            
+            // Clear and populate exercises
+            const exercisesList = document.getElementById('exercisesList');
+            exercisesList.innerHTML = '';
+            
+            category.exercises.forEach(exercise => {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'exercise-input';
+                input.value = exercise;
+                exercisesList.appendChild(input);
+            });
+            
+            // If there are no exercises, add one empty input
+            if (category.exercises.length === 0) {
+                addExerciseInput();
+            }
+            
+            // Show the modal
+            document.getElementById('categoryModal').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading category');
+        });
+}
+
+function saveCategory() {
+    const name = document.getElementById('categoryName').value;
+    const exercises = Array.from(document.querySelectorAll('.exercise-input'))
+        .map(input => input.value)
+        .filter(value => value.trim() !== '');
+
+    if (!name || exercises.length === 0) {
+        alert('Please provide a category name and at least one exercise');
+        return;
+    }
+
+    fetch('/update_workout_category', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            name, 
+            exercises,
+            id: editingCategoryId 
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else if (data.error) {
+            alert(data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving category');
+    });
+}
+
+function closeModal() {
+    document.getElementById('categoryModal').style.display = 'none';
+    editingCategoryId = null;
+}
+
+function addExerciseInput() {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'exercise-input';
+    document.getElementById('exercisesList').appendChild(input);
 }
 
 </script>

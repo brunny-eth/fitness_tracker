@@ -92,7 +92,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const chartData = {{ chart_data|tojson|safe }};
     const proteinGoal = {{ protein_goal }};
-    const calorieLimit = 2000; 
+    
+    const proteinValues = chartData.map(d => d.protein).filter(v => v !== null);
+    const calorieValues = chartData.map(d => d.calories).filter(v => v !== null);
+    
+    const minProtein = Math.min(...proteinValues) * 0.8;  
+    const maxProtein = Math.max(...proteinValues) * 1.2;  
+    const minCalories = Math.min(...calorieValues) * 0.8;
+    const maxCalories = Math.max(...calorieValues) * 1.2;
     
     new Chart(ctx, {
         type: 'line',
@@ -102,16 +109,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 {
                     label: 'Protein (g)',
                     data: chartData.map(d => d.protein),
-                    borderColor: '#4caf50',
+                    borderColor: '#2196F3',  
+                    backgroundColor: '#2196F3',
                     yAxisID: 'y-protein',
-                    tension: 0.1
+                    tension: 0.3,  
+                    pointRadius: 4,
+                    pointHoverRadius: 6
                 },
                 {
                     label: 'Calories',
                     data: chartData.map(d => d.calories),
-                    borderColor: '#f44336',
+                    borderColor: '#9E9E9E',  
+                    backgroundColor: '#9E9E9E',
                     yAxisID: 'y-calories',
-                    tension: 0.1
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
                 }
             ]
         },
@@ -125,49 +138,77 @@ document.addEventListener('DOMContentLoaded', function() {
                 'y-protein': {
                     type: 'linear',
                     position: 'left',
+                    min: minProtein,
+                    max: maxProtein,
                     grid: {
                         drawOnChartArea: false
                     },
                     title: {
                         display: true,
-                        text: 'Protein (g)'
+                        text: 'Protein (g)',
+                        color: '#2196F3'
                     }
                 },
                 'y-calories': {
                     type: 'linear',
                     position: 'right',
+                    min: minCalories,
+                    max: maxCalories,
                     grid: {
                         drawOnChartArea: false
                     },
                     title: {
                         display: true,
-                        text: 'Calories'
+                        text: 'Calories',
+                        color: '#9E9E9E'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
                     }
                 }
             },
             plugins: {
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    titleColor: '#000',
+                    bodyColor: '#000',
+                    borderColor: '#ddd',
+                    borderWidth: 1,
+                    padding: 10,
+                    displayColors: true,
+                },
                 annotation: {
                     annotations: {
                         proteinGoalLine: {
                             type: 'line',
                             yMin: proteinGoal,
                             yMax: proteinGoal,
-                            borderColor: '#4caf50',
+                            borderColor: '#2196F3',
                             borderDash: [5, 5],
                             borderWidth: 1,
+                            yScaleID: 'y-protein',
                             label: {
-                                content: 'Protein Goal'
+                                content: 'Protein Goal',
+                                display: true,
+                                backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                                color: '#2196F3'
                             }
-                        },
+                        },    
                         calorieGoalLine: {
                             type: 'line',
-                            yMin: calorieLimit,
-                            yMax: calorieLimit,
-                            borderColor: '#f44336',
+                            yMin: maxCalories,
+                            yMax: maxCalories,
+                            borderColor: '#9E9E9E',
                             borderDash: [5, 5],
                             borderWidth: 1,
+                            yScaleID: 'y-calories',
                             label: {
-                                content: 'Calorie Limit'
+                                content: 'Calorie Target',
+                                display: true,
+                                backgroundColor: 'rgba(158, 158, 158, 0.1)',
+                                color: '#9E9E9E'
                             }
                         }
                     }

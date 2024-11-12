@@ -90,3 +90,283 @@
 2024-11-12 18:14:30,611 INFO: 127.0.0.1 - - [12/Nov/2024 18:14:30] "GET /get_workout_categories HTTP/1.1" 200 -
 2024-11-12 18:15:29,604 INFO: 127.0.0.1 - - [12/Nov/2024 18:15:29] "GET /workouts HTTP/1.1" 200 -
 2024-11-12 18:15:29,673 INFO: 127.0.0.1 - - [12/Nov/2024 18:15:29] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-12 18:16:03,028 INFO: 127.0.0.1 - - [12/Nov/2024 18:16:03] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:16:15,093 INFO: 127.0.0.1 - - [12/Nov/2024 18:16:15] "[33mPOST /update_nutrition HTTP/1.1[0m" 404 -
+2024-11-12 18:16:16,885 INFO: 127.0.0.1 - - [12/Nov/2024 18:16:16] "[33mPOST /update_nutrition HTTP/1.1[0m" 404 -
+2024-11-12 18:16:33,309 INFO: 127.0.0.1 - - [12/Nov/2024 18:16:33] "[33mPOST /update_nutrition HTTP/1.1[0m" 404 -
+2024-11-12 18:17:22,003 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-12 18:17:22,616 INFO: Application startup
+2024-11-12 18:17:22,649 WARNING:  * Debugger is active!
+2024-11-12 18:17:22,655 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:17:25,228 INFO: 127.0.0.1 - - [12/Nov/2024 18:17:25] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:17:30,390 INFO: 127.0.0.1 - - [12/Nov/2024 18:17:30] "POST /update_nutrition HTTP/1.1" 200 -
+2024-11-12 18:17:30,401 INFO: 127.0.0.1 - - [12/Nov/2024 18:17:30] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:17:38,370 INFO: 127.0.0.1 - - [12/Nov/2024 18:17:38] "POST /update_nutrition HTTP/1.1" 200 -
+2024-11-12 18:17:38,385 INFO: 127.0.0.1 - - [12/Nov/2024 18:17:38] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:17:45,884 INFO: 127.0.0.1 - - [12/Nov/2024 18:17:45] "POST /update_nutrition HTTP/1.1" 200 -
+2024-11-12 18:17:45,898 INFO: 127.0.0.1 - - [12/Nov/2024 18:17:45] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:17:58,467 INFO: 127.0.0.1 - - [12/Nov/2024 18:17:58] "POST /update_nutrition HTTP/1.1" 200 -
+2024-11-12 18:17:58,482 INFO: 127.0.0.1 - - [12/Nov/2024 18:17:58] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:20:16,453 INFO: 127.0.0.1 - - [12/Nov/2024 18:20:16] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:20:40,363 INFO: 127.0.0.1 - - [12/Nov/2024 18:20:40] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:20:42,985 INFO: 127.0.0.1 - - [12/Nov/2024 18:20:42] "GET / HTTP/1.1" 200 -
+2024-11-12 18:20:44,532 INFO: 127.0.0.1 - - [12/Nov/2024 18:20:44] "GET /workouts HTTP/1.1" 200 -
+2024-11-12 18:20:44,600 INFO: 127.0.0.1 - - [12/Nov/2024 18:20:44] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-12 18:20:45,465 INFO: 127.0.0.1 - - [12/Nov/2024 18:20:45] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:21:15,594 INFO: 127.0.0.1 - - [12/Nov/2024 18:21:15] "GET / HTTP/1.1" 200 -
+2024-11-12 18:21:26,371 INFO: 127.0.0.1 - - [12/Nov/2024 18:21:26] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:21:26,969 INFO: 127.0.0.1 - - [12/Nov/2024 18:21:26] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:21:29,196 INFO: 127.0.0.1 - - [12/Nov/2024 18:21:29] "GET / HTTP/1.1" 200 -
+2024-11-12 18:25:58,849 INFO: 127.0.0.1 - - [12/Nov/2024 18:25:58] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:25:59,558 INFO: 127.0.0.1 - - [12/Nov/2024 18:25:59] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:25:59,750 INFO: 127.0.0.1 - - [12/Nov/2024 18:25:59] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:26:03,650 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-12 18:26:04,278 INFO: Application startup
+2024-11-12 18:26:04,314 WARNING:  * Debugger is active!
+2024-11-12 18:26:04,320 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:26:09,000 INFO: 127.0.0.1 - - [12/Nov/2024 18:26:09] "[35m[1mGET /?entry_type=manual HTTP/1.1[0m" 500 -
+2024-11-12 18:26:09,013 INFO: 127.0.0.1 - - [12/Nov/2024 18:26:09] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2024-11-12 18:26:09,013 INFO: 127.0.0.1 - - [12/Nov/2024 18:26:09] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2024-11-12 18:26:09,078 INFO: 127.0.0.1 - - [12/Nov/2024 18:26:09] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=dTFgv05BVba4Hki37YdF HTTP/1.1" 200 -
+2024-11-12 18:26:09,080 INFO: 127.0.0.1 - - [12/Nov/2024 18:26:09] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2024-11-12 18:26:09,115 INFO: 127.0.0.1 - - [12/Nov/2024 18:26:09] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-12 18:26:09,814 INFO: 127.0.0.1 - - [12/Nov/2024 18:26:09] "[35m[1mGET /?entry_type=manual HTTP/1.1[0m" 500 -
+2024-11-12 18:26:09,826 INFO: 127.0.0.1 - - [12/Nov/2024 18:26:09] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-12 18:26:09,826 INFO: 127.0.0.1 - - [12/Nov/2024 18:26:09] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-12 18:26:09,879 INFO: 127.0.0.1 - - [12/Nov/2024 18:26:09] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=dTFgv05BVba4Hki37YdF HTTP/1.1[0m" 304 -
+2024-11-12 18:26:09,883 INFO: 127.0.0.1 - - [12/Nov/2024 18:26:09] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-12 18:26:09,922 INFO: 127.0.0.1 - - [12/Nov/2024 18:26:09] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-12 18:26:22,670 INFO: Application startup
+2024-11-12 18:26:25,911 INFO: Application startup
+2024-11-12 18:27:13,331 INFO: Application startup
+2024-11-12 18:28:18,127 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/migrations/versions/697a090480e7_add_max_calories_to_user_settings.py', reloading
+2024-11-12 18:28:18,592 INFO: Application startup
+2024-11-12 18:28:18,625 WARNING:  * Debugger is active!
+2024-11-12 18:28:18,630 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:28:28,273 INFO: Application startup
+2024-11-12 18:28:51,100 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/migrations/versions/697a090480e7_add_max_calories_to_user_settings.py', reloading
+2024-11-12 18:28:51,577 INFO: Application startup
+2024-11-12 18:28:51,607 WARNING:  * Debugger is active!
+2024-11-12 18:28:51,612 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:28:58,270 INFO: Application startup
+2024-11-12 18:29:35,404 INFO: Application startup
+2024-11-12 18:29:36,269 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/migrations/env.py', reloading
+2024-11-12 18:29:36,754 INFO: Application startup
+2024-11-12 18:29:36,788 WARNING:  * Debugger is active!
+2024-11-12 18:29:36,794 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:29:42,279 INFO: Application startup
+2024-11-12 18:29:45,648 INFO: Application startup
+2024-11-12 18:29:51,656 INFO: 127.0.0.1 - - [12/Nov/2024 18:29:51] "[32mGET /?entry_type=manual HTTP/1.1[0m" 302 -
+2024-11-12 18:29:51,665 INFO: 127.0.0.1 - - [12/Nov/2024 18:29:51] "GET /login?next=/?entry_type%3Dmanual HTTP/1.1" 200 -
+2024-11-12 18:29:57,004 INFO: 127.0.0.1 - - [12/Nov/2024 18:29:57] "POST /login HTTP/1.1" 200 -
+2024-11-12 18:30:01,126 INFO: 127.0.0.1 - - [12/Nov/2024 18:30:01] "GET /register HTTP/1.1" 200 -
+2024-11-12 18:30:13,354 INFO: 127.0.0.1 - - [12/Nov/2024 18:30:13] "[32mPOST /register HTTP/1.1[0m" 302 -
+2024-11-12 18:30:13,362 INFO: 127.0.0.1 - - [12/Nov/2024 18:30:13] "GET / HTTP/1.1" 200 -
+2024-11-12 18:30:22,282 INFO: HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2024-11-12 18:30:22,286 INFO: 127.0.0.1 - - [12/Nov/2024 18:30:22] "[35m[1mPOST /analyze_meal HTTP/1.1[0m" 500 -
+2024-11-12 18:30:23,863 INFO: HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2024-11-12 18:30:23,865 INFO: 127.0.0.1 - - [12/Nov/2024 18:30:23] "[35m[1mPOST /analyze_meal HTTP/1.1[0m" 500 -
+2024-11-12 18:30:44,310 INFO: 127.0.0.1 - - [12/Nov/2024 18:30:44] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-12 18:30:45,138 INFO: 127.0.0.1 - - [12/Nov/2024 18:30:45] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-12 18:30:45,349 INFO: 127.0.0.1 - - [12/Nov/2024 18:30:45] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-12 18:30:45,493 INFO: 127.0.0.1 - - [12/Nov/2024 18:30:45] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-12 18:30:45,685 INFO: 127.0.0.1 - - [12/Nov/2024 18:30:45] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-12 18:31:16,092 INFO: Application startup
+2024-11-12 18:31:16,139 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.99:5001
+2024-11-12 18:31:16,139 INFO: [33mPress CTRL+C to quit[0m
+2024-11-12 18:31:16,139 INFO:  * Restarting with stat
+2024-11-12 18:31:16,498 INFO: Application startup
+2024-11-12 18:31:16,529 WARNING:  * Debugger is active!
+2024-11-12 18:31:16,534 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:31:23,401 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:23] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:31:24,476 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:24] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:31:27,337 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:27] "POST /delete_nutrition/1 HTTP/1.1" 200 -
+2024-11-12 18:31:27,346 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:27] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:31:30,528 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:30] "POST /delete_nutrition/2 HTTP/1.1" 200 -
+2024-11-12 18:31:30,537 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:30] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:31:36,096 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:36] "POST /delete_nutrition/3 HTTP/1.1" 200 -
+2024-11-12 18:31:36,106 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:36] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:31:38,060 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:38] "POST /delete_nutrition/4 HTTP/1.1" 200 -
+2024-11-12 18:31:38,067 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:38] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:31:40,364 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:40] "POST /delete_nutrition/5 HTTP/1.1" 200 -
+2024-11-12 18:31:40,376 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:40] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:31:45,659 INFO: HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2024-11-12 18:31:45,661 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:45] "[35m[1mPOST /analyze_meal HTTP/1.1[0m" 500 -
+2024-11-12 18:31:51,014 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:51] "GET /?entry_type=claude HTTP/1.1" 200 -
+2024-11-12 18:31:51,771 INFO: 127.0.0.1 - - [12/Nov/2024 18:31:51] "GET /?entry_type=claude HTTP/1.1" 200 -
+2024-11-12 18:33:12,190 INFO: 127.0.0.1 - - [12/Nov/2024 18:33:12] "GET /?entry_type=claude HTTP/1.1" 200 -
+2024-11-12 18:33:12,960 INFO: 127.0.0.1 - - [12/Nov/2024 18:33:12] "GET /?entry_type=claude HTTP/1.1" 200 -
+2024-11-12 18:33:13,154 INFO: 127.0.0.1 - - [12/Nov/2024 18:33:13] "GET /?entry_type=claude HTTP/1.1" 200 -
+2024-11-12 18:33:15,429 INFO: HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2024-11-12 18:33:15,442 INFO: 127.0.0.1 - - [12/Nov/2024 18:33:15] "[35m[1mPOST /analyze_meal HTTP/1.1[0m" 500 -
+2024-11-12 18:34:22,024 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-12 18:34:22,136 INFO:  * Restarting with stat
+2024-11-12 18:34:22,706 INFO: Application startup
+2024-11-12 18:34:22,743 WARNING:  * Debugger is active!
+2024-11-12 18:34:22,749 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:34:26,652 INFO: 127.0.0.1 - - [12/Nov/2024 18:34:26] "GET /?entry_type=claude HTTP/1.1" 200 -
+2024-11-12 18:34:29,640 INFO: HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 401 Unauthorized"
+2024-11-12 18:34:29,642 INFO: 127.0.0.1 - - [12/Nov/2024 18:34:29] "[35m[1mPOST /analyze_meal HTTP/1.1[0m" 500 -
+2024-11-12 18:34:47,606 INFO: Application startup
+2024-11-12 18:34:47,654 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.99:5001
+2024-11-12 18:34:47,654 INFO: [33mPress CTRL+C to quit[0m
+2024-11-12 18:34:47,654 INFO:  * Restarting with stat
+2024-11-12 18:34:48,011 INFO: Application startup
+2024-11-12 18:34:48,042 WARNING:  * Debugger is active!
+2024-11-12 18:34:48,047 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:34:59,260 INFO: HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2024-11-12 18:34:59,268 INFO: 127.0.0.1 - - [12/Nov/2024 18:34:59] "POST /analyze_meal HTTP/1.1" 200 -
+2024-11-12 18:35:03,553 INFO: Received nutrition data: {'protein_amount': 43, 'calorie_amount': 280, 'meal_name': '       chicken'}
+2024-11-12 18:35:03,559 INFO: Successfully added nutrition entry
+2024-11-12 18:35:03,559 INFO: 127.0.0.1 - - [12/Nov/2024 18:35:03] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-12 18:35:03,589 INFO: 127.0.0.1 - - [12/Nov/2024 18:35:03] "GET /?entry_type=claude HTTP/1.1" 200 -
+2024-11-12 18:35:09,401 INFO: Received nutrition data: {'protein_amount': '15', 'calorie_amount': '15', 'meal_name': '       '}
+2024-11-12 18:35:09,404 INFO: Successfully added nutrition entry
+2024-11-12 18:35:09,404 INFO: 127.0.0.1 - - [12/Nov/2024 18:35:09] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-12 18:35:09,412 INFO: 127.0.0.1 - - [12/Nov/2024 18:35:09] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:35:11,189 INFO: Received nutrition data: {'protein_amount': '', 'calorie_amount': '', 'meal_name': '       '}
+2024-11-12 18:35:11,189 ERROR: Error adding nutrition: could not convert string to float: ''
+2024-11-12 18:35:11,189 INFO: 127.0.0.1 - - [12/Nov/2024 18:35:11] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 500 -
+2024-11-12 18:37:18,119 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:18] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:37:24,551 INFO: Received nutrition data: {'protein_amount': '15', 'calorie_amount': '15', 'meal_name': 'Chicken'}
+2024-11-12 18:37:24,555 INFO: Successfully added nutrition entry
+2024-11-12 18:37:24,555 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:24] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-12 18:37:24,568 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:24] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:37:34,444 INFO: HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2024-11-12 18:37:34,447 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:34] "POST /analyze_meal HTTP/1.1" 200 -
+2024-11-12 18:37:45,022 INFO: Received nutrition data: {'protein_amount': 5.5, 'calorie_amount': 90, 'meal_name': '       turkey stick'}
+2024-11-12 18:37:45,025 INFO: Successfully added nutrition entry
+2024-11-12 18:37:45,026 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:45] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-12 18:37:45,038 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:45] "GET /?entry_type=claude HTTP/1.1" 200 -
+2024-11-12 18:37:49,931 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:49] "POST /delete_nutrition/2 HTTP/1.1" 200 -
+2024-11-12 18:37:49,940 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:49] "GET /?entry_type=claude HTTP/1.1" 200 -
+2024-11-12 18:37:51,991 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:51] "POST /delete_nutrition/1 HTTP/1.1" 200 -
+2024-11-12 18:37:52,000 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:52] "GET /?entry_type=claude HTTP/1.1" 200 -
+2024-11-12 18:37:55,318 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:55] "POST /delete_nutrition/3 HTTP/1.1" 200 -
+2024-11-12 18:37:55,324 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:55] "GET /?entry_type=claude HTTP/1.1" 200 -
+2024-11-12 18:37:57,372 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:57] "POST /delete_nutrition/4 HTTP/1.1" 200 -
+2024-11-12 18:37:57,379 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:57] "GET /?entry_type=claude HTTP/1.1" 200 -
+2024-11-12 18:37:58,193 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:58] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:37:58,845 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:58] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:37:59,512 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:59] "[32mGET /logout HTTP/1.1[0m" 302 -
+2024-11-12 18:37:59,524 INFO: 127.0.0.1 - - [12/Nov/2024 18:37:59] "GET /login HTTP/1.1" 200 -
+2024-11-12 18:38:00,766 INFO: 127.0.0.1 - - [12/Nov/2024 18:38:00] "[32mGET /workouts HTTP/1.1[0m" 302 -
+2024-11-12 18:38:00,771 INFO: 127.0.0.1 - - [12/Nov/2024 18:38:00] "GET /login?next=/workouts HTTP/1.1" 200 -
+2024-11-12 18:38:01,506 INFO: 127.0.0.1 - - [12/Nov/2024 18:38:01] "[32mGET /history HTTP/1.1[0m" 302 -
+2024-11-12 18:38:01,516 INFO: 127.0.0.1 - - [12/Nov/2024 18:38:01] "GET /login?next=/history HTTP/1.1" 200 -
+2024-11-12 18:38:01,983 INFO: 127.0.0.1 - - [12/Nov/2024 18:38:01] "[32mGET / HTTP/1.1[0m" 302 -
+2024-11-12 18:38:01,990 INFO: 127.0.0.1 - - [12/Nov/2024 18:38:01] "GET /login?next=/ HTTP/1.1" 200 -
+2024-11-12 18:38:13,791 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-12 18:38:13,901 INFO:  * Restarting with stat
+2024-11-12 18:38:14,430 INFO: Application startup
+2024-11-12 18:38:14,465 WARNING:  * Debugger is active!
+2024-11-12 18:38:14,471 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:38:35,606 INFO: Application startup
+2024-11-12 18:38:35,655 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.99:5001
+2024-11-12 18:38:35,655 INFO: [33mPress CTRL+C to quit[0m
+2024-11-12 18:38:35,655 INFO:  * Restarting with stat
+2024-11-12 18:38:36,000 INFO: Application startup
+2024-11-12 18:38:36,030 WARNING:  * Debugger is active!
+2024-11-12 18:38:36,034 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:40:04,722 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:04] "POST /login HTTP/1.1" 200 -
+2024-11-12 18:40:06,675 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:06] "GET /register HTTP/1.1" 200 -
+2024-11-12 18:40:20,918 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:20] "[32mPOST /register HTTP/1.1[0m" 302 -
+2024-11-12 18:40:20,929 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:20] "GET / HTTP/1.1" 200 -
+2024-11-12 18:40:23,091 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:23] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:40:24,844 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:24] "GET / HTTP/1.1" 200 -
+2024-11-12 18:40:26,432 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:26] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:40:29,001 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:29] "POST /update_settings HTTP/1.1" 200 -
+2024-11-12 18:40:31,132 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:31] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:40:32,683 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:32] "GET / HTTP/1.1" 200 -
+2024-11-12 18:40:34,695 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:34] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:40:35,655 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:35] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:40:40,739 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:40] "[35m[1mPOST /update_settings HTTP/1.1[0m" 500 -
+2024-11-12 18:40:45,620 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:45] "POST /update_settings HTTP/1.1" 200 -
+2024-11-12 18:40:47,119 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:47] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:40:47,871 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:47] "GET / HTTP/1.1" 200 -
+2024-11-12 18:40:52,073 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:52] "GET /workouts HTTP/1.1" 200 -
+2024-11-12 18:40:52,144 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:52] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-12 18:40:55,931 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:55] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:40:57,820 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:57] "GET / HTTP/1.1" 200 -
+2024-11-12 18:40:58,588 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:58] "GET /workouts HTTP/1.1" 200 -
+2024-11-12 18:40:58,658 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:58] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-12 18:40:59,076 INFO: 127.0.0.1 - - [12/Nov/2024 18:40:59] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:41:00,415 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:00] "GET / HTTP/1.1" 200 -
+2024-11-12 18:41:39,755 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:39] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:41:40,543 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:40] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:41:42,521 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:42] "GET /workouts HTTP/1.1" 200 -
+2024-11-12 18:41:42,587 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:42] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-12 18:41:45,434 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:45] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:41:55,517 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:55] "POST /update_workout_category HTTP/1.1" 200 -
+2024-11-12 18:41:55,524 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:55] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:41:58,274 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:58] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:41:58,964 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:58] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:41:59,161 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:59] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:41:59,324 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:59] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:41:59,489 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:59] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:41:59,687 INFO: 127.0.0.1 - - [12/Nov/2024 18:41:59] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:42:02,397 INFO: 127.0.0.1 - - [12/Nov/2024 18:42:02] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:42:02,598 INFO: 127.0.0.1 - - [12/Nov/2024 18:42:02] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:42:27,290 INFO: 127.0.0.1 - - [12/Nov/2024 18:42:27] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:42:27,640 INFO: 127.0.0.1 - - [12/Nov/2024 18:42:27] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:42:27,809 INFO: 127.0.0.1 - - [12/Nov/2024 18:42:27] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:42:27,990 INFO: 127.0.0.1 - - [12/Nov/2024 18:42:27] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:42:28,171 INFO: 127.0.0.1 - - [12/Nov/2024 18:42:28] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:42:28,344 INFO: 127.0.0.1 - - [12/Nov/2024 18:42:28] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:42:28,545 INFO: 127.0.0.1 - - [12/Nov/2024 18:42:28] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:42:47,143 INFO: 127.0.0.1 - - [12/Nov/2024 18:42:47] "GET /workouts HTTP/1.1" 200 -
+2024-11-12 18:42:47,217 INFO: 127.0.0.1 - - [12/Nov/2024 18:42:47] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-12 18:43:04,663 INFO: 127.0.0.1 - - [12/Nov/2024 18:43:04] "[35m[1mPOST /log_workout HTTP/1.1[0m" 201 -
+2024-11-12 18:43:04,671 INFO: 127.0.0.1 - - [12/Nov/2024 18:43:04] "GET /workouts HTTP/1.1" 200 -
+2024-11-12 18:43:04,742 INFO: 127.0.0.1 - - [12/Nov/2024 18:43:04] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-12 18:43:08,705 INFO: 127.0.0.1 - - [12/Nov/2024 18:43:08] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:43:10,603 INFO: 127.0.0.1 - - [12/Nov/2024 18:43:10] "GET / HTTP/1.1" 200 -
+2024-11-12 18:44:36,316 INFO: 127.0.0.1 - - [12/Nov/2024 18:44:36] "GET /workouts HTTP/1.1" 200 -
+2024-11-12 18:44:36,393 INFO: 127.0.0.1 - - [12/Nov/2024 18:44:36] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-12 18:44:37,787 INFO: 127.0.0.1 - - [12/Nov/2024 18:44:37] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:46:24,411 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-12 18:46:24,521 INFO:  * Restarting with stat
+2024-11-12 18:46:25,224 INFO: Application startup
+2024-11-12 18:46:25,269 WARNING:  * Debugger is active!
+2024-11-12 18:46:25,276 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:46:56,227 INFO: 127.0.0.1 - - [12/Nov/2024 18:46:56] "[33mGET /get_workout_category/1 HTTP/1.1[0m" 404 -
+2024-11-12 18:49:59,136 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-12 18:49:59,262 INFO:  * Restarting with stat
+2024-11-12 18:49:59,858 INFO: Application startup
+2024-11-12 18:49:59,900 WARNING:  * Debugger is active!
+2024-11-12 18:49:59,908 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:50:20,798 INFO: 127.0.0.1 - - [12/Nov/2024 18:50:20] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:50:22,635 INFO: 127.0.0.1 - - [12/Nov/2024 18:50:22] "GET /get_workout_category/1 HTTP/1.1" 200 -
+2024-11-12 18:50:26,407 INFO: 127.0.0.1 - - [12/Nov/2024 18:50:26] "POST /update_workout_category HTTP/1.1" 200 -
+2024-11-12 18:50:26,415 INFO: 127.0.0.1 - - [12/Nov/2024 18:50:26] "GET /settings HTTP/1.1" 200 -
+2024-11-12 18:50:28,174 INFO: 127.0.0.1 - - [12/Nov/2024 18:50:28] "GET /workouts HTTP/1.1" 200 -
+2024-11-12 18:50:28,243 INFO: 127.0.0.1 - - [12/Nov/2024 18:50:28] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-12 18:52:35,935 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-12 18:52:36,043 INFO:  * Restarting with stat
+2024-11-12 18:52:36,570 INFO: Application startup
+2024-11-12 18:52:36,606 WARNING:  * Debugger is active!
+2024-11-12 18:52:36,612 INFO:  * Debugger PIN: 133-619-259
+2024-11-12 18:52:38,107 INFO: 127.0.0.1 - - [12/Nov/2024 18:52:38] "GET /workouts HTTP/1.1" 200 -
+2024-11-12 18:52:38,235 INFO: 127.0.0.1 - - [12/Nov/2024 18:52:38] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-12 18:52:39,881 INFO: 127.0.0.1 - - [12/Nov/2024 18:52:39] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:52:51,511 INFO: 127.0.0.1 - - [12/Nov/2024 18:52:51] "GET / HTTP/1.1" 200 -
+2024-11-12 18:52:57,057 INFO: Received nutrition data: {'protein_amount': '1', 'calorie_amount': '1', 'meal_name': 'a'}
+2024-11-12 18:52:57,062 INFO: Successfully added nutrition entry
+2024-11-12 18:52:57,062 INFO: 127.0.0.1 - - [12/Nov/2024 18:52:57] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-12 18:52:57,072 INFO: 127.0.0.1 - - [12/Nov/2024 18:52:57] "GET /?entry_type=manual HTTP/1.1" 200 -
+2024-11-12 18:52:58,671 INFO: 127.0.0.1 - - [12/Nov/2024 18:52:58] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:53:03,567 INFO: 127.0.0.1 - - [12/Nov/2024 18:53:03] "GET /workouts HTTP/1.1" 200 -
+2024-11-12 18:53:03,637 INFO: 127.0.0.1 - - [12/Nov/2024 18:53:03] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-12 18:53:04,455 INFO: 127.0.0.1 - - [12/Nov/2024 18:53:04] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:57:12,852 INFO: 127.0.0.1 - - [12/Nov/2024 18:57:12] "GET /history HTTP/1.1" 200 -
+2024-11-12 18:57:22,758 INFO: 127.0.0.1 - - [12/Nov/2024 18:57:22] "POST /update_nutrition HTTP/1.1" 200 -
+2024-11-12 18:57:22,773 INFO: 127.0.0.1 - - [12/Nov/2024 18:57:22] "GET /history HTTP/1.1" 200 -
