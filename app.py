@@ -492,6 +492,15 @@ def delete_workout_category(category_id):
         id=category_id,
         user_id=current_user.id
     ).first_or_404()
+    
+    try:
+        db.session.delete(category)
+        db.session.commit()
+        return jsonify({"success": True, "message": "Category deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Error deleting workout category: {str(e)}")
+        return jsonify({"success": False, "error": "Error deleting category"}), 500
 
 @app.route('/settings')
 @login_required  
