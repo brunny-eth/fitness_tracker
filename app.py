@@ -473,21 +473,30 @@ def get_workout_categories():
 @app.route('/update_workout_category', methods=['POST'])
 @login_required  
 def update_workout_category():
-    data = request.json  
+    data = request.json
     if not data.get('name') or not data.get('exercises'):
         return jsonify({"error": "Name and exercises are required"}), 400
-        
-    category = WorkoutCategory.query.filter_by(
-        name=data['name'],
-        user_id=current_user.id
-    ).first()
+    
+    if data.get('id'):
+        category = WorkoutCategory.query.filter_by(
+            id=data['id'],
+            user_id=current_user.id
+        ).first()
+        if not category:
+            return jsonify({"error": "Category not found"}), 404
+    else:
+        category = WorkoutCategory.query.filter_by(
+            name=data['name'],
+            user_id=current_user.id
+        ).first()
     
     try:
         if category:
+            category.name = data['name']
             category.exercises = json.dumps(data['exercises'])
         else:
             category = WorkoutCategory(
-                user_id=current_user.id,  
+                user_id=current_user.id,
                 name=data['name'],
                 exercises=json.dumps(data['exercises'])
             )

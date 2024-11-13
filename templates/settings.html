@@ -20,122 +20,145 @@
             <input type="number" id="max-calories" value="{{ max_calories }}">
         </div>
 
-        <button onclick="updateSettings()">Update Settings</button>
+        <button onclick="updateSettings()" class="btn-primary">Update Settings</button>
     </div>
 </div>
-
 
 <div class="section">
     <h2>Workout Categories</h2>
-    <div id="workout-categories">
-        {% for category in workout_categories %}
-        <div class="category-entry" data-id="{{ category.id }}">
-            <div class="category-header">
-                <h3>{{ category.name }}</h3>
-                <div class="button-group">
-                    <button onclick="editCategory({{ category.id }})" class="edit-btn">Edit</button>
-                    <button onclick="deleteCategory({{ category.id }})" class="delete-btn">Delete</button>
-                </div>
-            </div>
-            <div class="exercises-list">
-                <h4>Exercises:</h4>
-                <ul>
-                    {% for exercise in category.get_exercises() %}
-                    <li>{{ exercise }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
     
-    <button onclick="showAddCategoryModal()" class="add-btn">Add New Category</button>
-</div>
-
-<div id="categoryModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <h3 id="modalTitle">Add Category</h3>
-        <div>
-            <label for="categoryName">Category Name:</label>
-            <input type="text" id="categoryName">
+    {% for category in workout_categories %}
+    <div class="category-card">
+        <div class="category-header">
+            <h3>{{ category.name }}</h3>
+            <div class="button-group">
+                <button class="btn-secondary" onclick="editCategory('{{ category.id }}')">Edit</button>
+                <button class="btn-danger" onclick="deleteCategory('{{ category.id }}')">Delete</button>
+            </div>
         </div>
-        <div>
+        <div class="category-content">
+            <h4>Exercises:</h4>
+            <ul class="exercise-list">
+                {% for exercise in category.get_exercises() %}
+                <li>{{ exercise }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="category-card" id="add-category">
+        <h3>Add New Category</h3>
+        <div class="form-group">
+            <label for="categoryName">Category Name:</label>
+            <input type="text" id="categoryName" class="form-input">
+        </div>
+        <div class="form-group">
             <label>Exercises:</label>
             <div id="exercisesList">
                 <input type="text" class="exercise-input">
             </div>
-            <button onclick="addExerciseInput()" class="small-btn">+ Add Exercise</button>
+            <button onclick="addExerciseInput()" class="btn-secondary">+ Add Exercise</button>
         </div>
-        <div class="modal-buttons">
-            <button onclick="saveCategory()" class="save-btn">Save</button>
-            <button onclick="closeModal()" class="cancel-btn">Cancel</button>
+        <div class="form-buttons">
+            <button onclick="saveCategory()" class="btn-primary">Save Category</button>
         </div>
     </div>
 </div>
 
 <style>
-    .category-entry {
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 15px;
-        margin-bottom: 15px;
-    }
-    
-    .category-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .exercises-list {
-        margin-top: 10px;
-    }
-    
-    .modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.5);
-    }
-    
-    .modal-content {
-        background-color: white;
-        margin: 15% auto;
-        padding: 20px;
-        width: 80%;
-        max-width: 500px;
-        border-radius: 4px;
-    }
-    
-    .exercise-input {
-        margin: 5px 0;
-        width: 100%;
-    }
+.section {
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    padding: 24px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
 
-    .button-group {
+.category-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 12px;
+    background-color: #ffffff;
+}
+
+.category-header {
     display: flex;
-    gap: 10px;
-    }
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
 
-    .edit-btn, .delete-btn {
-    background-color: #f5f5f5;
-    color: #666;
-    border: 1px solid #ddd;
-    padding: 5px 10px;
-    border-radius: 3px;
+.exercise-list {
+    list-style-type: disc;
+    margin-left: 1.25rem;
+    color: #4b5563;
+}
+
+.btn-primary {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
     cursor: pointer;
-    }
+}
 
-    .edit-btn:hover, .delete-btn:hover {
-    background-color: #e0e0e0;
-    color: #333;
-    }
+.btn-secondary {
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+.btn-danger {
+    background-color: #fee2e2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #374151;
+}
+
+.form-input, .exercise-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    margin-bottom: 0.5rem;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+}
+
+.form-buttons {
+    margin-top: 1rem;
+}
+
+.settings-form {
+    max-width: 500px;
+}
 </style>
-    
 
 <script>
+let editingCategoryId = null;
 
 function updateSettings() {
     const weight = document.getElementById('weight').value;
@@ -144,9 +167,7 @@ function updateSettings() {
     
     fetch('/update_settings', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ weight, ratio, max_calories: maxCalories })
     })
     .then(response => response.json())
@@ -162,13 +183,6 @@ function updateSettings() {
     });
 }
 
-function showAddCategoryModal() {
-    document.getElementById('modalTitle').textContent = 'Add Category';
-    document.getElementById('categoryName').value = '';
-    document.getElementById('exercisesList').innerHTML = '<input type="text" class="exercise-input">';
-    document.getElementById('categoryModal').style.display = 'block';
-}
-
 function addExerciseInput() {
     const input = document.createElement('input');
     input.type = 'text';
@@ -182,43 +196,32 @@ function saveCategory() {
         .map(input => input.value)
         .filter(value => value.trim() !== '');
 
+    if (!name || exercises.length === 0) {
+        alert('Please provide a category name and at least one exercise');
+        return;
+    }
+
     fetch('/update_workout_category', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, exercises })
+        body: JSON.stringify({ 
+            id: editingCategoryId,
+            name, 
+            exercises
+        })
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
             location.reload();
+        } else if (data.error) {
+            alert(data.error);
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving category');
     });
-}
-
-function editCategory(categoryId) {
-    fetch(`/get_workout_category/${categoryId}`)
-        .then(response => response.json())
-        .then(category => {
-            document.getElementById('modalTitle').textContent = 'Edit Category';
-            document.getElementById('categoryName').value = category.name;
-            
-            const exercisesList = document.getElementById('exercisesList');
-            exercisesList.innerHTML = '';
-            
-            category.exercises.forEach(exercise => {
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.className = 'exercise-input';
-                input.value = exercise;
-                exercisesList.appendChild(input);
-            });
-            
-            document.getElementById('categoryModal').style.display = 'block';
-        });
-}
-
-function closeModal() {
-    document.getElementById('categoryModal').style.display = 'none';
 }
 
 function deleteCategory(categoryId) {
@@ -240,22 +243,14 @@ function deleteCategory(categoryId) {
     }
 }
 
-let editingCategoryId = null;
-
 function editCategory(categoryId) {
     editingCategoryId = categoryId;
-    
     fetch(`/get_workout_category/${categoryId}`)
         .then(response => response.json())
         .then(category => {
-            // Set modal title and category name
-            document.getElementById('modalTitle').textContent = 'Edit Category';
             document.getElementById('categoryName').value = category.name;
-            
-            // Clear and populate exercises
             const exercisesList = document.getElementById('exercisesList');
             exercisesList.innerHTML = '';
-            
             category.exercises.forEach(exercise => {
                 const input = document.createElement('input');
                 input.type = 'text';
@@ -263,66 +258,11 @@ function editCategory(categoryId) {
                 input.value = exercise;
                 exercisesList.appendChild(input);
             });
-            
-            // If there are no exercises, add one empty input
-            if (category.exercises.length === 0) {
-                addExerciseInput();
-            }
-            
-            // Show the modal
-            document.getElementById('categoryModal').style.display = 'block';
         })
         .catch(error => {
             console.error('Error:', error);
             alert('Error loading category');
         });
 }
-
-function saveCategory() {
-    const name = document.getElementById('categoryName').value;
-    const exercises = Array.from(document.querySelectorAll('.exercise-input'))
-        .map(input => input.value)
-        .filter(value => value.trim() !== '');
-
-    if (!name || exercises.length === 0) {
-        alert('Please provide a category name and at least one exercise');
-        return;
-    }
-
-    fetch('/update_workout_category', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            name, 
-            exercises,
-            id: editingCategoryId 
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else if (data.error) {
-            alert(data.error);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error saving category');
-    });
-}
-
-function closeModal() {
-    document.getElementById('categoryModal').style.display = 'none';
-    editingCategoryId = null;
-}
-
-function addExerciseInput() {
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = 'exercise-input';
-    document.getElementById('exercisesList').appendChild(input);
-}
-
 </script>
 {% endblock %}
