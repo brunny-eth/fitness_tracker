@@ -1,97 +1,6 @@
 {% extends "base.html" %}
+
 {% block content %}
-<style>
-.section {
-    overflow-x: auto;
-}
-
-canvas {
-    max-width: 100%;
-    height: auto !important;
-}
-
-.modal {
-    z-index: 1000;
-}
-
-.modal-content {
-    border-radius: 8px;
-}
-
-@media (max-width: 640px) {
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
-
-    thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
-
-    tr {
-        margin-bottom: 20px;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        background: white;
-    }
-
-    td {
-        position: relative;
-        padding: 12px;
-        padding-left: 45%;
-        border: none;
-        border-bottom: 1px solid #e5e7eb;
-        min-height: 40px;
-    }
-
-    td:last-child {
-        border-bottom: none;
-    }
-
-    td:before {
-        position: absolute;
-        left: 12px;
-        width: 40%;
-        padding-right: 10px;
-        font-weight: 500;
-    }
-
-    td:nth-of-type(1):before { content: "Date"; }
-    td:nth-of-type(2):before { content: "Workout"; }
-    td:nth-of-type(3):before { content: "Nutrition"; }
-
-    .modal-content {
-        margin: 5% auto;
-        width: 90%;
-        max-width: none;
-    }
-
-    .modal-content input {
-        width: 100%;
-        padding: 12px;
-        margin: 8px 0;
-        font-size: 16px;
-    }
-
-    .modal-content button {
-        width: 100%;
-        margin: 8px 0;
-        padding: 12px;
-        min-height: 44px;
-    }
-
-    div[style*="display: flex"] {
-        flex-direction: column;
-    }
-
-    button[style*="margin-left"] {
-        margin-left: 0 !important;
-        margin-top: 8px;
-    }
-}
-</style>
-
 <div class="section">
     <h2>Nutrition Trends</h2>
     <canvas id="nutritionChart"></canvas>
@@ -110,8 +19,8 @@ canvas {
         <tbody>
             {% for entry in history %}
             <tr>
-                <td data-label="Date">{{ entry.date.strftime('%B %d, %Y') }}</td>
-                <td data-label="Workout">
+                <td>{{ entry.date.strftime('%B %d, %Y') }}</td>
+                <td>
                     {% if entry.workout %}
                         <strong>{{ entry.workout.type }}</strong>
                         <br>
@@ -123,7 +32,7 @@ canvas {
                         No workout logged
                     {% endif %}
                 </td>
-                <td data-label="Nutrition">
+                <td>
                     <div style="display: flex; justify-content: space-between; align-items: start;">
                         <div>
                             {% if entry.nutrition %}
