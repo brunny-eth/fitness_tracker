@@ -637,6 +637,22 @@ def get_last_workout(workout_type):
         }), 200
     return jsonify({"message": "No previous workout found"}), 404
 
+@app.route('/get_exercise_history/<workout_type>/<exercise_name>')
+@login_required
+def get_exercise_history(workout_type, exercise_name):
+    last_workout = Workout.query.filter_by(
+        user_id=current_user.id,
+        type=workout_type
+    ).order_by(Workout.date.desc()).first()
+    
+    if last_workout:
+        exercises = json.loads(last_workout.exercises)
+        for exercise in exercises:
+            if exercise['name'] == exercise_name:
+                return jsonify(exercise), 200
+    
+    return jsonify({"message": "No history found"}), 404
+
 # app runner
 if __name__ == '__main__':
     with app.app_context():
