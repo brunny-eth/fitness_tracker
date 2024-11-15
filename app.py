@@ -254,7 +254,7 @@ def workouts():
     ).first() is not None
     
     workouts = Workout.query.filter_by(user_id=current_user.id).order_by(Workout.date.desc()).limit(10).all()
-    workout_categories = WorkoutCategory.query.all()  
+    workout_categories = WorkoutCategory.query.filter_by(user_id=current_user.id).all()  
     
     return render_template('workouts.html',
                          active_tab='workouts',
@@ -537,6 +537,23 @@ def delete_workout_category(category_id):
         logging.error(f"Error deleting workout category: {str(e)}")
         return jsonify({"success": False, "error": "Error deleting category"}), 500
 
+@app.route('/delete_workout/<int:workout_id>', methods=['POST'])
+@login_required
+def delete_workout(workout_id):
+    workout = Workout.query.filter_by(
+        id=workout_id,
+        user_id=current_user.id
+    ).first_or_404()
+    
+    try:
+        db.session.delete(workout)
+        db.session.commit()
+        return jsonify({"message": "Workout deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Error deleting workout: {str(e)}")
+        return jsonify({"error": "Error deleting workout"}), 500
+
 @app.route('/update_nutrition', methods=['POST'])
 @login_required
 def update_nutrition():
@@ -604,6 +621,21 @@ def get_workout_category(category_id):
         'name': category.name,
         'exercises': category.get_exercises()
     })
+
+@app.route('/get_last_workout/<workout_type>')
+@login_required
+def get_last_workout(workout_type):
+    last_workout = Workout.query.filter_by(
+        user_id=current_user.id,
+        type=workout_type
+    ).order_by(Workout.date.desc()).first()
+    
+    if last_workout:
+        return jsonify({
+            "type": last_workout.type,
+            "exercises": json.loads(last_workout.exercises)
+        }), 200
+    return jsonify({"message": "No previous workout found"}), 404
 
 # app runner
 if __name__ == '__main__':
