@@ -653,6 +653,26 @@ def get_exercise_history(workout_type, exercise_name):
     
     return jsonify({"message": "No history found"}), 404
 
+@app.route('/update_workout/<int:workout_id>', methods=['POST'])
+@login_required
+def update_workout(workout_id):
+    try:
+        data = request.json
+        workout = Workout.query.filter_by(
+            id=workout_id,
+            user_id=current_user.id
+        ).first_or_404()
+        
+        workout.type = data['type']
+        workout.exercises = json.dumps(data['exercises'])
+        
+        db.session.commit()
+        return jsonify({"message": "Workout updated successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Error updating workout: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
 # app runner
 if __name__ == '__main__':
     with app.app_context():

@@ -156,7 +156,7 @@ canvas {
 </div>
 
 <div id="editModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
-    <div class="modal-content" style="background-color: white; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px;">
+    <div id="editModal" class="modal-content" style="background-color: white; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px;">
         <h3>Edit Nutrition Data</h3>
         <form id="editForm">
             <input type="hidden" id="editDate">
@@ -168,7 +168,10 @@ canvas {
                 <label for="editCalories">Calories:</label>
                 <input type="number" id="editCalories" required>
             </div>
-            <div style="margin-top: 20px;">
+            <div style="margin-top: 20px; text-align: center;">
+                <p style="margin-bottom: 15px; color: #666;">
+                    Want to edit workout data? <a href="/workouts" style="color: #4a90e2; text-decoration: none;">Visit the Workouts page</a>
+                </p>
                 <button type="button" onclick="submitEdit()">Save</button>
                 <button type="button" onclick="closeEditModal()">Cancel</button>
             </div>
