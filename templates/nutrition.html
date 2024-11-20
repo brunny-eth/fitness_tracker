@@ -53,22 +53,36 @@
 </div>
 
 <div class="section">
-   <h2>Add Nutrition Entry</h2>
-   
-   <div class="form-group">
-       <label for="entry_type">Select Entry Type</label>
-       <select 
-       id="entry_type" 
-       onchange="toggleEntryType()" 
-       value="{{ entry_type }}" 
-       class="w-full max-w-xs p-2 border border-gray-200 rounded-md"
-   >           <option value="manual">Manual Entry</option>
-           <option value="claude">Ask Claude</option>
-           <option value="saved">Saved Meals</option>
-       </select>
-   </div>
+    <h2>Add Nutrition Entry</h2>
+    
+    <div class="entry-type-toggle">
+        <button 
+            class="toggle-button active" 
+            onclick="setEntryType('claude')" 
+            id="claude_button"
+        >
+            Ask AI
+        </button>
+        <button 
+            class="toggle-button" 
+            onclick="setEntryType('manual')" 
+            id="manual_button"
+        >
+            Manual Entry
+        </button>
+    </div> 
 
-   <div id="manual_input" class="input-group">
+    <div id="claude_input" class="input-group">
+        <textarea 
+            id="meal_description" 
+            placeholder="Describe what you ate (e.g., '2 eggs with toast and a banana')"
+            rows="3">
+        </textarea>
+        <button type="button" onclick="analyzeMeal()" id="analyze_button">Analyze Meal</button>
+        <div id="analysis_result"></div>
+    </div>
+
+   <div id="manual_input" class="input-group hidden">
     <label for="amount">Enter nutrition directly:</label>
     <div class="input-row">
         <input type="text" id="manual_meal_name" placeholder="Meal name">
@@ -76,59 +90,52 @@
         <input type="number" id="calorie_amount" placeholder="Calories">
         <button type="button" onclick="addNutrition()">Add</button>
     </div>
-    </div>  
+    </div> 
+</div>
 
-   <div id="claude_input" class="input-group hidden">
-       <textarea 
-           id="meal_description" 
-           placeholder="Describe what you ate (e.g., '2 eggs with toast and a banana')"
-           rows="3">
-       </textarea>
-       <button type="button" onclick="analyzeMeal()" id="analyze_button">Analyze Meal</button>
-       <div id="analysis_result"></div>
-   </div>
-
-   <div id="saved_meals_input" class="input-group hidden">
-    <div class="collapsible-section">
-        <div class="section-header" onclick="toggleSection('quick-add')">
-            <h3>Quick Add Saved Meals</h3>
-            <span class="toggle-icon">▼</span>
-        </div>
-        <div id="quick-add-content" class="section-content">
-            <div class="search-container">
-                <input 
-                    type="text" 
-                    id="meal_search" 
-                    placeholder="Search saved meals..."
-                    oninput="searchMeals(this.value)"
-                    class="search-input"
-                >
+<div class="section">
+    <h2>Saved Meals</h2>
+    <div id="saved_meals_input" class="input-group">
+        <div class="collapsible-section">
+            <div class="section-header collapsed" onclick="toggleSection('quick-add')">
+                <h3>Search Saved Meals</h3>
+                <span class="toggle-icon">▼</span>
             </div>
-            <div id="meals_container">
-                {% for meal in saved_meals %}
-                <div class="meal-entry" data-meal-name="{{ meal.name.lower() }}">
-                    <div class="meal-content">
-                        <span class="meal-name">{{ meal.name }}</span>
-                        <span class="meal-nutrition">({{ meal.protein_per_serving }}g protein, {{ meal.calories_per_serving }} cal)</span>
-                    </div>
-                    <div class="meal-actions">
-                        <button type="button" onclick="addSavedMeal({{ meal.id }})" class="add-button">Add meal to today</button>
-                        <span onclick="deleteSavedMeal({{ meal.id }})" class="delete-button">×</span>
-                    </div>
+            <div id="quick-add-content" class="section-content collapsed">
+                <div class="search-container">
+                    <input 
+                        type="text" 
+                        id="meal_search" 
+                        placeholder="Search saved meals..."
+                        oninput="searchMeals(this.value)"
+                        class="search-input"
+                    >
                 </div>
+                <div id="meals_container">
+                    {% for meal in saved_meals %}
+                    <div class="meal-entry" data-meal-name="{{ meal.name.lower() }}">
+                        <div class="meal-content">
+                            <span class="meal-name">{{ meal.name }}</span>
+                            <span class="meal-nutrition">({{ meal.protein_per_serving }}g protein, {{ meal.calories_per_serving }} cal)</span>
+                        </div>
+                        <div class="meal-actions">
+                            <button type="button" onclick="addSavedMeal({{ meal.id }})" class="add-button">Add meal to today</button>
+                            <span onclick="deleteSavedMeal({{ meal.id }})" class="delete-button">×</span>
+                        </div>
+</div>
                 {% endfor %}
             </div>
         </div>
     </div>
 
     <div class="section-divider"></div>
-
     <div class="collapsible-section">
-        <div class="section-header" onclick="toggleSection('add-new')">
+
+        <div class="section-header collapsed" onclick="toggleSection('add-new')">
             <h3>Add New Saved Meal</h3>
             <span class="toggle-icon">▼</span>
         </div>
-        <div id="add-new-content" class="section-content">
+        <div id="add-new-content" class="section-content collapsed">
             <div class="form-fields">
                 <div class="form-group">
                     <label for="new_meal_name">Meal Name</label>
@@ -146,7 +153,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <style>
@@ -404,6 +410,34 @@
     align-items: center;
 }
 
+.entry-type-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.toggle-button {
+    flex: 1;
+    padding: 8px 16px;
+    border: 1px solid #e5e7eb;
+    background-color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.toggle-button.active {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+.toggle-button:hover:not(.active) {
+    background-color: #f3f4f6;
+}
+
 @media (max-width: 640px) {
     .input-row {
         flex-direction: column;
@@ -629,30 +663,24 @@ function toggleSection(sectionId) {
 }
 
 
-function toggleEntryType() {
-    const entryType = document.getElementById('entry_type').value;
+function setEntryType(type) {
     const claudeInput = document.getElementById('claude_input');
     const manualInput = document.getElementById('manual_input');
-    const savedMealsInput = document.getElementById('saved_meals_input');
+    const claudeButton = document.getElementById('claude_button');
+    const manualButton = document.getElementById('manual_button');
     
-    claudeInput.style.display = 'none';
-    manualInput.style.display = 'none';
-    savedMealsInput.style.display = 'none';
+    claudeInput.classList.add('hidden');
+    manualInput.classList.add('hidden');
+    claudeButton.classList.remove('active');
+    manualButton.classList.remove('active');
     
-    switch(entryType) {
-        case 'claude':
-            claudeInput.style.display = 'block';
-            break;
-        case 'saved':
-            savedMealsInput.style.display = 'block';
-            break;
-        default:
-            manualInput.style.display = 'block';
+    if (type === 'claude') {
+        claudeInput.classList.remove('hidden');
+        claudeButton.classList.add('active');
+    } else {
+        manualInput.classList.remove('hidden');
+        manualButton.classList.add('active');
     }
-    
-    const url = new URL(window.location);
-    url.searchParams.set('entry_type', entryType);
-    window.history.pushState({}, '', url);
 }
 
 function deleteMeal(entryId) {
@@ -668,19 +696,6 @@ function deleteMeal(entryId) {
         });
     }
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const entryType = urlParams.get('entry_type') || 'manual';
-    
-    console.log('Page loaded, setting entry type to:', entryType);
-    
-    const selectElement = document.getElementById('entry_type');
-    if (selectElement) {
-        selectElement.value = entryType;
-        toggleEntryType();
-    }
-});
 
 function analyzeMeal() {
     const description = document.getElementById('meal_description').value;
@@ -772,22 +787,22 @@ function postAnalyzedMeal(nutritionData) {
         if (data.error) {
             document.getElementById('result').textContent = data.error;
         } else {
-            const url = new URL(window.location);
-            url.searchParams.set('entry_type', 'claude');
-            window.location.href = url.toString();
+            location.reload(); 
         }
     });
 }
 
-window.onload = function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const entryType = urlParams.get('entry_type') || 'manual';
-    
-    document.getElementById('entry_type').value = entryType;
-    toggleEntryType();
-}
-
 document.addEventListener('DOMContentLoaded', function() {
+    setEntryType('claude');  
+    // Remove this part:
+    // const sections = ['quick-add', 'add-new'];
+    // sections.forEach(section => {
+    //     const header = document.querySelector(`[onclick="toggleSection('${section}')"]`);
+    //     const content = document.getElementById(`${section}-content`);
+    //     if (header && content) {
+    //         content.classList.remove('collapsed');
+    //     }
+    // });
 });
 
 </script>
