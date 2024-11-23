@@ -247,23 +247,21 @@ def add_nutrition():
 @login_required
 def workouts():
     today = date.today()
-    
-    todays_workouts = Workout.query.filter(
+    worked_out_today = Workout.query.filter(
         Workout.user_id == current_user.id,
         Workout.date >= today,
         Workout.date < datetime.combine(today, datetime.max.time())
-    ).order_by(Workout.date.desc()).all()
+    ).first() is not None
     
-    worked_out_today = len(todays_workouts) > 0
-    
-    workout_categories = WorkoutCategory.query.filter_by(user_id=current_user.id).all()
+    workouts = Workout.query.filter_by(user_id=current_user.id).order_by(Workout.date.desc()).limit(10).all()
+    workout_categories = WorkoutCategory.query.filter_by(user_id=current_user.id).all()  
     
     return render_template('workouts.html',
                          active_tab='workouts',
                          date=today.strftime("%B %d, %Y"),
                          worked_out_today=worked_out_today,
-                         todays_workouts=todays_workouts,
-                         workout_categories=workout_categories,
+                         workouts=workouts,
+                         workout_categories=workout_categories,  
                          json=json)
 
 @app.route('/log_workout', methods=['POST'])
@@ -306,9 +304,6 @@ def saved_meals():
         "calories_per_serving": meal.calories_per_serving
     } for meal in saved_meals])
 
-@app.template_filter('from_json')
-def from_json(value):
-    return json.loads(value)
 
 @app.route('/history')
 @login_required
@@ -474,6 +469,21 @@ def get_workout_categories():
         'name': cat.name,
         'exercises': cat.get_exercises()  
     } for cat in categories])
+
+@app.route('/get_saved_meal/<int:meal_id>', methods=['GET'])
+@login_required
+def get_saved_meal(meal_id):
+    meal = SavedMeal.query.filter_by(
+        id=meal_id,
+        user_id=current_user.id
+    ).first_or_404()
+    
+    return jsonify({
+        'id': meal.id,
+        'name': meal.name,
+        'protein_per_serving': meal.protein_per_serving,
+        'calories_per_serving': meal.calories_per_serving
+    })
 
 @app.route('/update_workout_category', methods=['POST'])
 @login_required  
