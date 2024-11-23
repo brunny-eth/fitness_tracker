@@ -22,3 +22,10 @@ instance/
 
 # OS
 .DS_Store.env
+venv/
+*.pyc
+__pycache__/
+node_modules/
+package.json
+package-lock.json
+tailwind.config.js

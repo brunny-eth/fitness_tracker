@@ -247,21 +247,23 @@ def add_nutrition():
 @login_required
 def workouts():
     today = date.today()
-    worked_out_today = Workout.query.filter(
+    
+    todays_workouts = Workout.query.filter(
         Workout.user_id == current_user.id,
         Workout.date >= today,
         Workout.date < datetime.combine(today, datetime.max.time())
-    ).first() is not None
+    ).order_by(Workout.date.desc()).all()
     
-    workouts = Workout.query.filter_by(user_id=current_user.id).order_by(Workout.date.desc()).limit(10).all()
-    workout_categories = WorkoutCategory.query.filter_by(user_id=current_user.id).all()  
+    worked_out_today = len(todays_workouts) > 0
+    
+    workout_categories = WorkoutCategory.query.filter_by(user_id=current_user.id).all()
     
     return render_template('workouts.html',
                          active_tab='workouts',
                          date=today.strftime("%B %d, %Y"),
                          worked_out_today=worked_out_today,
-                         workouts=workouts,
-                         workout_categories=workout_categories,  
+                         todays_workouts=todays_workouts,
+                         workout_categories=workout_categories,
                          json=json)
 
 @app.route('/log_workout', methods=['POST'])
@@ -304,6 +306,9 @@ def saved_meals():
         "calories_per_serving": meal.calories_per_serving
     } for meal in saved_meals])
 
+@app.template_filter('from_json')
+def from_json(value):
+    return json.loads(value)
 
 @app.route('/history')
 @login_required
