@@ -88,23 +88,31 @@
       </div>
   
       <div class="meal-entry">
-        <input type="text" id="modalMealSearch" placeholder="Search saved meals..." oninput="searchMeals(this.value)" class="search-input">
+        <input type="text" 
+               id="modalMealSearch" 
+               placeholder="Search saved meals..." 
+               oninput="searchMeals(this.value)" 
+               class="search-input">
+        
         <div id="modalMealsContainer" class="saved-meals-list">
-          {% for meal in saved_meals %}
-          <div class="saved-meal-item" data-meal-name="{{ meal.name.lower() }}">
-            <div class="meal-info">
-              <h4>{{ meal.name }}</h4>
-              <p>{{ meal.protein_per_serving }}g protein • {{ meal.calories_per_serving }} calories</p>
+            {% for meal in saved_meals %}
+            <div class="saved-meal-item" data-meal-name="{{ meal.name.lower() }}">
+                <div class="meal-content">
+                    <div class="meal-info">
+                        <h4>{{ meal.name }}</h4>
+                        <p>{{ meal.protein_per_serving }}g protein • {{ meal.calories_per_serving }} calories</p>
+                    </div>
+                    <div class="meal-actions">
+                        <button class="action-btn" onclick="addSavedMeal({{ meal.id }})">Add</button>
+                        <button class="action-btn" onclick="editSavedMeal({{ meal.id }})">Edit</button>
+                        <button class="action-btn delete" onclick="deleteSavedMeal({{ meal.id }})">Delete</button>
+                    </div>
+                </div>
             </div>
-            <div class="meal-actions">
-              <button class="add-meal-btn" onclick="addSavedMeal({{ meal.id }})">Add</button>
-              <button class="edit-meal-btn" onclick="editSavedMeal({{ meal.id }})">Edit</button>
-            </div>
-          </div>
-          {% endfor %}
-          <p id="no-results-message" style="display: none; color: #666; text-align: center; padding: 10px;">No meals found</p>
+            {% endfor %}
+            <p id="no-results-message" style="display: none;">No meals found</p>
         </div>
-      </div>
+    </div>
   
       <div class="modal-section">
         <div class="or-container">
@@ -293,16 +301,26 @@
   color: #6b7280;
 }
 
-.meal-info h3 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500;
+.meal-info {
+    flex-grow: 1;
+}
+
+.meal-info h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .meal-info p {
-  margin: 4px 0 0;
-  font-size: 14px;
-  color: #6b7280;
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.meal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .or-container {
@@ -315,9 +333,30 @@
   color: #6b7280;
 }
 
-.meal-actions {
-  display: flex;
-  gap: 8px;
+
+.action-btn {
+    padding: 8px 16px;
+    min-width: 80px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: #3b82f6;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.action-btn:hover {
+    background-color: #2563eb;
+}
+
+.action-btn.delete {
+    background-color: #ef4444;
+}
+
+.action-btn.delete:hover {
+    background-color: #dc2626;
 }
 
 .edit-meal-btn {
@@ -349,15 +388,105 @@
   z-index: 1000;
 }
 
+/* Add these styles to your existing <style> section */
+
+/* Search container */
+.search-container {
+    padding: 0 16px;
+    margin-bottom: 16px;
+}
+
+/* Search input */
+.search-input {
+    width: calc(100% - 32px); 
+    margin: 16px; 
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* Saved meal items */
+.saved-meal-item {
+    margin: 8px 16px;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.meal-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.meal-info {
+    flex-grow: 1;
+}
+
+.meal-info h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.meal-info p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.meal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.action-btn {
+    padding: 8px 16px;
+    min-width: 80px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: #3b82f6;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.action-btn:hover {
+    background-color: #2563eb;
+}
+
+.action-btn.delete {
+    background-color: #ef4444;
+}
+
+.action-btn.delete:hover {
+    background-color: #dc2626;
+}
+
+/* Modal adjustments */
 .modal-content {
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
-  max-width: 500px;
-  width: 90%;
-  margin: 50px auto;
-  max-height: 90vh;
-  overflow-y: auto;
+    max-width: 500px;
+    width: 90%;
+    margin: 50px auto;
+    padding: 24px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.saved-meals-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    margin: 0 16px;
 }
 
 .modal-header {
@@ -399,33 +528,27 @@
   font-weight: 500;
 }
 
-.saved-meals-list {
-  max-height: 300px;
-  overflow-y: auto;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 8px;
-}
-
 .saved-meal-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  margin-bottom: 8px;
+    margin: 8px 16px;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: white;
 }
 
 /* Form Elements */
+.search-container {
+    padding: 0 16px;
+    margin-bottom: 16px;
+}
+
 .search-input {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: border-color 0.2s ease;
-  margin-bottom: 12px;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
 }
 
 .search-input:focus {
@@ -559,8 +682,11 @@
   }
   
   .meal-content {
-    padding-right: 8px;
-  }
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+  } 
 }
 
 /* Entry Type Toggle Group */

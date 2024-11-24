@@ -232,3 +232,45 @@
 2024-11-23 17:56:23,862 INFO: 127.0.0.1 - - [23/Nov/2024 17:56:23] "GET / HTTP/1.1" 200 -
 2024-11-23 17:56:24,045 INFO: 127.0.0.1 - - [23/Nov/2024 17:56:24] "GET / HTTP/1.1" 200 -
 2024-11-23 17:56:25,987 INFO: 127.0.0.1 - - [23/Nov/2024 17:56:25] "GET /get_saved_meal/1 HTTP/1.1" 200 -
+2024-11-24 15:38:55,957 INFO: Application startup
+2024-11-24 15:38:56,023 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.99:5001
+2024-11-24 15:38:56,023 INFO: [33mPress CTRL+C to quit[0m
+2024-11-24 15:38:56,024 INFO:  * Restarting with stat
+2024-11-24 15:38:56,364 INFO: Application startup
+2024-11-24 15:38:56,394 WARNING:  * Debugger is active!
+2024-11-24 15:38:56,400 INFO:  * Debugger PIN: 133-619-259
+2024-11-24 15:39:05,977 INFO: 127.0.0.1 - - [24/Nov/2024 15:39:05] "GET / HTTP/1.1" 200 -
+2024-11-24 15:41:42,140 INFO: 127.0.0.1 - - [24/Nov/2024 15:41:42] "GET /get_saved_meal/1 HTTP/1.1" 200 -
+2024-11-24 15:41:49,857 INFO: 127.0.0.1 - - [24/Nov/2024 15:41:49] "GET /get_saved_meal/1 HTTP/1.1" 200 -
+2024-11-24 15:42:14,025 INFO: Application startup
+2024-11-24 15:42:14,073 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.99:5001
+2024-11-24 15:42:14,073 INFO: [33mPress CTRL+C to quit[0m
+2024-11-24 15:42:14,074 INFO:  * Restarting with stat
+2024-11-24 15:42:14,438 INFO: Application startup
+2024-11-24 15:42:14,471 WARNING:  * Debugger is active!
+2024-11-24 15:42:14,475 INFO:  * Debugger PIN: 133-619-259
+2024-11-24 15:50:33,605 INFO: 127.0.0.1 - - [24/Nov/2024 15:50:33] "GET / HTTP/1.1" 200 -
+2024-11-24 15:50:37,236 INFO: 127.0.0.1 - - [24/Nov/2024 15:50:37] "GET /get_saved_meal/1 HTTP/1.1" 200 -
+2024-11-24 15:50:41,112 INFO: 127.0.0.1 - - [24/Nov/2024 15:50:41] "POST /delete_saved_meal/1 HTTP/1.1" 200 -
+2024-11-24 15:50:41,126 INFO: 127.0.0.1 - - [24/Nov/2024 15:50:41] "GET / HTTP/1.1" 200 -
+2024-11-24 15:52:42,038 INFO: 127.0.0.1 - - [24/Nov/2024 15:52:42] "GET / HTTP/1.1" 200 -
+2024-11-24 15:52:50,545 INFO: 127.0.0.1 - - [24/Nov/2024 15:52:50] "[35m[1mPOST /saved_meals HTTP/1.1[0m" 201 -
+2024-11-24 15:52:50,560 INFO: 127.0.0.1 - - [24/Nov/2024 15:52:50] "GET / HTTP/1.1" 200 -
+2024-11-24 15:52:53,946 INFO: Received nutrition data: {'saved_meal_id': 1}
+2024-11-24 15:52:53,951 INFO: Successfully added nutrition entry
+2024-11-24 15:52:53,951 INFO: 127.0.0.1 - - [24/Nov/2024 15:52:53] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-24 15:52:53,964 INFO: 127.0.0.1 - - [24/Nov/2024 15:52:53] "GET / HTTP/1.1" 200 -
+2024-11-24 15:52:56,390 INFO: 127.0.0.1 - - [24/Nov/2024 15:52:56] "GET /get_saved_meal/1 HTTP/1.1" 200 -
+2024-11-24 15:53:06,741 INFO: 127.0.0.1 - - [24/Nov/2024 15:53:06] "POST /delete_saved_meal/1 HTTP/1.1" 200 -
+2024-11-24 15:53:06,754 INFO: 127.0.0.1 - - [24/Nov/2024 15:53:06] "GET / HTTP/1.1" 200 -
+2024-11-24 15:53:18,598 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-24 15:53:18,707 INFO:  * Restarting with stat
+2024-11-24 15:53:19,237 INFO: Application startup
+2024-11-24 15:53:19,275 WARNING:  * Debugger is active!
+2024-11-24 15:53:19,280 INFO:  * Debugger PIN: 133-619-259
