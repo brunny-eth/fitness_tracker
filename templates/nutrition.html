@@ -50,6 +50,45 @@
     </div>
   </div>
 
+  <div class="quick-actions">
+    <button class="quick-add-btn" onclick="showQuickAddModal()">
+      + Quick Add Saved Meal
+    </button>
+  </div>
+</div>
+
+
+<div class="section nutrition-entry">
+  <h2>Add A Meal</h2>
+
+  <div class="entry-type-toggle">
+    <button class="toggle-button active" onclick="setEntryType('claude')" id="claude_button">
+      Ask AI
+    </button>
+    <button class="toggle-button" onclick="setEntryType('manual')" id="manual_button">
+      Manual Entry
+    </button>
+  </div>
+
+  <div id="claude_input" class="input-group">
+    <textarea id="meal_description" placeholder="Describe what you ate (e.g., '2 eggs with toast and a banana')" rows="3"></textarea>
+    <button type="button" onclick="analyzeMeal()" id="analyze_button">Analyze Meal</button>
+    <div id="analysis_result"></div>
+  </div>
+
+  <div id="manual_input" class="input-group hidden">
+    <label for="amount">Enter nutrition directly:</label>
+    <div class="input-row">
+      <input type="text" id="manual_meal_name" placeholder="Meal name">
+      <input type="number" step="0.1" id="protein_amount" placeholder="Protein (g)">
+      <input type="number" id="calorie_amount" placeholder="Calories">
+      <button type="button" onclick="addNutrition()">Add</button>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Today's Meals</h2>
   <div class="meals-container">
     {% if entries %}
       {% for entry in entries %}
@@ -72,13 +111,6 @@
       </div>
     {% endif %}
   </div>
-
-  <div class="quick-actions">
-    <button class="quick-add-btn" onclick="showQuickAddModal()">
-      + Quick Add Meal
-    </button>
-  </div>
-</div>
 
 <div id="quickAddModal" class="modal">
     <div class="modal-content">
@@ -103,7 +135,7 @@
                         <p>{{ meal.protein_per_serving }}g protein • {{ meal.calories_per_serving }} calories</p>
                     </div>
                     <div class="meal-actions">
-                        <button class="action-btn" onclick="addSavedMeal({{ meal.id }})">Add</button>
+                        <button class="action-btn" onclick="addSavedMeal({{ meal.id }})">Add to Today</button>
                         <button class="action-btn" onclick="editSavedMeal({{ meal.id }})">Edit</button>
                         <button class="action-btn delete" onclick="deleteSavedMeal({{ meal.id }})">Delete</button>
                     </div>
@@ -143,35 +175,6 @@
     </div>
     </div>
   </div>
-
-<div class="section nutrition-entry">
-  <h2>Add Nutrition Entry</h2>
-
-  <div class="entry-type-toggle">
-    <button class="toggle-button active" onclick="setEntryType('claude')" id="claude_button">
-      Ask AI
-    </button>
-    <button class="toggle-button" onclick="setEntryType('manual')" id="manual_button">
-      Manual Entry
-    </button>
-  </div>
-
-  <div id="claude_input" class="input-group">
-    <textarea id="meal_description" placeholder="Describe what you ate (e.g., '2 eggs with toast and a banana')" rows="3"></textarea>
-    <button type="button" onclick="analyzeMeal()" id="analyze_button">Analyze Meal</button>
-    <div id="analysis_result"></div>
-  </div>
-
-  <div id="manual_input" class="input-group hidden">
-    <label for="amount">Enter nutrition directly:</label>
-    <div class="input-row">
-      <input type="text" id="manual_meal_name" placeholder="Meal name">
-      <input type="number" step="0.1" id="protein_amount" placeholder="Protein (g)">
-      <input type="number" id="calorie_amount" placeholder="Calories">
-      <button type="button" onclick="addNutrition()">Add</button>
-    </div>
-  </div>
-</div>
 
 <style>
 /* Core Layout */
@@ -282,12 +285,6 @@
   align-items: center;
 }
 
-.meal-content {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
 .meal-icon {
   background-color: #f3f4f6;
   width: 40px;
@@ -333,7 +330,6 @@
   color: #6b7280;
 }
 
-
 .action-btn {
     padding: 8px 16px;
     min-width: 80px;
@@ -378,25 +374,24 @@
 
 /* Modal Styles */
 .modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto; 
+    padding: 20px 0; 
 }
 
-/* Add these styles to your existing <style> section */
-
-/* Search container */
+/* Search and Input */
 .search-container {
     padding: 0 16px;
     margin-bottom: 16px;
 }
 
-/* Search input */
 .search-input {
     width: calc(100% - 32px); 
     margin: 16px; 
@@ -406,7 +401,6 @@
     font-size: 14px;
 }
 
-/* Saved meal items */
 .saved-meal-item {
     margin: 8px 16px;
     padding: 12px;
@@ -422,62 +416,20 @@
     gap: 16px;
 }
 
-.meal-info {
-    flex-grow: 1;
-}
-
-.meal-info h4 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 500;
-}
-
-.meal-info p {
-    margin: 4px 0 0;
-    font-size: 14px;
-    color: #6b7280;
-}
-
-.meal-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.action-btn {
-    padding: 8px 16px;
-    min-width: 80px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    background-color: #3b82f6;
-    color: white;
-    transition: background-color 0.2s;
-}
-
-.action-btn:hover {
-    background-color: #2563eb;
-}
-
-.action-btn.delete {
-    background-color: #ef4444;
-}
-
-.action-btn.delete:hover {
-    background-color: #dc2626;
-}
-
-/* Modal adjustments */
+/* Modal Components */
 .modal-content {
     max-width: 500px;
     width: 90%;
-    margin: 50px auto;
+    max-height: 90vh; 
+    height: auto;     
+    margin: 20px auto; 
     padding: 24px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; 
+    display: flex;    
+    flex-direction: column; 
 }
 
 .saved-meals-list {
@@ -526,14 +478,6 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-}
-
-.saved-meal-item {
-    margin: 8px 16px;
-    padding: 16px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    background-color: white;
 }
 
 /* Form Elements */
@@ -596,13 +540,6 @@
 .quick-add-btn:hover {
   background-color: #2563eb;
 }
-
-.or-text {
-  text-align: center;
-  color: #6b7280;
-  margin-bottom: 12px;
-}
-
 
 .primary-btn {
   width: 100%;
@@ -681,103 +618,6 @@
     min-height: 44px;
   }
   
-  .meal-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
-  } 
-}
-
-/* Entry Type Toggle Group */
-.entry-type-toggle {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    border-radius: 6px;
-}
-
-/* Form Fields */
-#meal_description {
-    width: 100%;
-    min-height: 80px;
-    padding: 12px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    font-size: 14px;
-    font-family: inherit;
-    resize: vertical;
-    margin-bottom: 12px;
-    box-sizing: border-box;
-    transition: border-color 0.2s ease;
-}
-
-#meal_description:focus {
-    outline: none;
-    border-color: #9ca3af;
-    box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.2);
-}
-
-#analyze_button {
-    background-color: #f9fafb;
-    color: #374151;
-    padding: 8px 16px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-#analyze_button:hover {
-    background-color: #f3f4f6;
-    border-color: #d1d5db;
-}
-
-#analyze_button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-#analysis_result {
-    margin-top: 16px;
-}
-
-/* Input Fields */
-.input-row input[type="text"] {
-    flex: 2;
-    padding: 8px 12px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.input-row input[type="number"] {
-    flex: 1;
-    padding: 8px 12px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.input-row button {
-    padding: 8px 16px;
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-/* Entry Type Toggle Group */
-.entry-type-toggle {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    border-radius: 6px;
 }
 
 /* Form Fields */
@@ -906,27 +746,6 @@ function editSavedMeal(mealId) {
     });
 }
 
-function checkIngredient() {
-    const ingredient = document.getElementById('ingredient').value;
-    fetch('/add_nutrition', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ingredient: ingredient })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            document.getElementById('result').textContent = data.error;
-        } else {
-            document.getElementById('result').textContent = data.message;
-            document.getElementById('protein_amount').value = data.protein;
-            document.getElementById('calorie_amount').value = data.calories;
-        }
-    });
-}
-
 function addNutrition() {
     const protein_amount = document.getElementById('protein_amount').value;
     const calorie_amount = document.getElementById('calorie_amount').value;
@@ -985,52 +804,6 @@ function addSavedMeal(mealId) {
         } else {
             location.reload();
         }
-    });
-}
-
-function saveMeal() {
-    const name = document.getElementById('new_meal_name').value;
-    const protein = document.getElementById('new_meal_protein').value;
-    const calories = document.getElementById('new_meal_calories').value;
-    
-    if (!name || !protein || !calories) {
-        alert('Please fill in all fields');
-        return;
-    }
-    
-    fetch('/saved_meals', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            name: name,
-            protein_per_serving: protein,
-            calories_per_serving: calories
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            alert(data.error);
-        } else {
-            document.getElementById('new_meal_name').value = '';
-            document.getElementById('new_meal_protein').value = '';
-            document.getElementById('new_meal_calories').value = '';
-            
-            const mealsContainer = document.getElementById('meals_container');
-            const newMealHtml = `
-                <div class="meal-entry" data-meal-name="${name.toLowerCase()}">
-                    <span>${name} (${protein}g protein, ${calories} cal)</span>
-                    <button type="button" onclick="addSavedMeal(${data.id})">Add</button>
-                </div>
-            `;
-            mealsContainer.insertAdjacentHTML('afterbegin', newMealHtml);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error saving meal');
     });
 }
 

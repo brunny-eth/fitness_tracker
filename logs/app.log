@@ -274,3 +274,53 @@
 2024-11-24 15:53:19,237 INFO: Application startup
 2024-11-24 15:53:19,275 WARNING:  * Debugger is active!
 2024-11-24 15:53:19,280 INFO:  * Debugger PIN: 133-619-259
+2024-11-24 15:57:32,710 INFO: 127.0.0.1 - - [24/Nov/2024 15:57:32] "GET / HTTP/1.1" 200 -
+2024-11-24 15:57:43,934 INFO: 127.0.0.1 - - [24/Nov/2024 15:57:43] "GET / HTTP/1.1" 200 -
+2024-11-24 15:59:18,519 INFO: 127.0.0.1 - - [24/Nov/2024 15:59:18] "GET / HTTP/1.1" 200 -
+2024-11-24 15:59:19,392 INFO: 127.0.0.1 - - [24/Nov/2024 15:59:19] "GET / HTTP/1.1" 200 -
+2024-11-24 15:59:19,658 INFO: 127.0.0.1 - - [24/Nov/2024 15:59:19] "GET / HTTP/1.1" 200 -
+2024-11-24 16:02:27,240 INFO: 127.0.0.1 - - [24/Nov/2024 16:02:27] "GET / HTTP/1.1" 200 -
+2024-11-24 16:02:38,398 INFO: 127.0.0.1 - - [24/Nov/2024 16:02:38] "[35m[1mPOST /saved_meals HTTP/1.1[0m" 201 -
+2024-11-24 16:02:38,413 INFO: 127.0.0.1 - - [24/Nov/2024 16:02:38] "GET / HTTP/1.1" 200 -
+2024-11-24 16:02:42,790 INFO: 127.0.0.1 - - [24/Nov/2024 16:02:42] "POST /delete_nutrition/7 HTTP/1.1" 200 -
+2024-11-24 16:02:42,802 INFO: 127.0.0.1 - - [24/Nov/2024 16:02:42] "GET / HTTP/1.1" 200 -
+2024-11-24 16:03:12,931 INFO: 127.0.0.1 - - [24/Nov/2024 16:03:12] "GET / HTTP/1.1" 200 -
+2024-11-24 16:06:01,084 INFO: 127.0.0.1 - - [24/Nov/2024 16:06:01] "GET / HTTP/1.1" 200 -
+2024-11-24 16:06:04,726 INFO: Received nutrition data: {'saved_meal_id': 1}
+2024-11-24 16:06:04,732 INFO: Successfully added nutrition entry
+2024-11-24 16:06:04,732 INFO: 127.0.0.1 - - [24/Nov/2024 16:06:04] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-24 16:06:04,745 INFO: 127.0.0.1 - - [24/Nov/2024 16:06:04] "GET / HTTP/1.1" 200 -
+2024-11-24 16:06:06,563 INFO: Received nutrition data: {'saved_meal_id': 1}
+2024-11-24 16:06:06,566 INFO: Successfully added nutrition entry
+2024-11-24 16:06:06,567 INFO: 127.0.0.1 - - [24/Nov/2024 16:06:06] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-24 16:06:06,578 INFO: 127.0.0.1 - - [24/Nov/2024 16:06:06] "GET / HTTP/1.1" 200 -
+2024-11-24 16:06:08,305 INFO: 127.0.0.1 - - [24/Nov/2024 16:06:08] "GET /get_saved_meal/1 HTTP/1.1" 200 -
+2024-11-24 16:06:10,866 INFO: 127.0.0.1 - - [24/Nov/2024 16:06:10] "[33mPUT /saved_meals/1 HTTP/1.1[0m" 404 -
+2024-11-24 16:06:16,506 INFO: 127.0.0.1 - - [24/Nov/2024 16:06:16] "[33mPUT /saved_meals/1 HTTP/1.1[0m" 404 -
+2024-11-24 16:06:19,186 INFO: 127.0.0.1 - - [24/Nov/2024 16:06:19] "[33mPUT /saved_meals/1 HTTP/1.1[0m" 404 -
+2024-11-24 16:07:27,964 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-24 16:07:28,077 INFO:  * Restarting with stat
+2024-11-24 16:07:28,608 INFO: Application startup
+2024-11-24 16:07:28,645 WARNING:  * Debugger is active!
+2024-11-24 16:07:28,650 INFO:  * Debugger PIN: 133-619-259
+2024-11-24 16:07:31,095 INFO: 127.0.0.1 - - [24/Nov/2024 16:07:31] "GET / HTTP/1.1" 200 -
+2024-11-24 16:07:33,532 INFO: Received nutrition data: {'saved_meal_id': 1}
+2024-11-24 16:07:33,538 INFO: Successfully added nutrition entry
+2024-11-24 16:07:33,539 INFO: 127.0.0.1 - - [24/Nov/2024 16:07:33] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-11-24 16:07:33,552 INFO: 127.0.0.1 - - [24/Nov/2024 16:07:33] "GET / HTTP/1.1" 200 -
+2024-11-24 16:07:40,106 INFO: 127.0.0.1 - - [24/Nov/2024 16:07:40] "[35m[1mPOST /saved_meals HTTP/1.1[0m" 201 -
+2024-11-24 16:07:40,121 INFO: 127.0.0.1 - - [24/Nov/2024 16:07:40] "GET / HTTP/1.1" 200 -
+2024-11-24 16:07:44,277 INFO: 127.0.0.1 - - [24/Nov/2024 16:07:44] "GET /get_saved_meal/2 HTTP/1.1" 200 -
+2024-11-24 16:07:46,235 INFO: 127.0.0.1 - - [24/Nov/2024 16:07:46] "PUT /saved_meals/2 HTTP/1.1" 200 -
+2024-11-24 16:07:46,244 INFO: 127.0.0.1 - - [24/Nov/2024 16:07:46] "GET / HTTP/1.1" 200 -
+2024-11-24 16:07:49,088 INFO: 127.0.0.1 - - [24/Nov/2024 16:07:49] "POST /delete_nutrition/8 HTTP/1.1" 200 -
+2024-11-24 16:07:49,101 INFO: 127.0.0.1 - - [24/Nov/2024 16:07:49] "GET / HTTP/1.1" 200 -
+2024-11-24 16:07:51,379 INFO: 127.0.0.1 - - [24/Nov/2024 16:07:51] "POST /delete_nutrition/7 HTTP/1.1" 200 -
+2024-11-24 16:07:51,393 INFO: 127.0.0.1 - - [24/Nov/2024 16:07:51] "GET / HTTP/1.1" 200 -
+2024-11-24 16:10:56,033 INFO: 127.0.0.1 - - [24/Nov/2024 16:10:56] "GET / HTTP/1.1" 200 -
+2024-11-24 16:16:25,538 INFO: 127.0.0.1 - - [24/Nov/2024 16:16:25] "GET / HTTP/1.1" 200 -
+2024-11-24 16:17:40,491 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-24 16:17:40,597 INFO:  * Restarting with stat
+2024-11-24 16:17:41,162 INFO: Application startup
+2024-11-24 16:17:41,200 WARNING:  * Debugger is active!
+2024-11-24 16:17:41,207 INFO:  * Debugger PIN: 133-619-259

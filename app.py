@@ -652,6 +652,26 @@ def get_last_workout(workout_type):
         }), 200
     return jsonify({"message": "No previous workout found"}), 404
 
+@app.route('/saved_meals/<int:meal_id>', methods=['PUT'])
+@login_required
+def update_saved_meal(meal_id):
+    try:
+        data = request.json
+        meal = SavedMeal.query.filter_by(
+            id=meal_id,
+            user_id=current_user.id
+        ).first_or_404()
+        
+        meal.name = data['name']
+        meal.protein_per_serving = float(data['protein_per_serving'])
+        meal.calories_per_serving = int(data['calories_per_serving'])
+        
+        db.session.commit()
+        return jsonify({"message": "Meal updated successfully", "id": meal.id}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/get_exercise_history/<workout_type>/<exercise_name>')
 @login_required
 def get_exercise_history(workout_type, exercise_name):
