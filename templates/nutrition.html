@@ -57,34 +57,102 @@
   </div>
 </div>
 
-
-<div class="section nutrition-entry">
+<div class="section">
   <h2>Add A Meal</h2>
-
+  
   <div class="entry-type-toggle">
     <button class="toggle-button active" onclick="setEntryType('claude')" id="claude_button">
       Ask AI
+    </button>
+    <button class="toggle-button" onclick="setEntryType('quick')" id="quick_button">
+      Quick Add
     </button>
     <button class="toggle-button" onclick="setEntryType('manual')" id="manual_button">
       Manual Entry
     </button>
   </div>
 
+  <!-- Quick Add Content -->
+  <div id="quick_input" class="input-group hidden">
+    <input type="text" 
+           id="modalMealSearch" 
+           placeholder="Search saved meals..." 
+           oninput="searchMeals(this.value)" 
+           class="search-input">
+    
+    <div id="modalMealsContainer" class="saved-meals-list">
+        {% for meal in saved_meals %}
+        <div class="saved-meal-item" data-meal-name="{{ meal.name.lower() }}">
+            <div class="meal-content">
+                <div class="meal-info">
+                    <h4>{{ meal.name }}</h4>
+                    <p>{{ meal.protein_per_serving }}g protein • {{ meal.calories_per_serving }} calories</p>
+                </div>
+                <div class="meal-actions">
+                    <button class="action-btn" onclick="addSavedMeal({{ meal.id }})">Add to Today</button>
+                    <button class="action-btn" onclick="editSavedMeal({{ meal.id }})">Edit</button>
+                    <button class="action-btn delete" onclick="deleteSavedMeal({{ meal.id }})">Delete</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <p id="no-results-message" style="display: none;">No meals found</p>
+    </div>
+
+    <div class="modal-section">
+        <div class="or-container">
+          <span class="or-text">or</span>
+        </div>
+        <button class="secondary-btn" onclick="showNewMealForm()">Add New Saved Meal</button>
+    </div>
+
+    <div id="newMealForm" class="modal-section hidden">
+        <h3>Add New Saved Meal</h3>
+        <input type="hidden" id="newMealId" value="">
+        <div class="form-group">
+            <label for="newMealName">Meal Name</label>
+            <input type="text" id="newMealName" required>
+        </div>
+        <div class="form-group">
+            <label for="newMealProtein">Protein (g)</label>
+            <input type="number" id="newMealProtein" step="0.1" required>
+        </div>
+        <div class="form-group">
+            <label for="newMealCalories">Calories</label>
+            <input type="number" id="newMealCalories" required>
+        </div>
+        <div class="form-buttons">
+            <button class="secondary-btn" onclick="hideNewMealForm()">Cancel</button>
+            <button class="primary-btn" onclick="saveNewMeal()">Save Meal</button>
+        </div>
+    </div>
+  </div>
+
+  <!-- Claude Input -->
   <div id="claude_input" class="input-group">
     <textarea id="meal_description" placeholder="Describe what you ate (e.g., '2 eggs with toast and a banana')" rows="3"></textarea>
     <button type="button" onclick="analyzeMeal()" id="analyze_button">Analyze Meal</button>
     <div id="analysis_result"></div>
   </div>
 
+  <!-- Manual Input -->
   <div id="manual_input" class="input-group hidden">
-    <label for="amount">Enter nutrition directly:</label>
+    <input type="text" 
+           id="manual_meal_name" 
+           placeholder="Meal name"
+           class="search-input">
     <div class="input-row">
-      <input type="text" id="manual_meal_name" placeholder="Meal name">
-      <input type="number" step="0.1" id="protein_amount" placeholder="Protein (g)">
-      <input type="number" id="calorie_amount" placeholder="Calories">
-      <button type="button" onclick="addNutrition()">Add</button>
+        <input type="number" 
+               step="0.1" 
+               id="protein_amount" 
+               placeholder="Protein (g)"
+               class="search-input">
+        <input type="number" 
+               id="calorie_amount" 
+               placeholder="Calories"
+               class="search-input">
     </div>
-  </div>
+    <button class="action-btn" onclick="addNutrition()">Add to Today</button>
 </div>
 
 <div class="section">
@@ -111,14 +179,8 @@
       </div>
     {% endif %}
   </div>
+</div>
 
-<div id="quickAddModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Add Meal</h2>
-        <button class="close-btn" onclick="closeQuickAddModal()">×</button>
-      </div>
-  
       <div class="meal-entry">
         <input type="text" 
                id="modalMealSearch" 
@@ -393,12 +455,18 @@
 }
 
 .search-input {
-    width: calc(100% - 32px); 
-    margin: 16px; 
+    width: 100%;
     padding: 12px;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     font-size: 14px;
+    box-sizing: border-box;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #9ca3af;
+    box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.2);
 }
 
 .saved-meal-item {
@@ -480,39 +548,12 @@
   font-weight: 500;
 }
 
-/* Form Elements */
-.search-container {
-    padding: 0 16px;
-    margin-bottom: 16px;
-}
-
-.search-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 14px;
-    box-sizing: border-box;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: #9ca3af;
-  box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.2);
-}
-
 .form-group {
   margin-bottom: 16px;
 }
 
 .input-group {
   margin-bottom: 16px;
-}
-
-.input-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
 }
 
 .form-buttons {
@@ -598,6 +639,32 @@
   padding: 16px;
 }
 
+/* Input Rows */
+.input-row {
+    display: flex;
+    gap: 16px;
+    margin: 16px 0;
+}
+
+.input-row input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.input-row button {
+    padding: 8px 16px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 /* Media Queries */
 @media (max-width: 640px) {
   .input-row {
@@ -665,34 +732,6 @@
 
 #analysis_result {
     margin-top: 16px;
-}
-
-/* Input Fields */
-.input-row input[type="text"] {
-    flex: 2;
-    padding: 8px 12px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.input-row input[type="number"] {
-    flex: 1;
-    padding: 8px 12px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.input-row button {
-    padding: 8px 16px;
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
 }
 </style>
 
@@ -863,17 +902,24 @@ function toggleSection(sectionId) {
 
 
 function setEntryType(type) {
+    const quickInput = document.getElementById('quick_input');
     const claudeInput = document.getElementById('claude_input');
     const manualInput = document.getElementById('manual_input');
+    const quickButton = document.getElementById('quick_button');
     const claudeButton = document.getElementById('claude_button');
     const manualButton = document.getElementById('manual_button');
     
+    quickInput.classList.add('hidden');
     claudeInput.classList.add('hidden');
     manualInput.classList.add('hidden');
+    quickButton.classList.remove('active');
     claudeButton.classList.remove('active');
     manualButton.classList.remove('active');
     
-    if (type === 'claude') {
+    if (type === 'quick') {
+        quickInput.classList.remove('hidden');
+        quickButton.classList.add('active');
+    } else if (type === 'claude') {
         claudeInput.classList.remove('hidden');
         claudeButton.classList.add('active');
     } else {
