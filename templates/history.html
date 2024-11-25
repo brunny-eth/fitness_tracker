@@ -18,6 +18,144 @@ canvas {
     border-radius: 8px;
 }
 
+.history-cards {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.history-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 1rem;
+}
+
+.history-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.history-card-date {
+    font-weight: 500;
+    color: #374151;
+}
+
+.history-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.workout-section {
+    background: none;
+    padding: 0;
+}
+
+.workout-section h4 {
+    color: #4b5563;
+    margin: 0 0 0.5rem 0;
+}
+
+.exercise-list {
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.nutrition-section {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.stat-with-goal {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.nutrition-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.goal-indicator {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.goal-reached {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.goal-not-reached {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.workout-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+    color: #374151;
+    font-weight: 500;
+}
+
+
+.workout-content {
+    display: none;
+    padding-left: 1rem;
+    margin-top: 0.5rem;
+}
+
+.workout-content.show {
+    display: block;
+}
+
+.chevron {
+    transition: transform 0.2s;
+}
+
+.chevron.rotated {
+    transform: rotate(90deg);
+}
+
+.workout-header:hover {
+    color: #2196F3;
+}
+
+.goal-indicator {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.goal-reached {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.goal-not-reached {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
 @media (max-width: 640px) {
     table, thead, tbody, th, td, tr {
         display: block;
@@ -97,62 +235,70 @@ canvas {
     <canvas id="nutritionChart"></canvas>
 </div>
 
-<div class="section">
-    <h2>Fitness History</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Workout</th>
-                <th>Nutrition</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entry in history %}
-            <tr>
-                <td data-label="Date">{{ entry.date.strftime('%B %d, %Y') }}</td>
-                <td data-label="Workout">
-                    {% if entry.workout %}
-                        <strong>{{ entry.workout.type }}</strong>
-                        <br>
-                        {% for exercise in entry.workout.exercises %}
-                            {{ exercise.name }}: {{ exercise.weight }}lbs × {{ exercise.sets }}×{{ exercise.reps }}
-                            <br>
-                        {% endfor %}
-                    {% else %}
-                        No workout logged
-                    {% endif %}
-                </td>
-                <td data-label="Nutrition">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <div>
-                            {% if entry.nutrition %}
-                                <strong>Protein:</strong> {{ entry.nutrition.protein }}g
-                                <br>
-                                <strong>Calories:</strong> {{ entry.nutrition.calories }}
-                                {% if entry.nutrition.protein_goal %}
-                                    <br>
-                                    <strong>Goal Status:</strong>
-                                    {% if entry.nutrition.protein >= entry.nutrition.protein_goal %}
-                                        <span style="color: green">Goal reached</span>
-                                    {% else %}
-                                        <span style="color: red">{{ entry.nutrition.protein }}g/{{ entry.nutrition.protein_goal }}g</span>
-                                    {% endif %}
-                                {% endif %}
+<div class="history-cards">
+    {% for entry in history %}
+    <div class="history-card">
+        <div class="history-card-header">
+            <span class="history-card-date">{{ entry.date.strftime('%B %d, %Y') }}</span>
+            <button onclick="openEditModal('{{ entry.date.strftime('%Y-%m-%d') }}', {{ entry.nutrition.protein if entry.nutrition else 0 }}, {{ entry.nutrition.calories if entry.nutrition else 0 }})">
+                Edit
+            </button>
+        </div>
+        
+        <div class="history-card-content">
+            {% if entry.nutrition %}
+            <div class="nutrition-section">
+                <div class="nutrition-stat">
+                    <div class="stat-with-goal">
+                        <strong>Protein:</strong> {{ entry.nutrition.protein }}g
+                        {% if entry.nutrition.protein_goal %}
+                            {% if entry.nutrition.protein >= entry.nutrition.protein_goal %}
+                            <span class="goal-indicator goal-reached">Goal reached</span>
                             {% else %}
-                                No nutrition data
+                            <span class="goal-indicator goal-not-reached">
+                                {{ entry.nutrition.protein }}g/{{ entry.nutrition.protein_goal }}g
+                            </span>
                             {% endif %}
-                        </div>
-                        <button onclick="openEditModal('{{ entry.date.strftime('%Y-%m-%d') }}', {{ entry.nutrition.protein if entry.nutrition else 0 }}, {{ entry.nutrition.calories if entry.nutrition else 0 }})"
-                                style="margin-left: 10px;">
-                            Edit
-                        </button>
+                        {% endif %}
                     </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                </div>
+                <div class="nutrition-stat">
+                    <div class="stat-with-goal">
+                        <strong>Calories:</strong> {{ entry.nutrition.calories }}
+                        {% if entry.nutrition.protein_goal %}
+                            {% if entry.nutrition.calories <= max_calories %}
+                            <span class="goal-indicator goal-reached">Goal reached</span>
+                            {% else %}
+                            <span class="goal-indicator goal-not-reached">
+                                Over by {{ entry.nutrition.calories - max_calories }}
+                            </span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if entry.workout %}
+            <div class="workout-section">
+                <div class="workout-header" onclick="toggleWorkout(this)">
+                    <span class="chevron">›</span>
+                    <strong>Workout:</strong> {{ entry.workout.type }}
+                </div>
+                <div class="workout-content">
+                    <div class="exercise-list">
+                        {% for exercise in entry.workout.exercises %}
+                        <div class="exercise-item">
+                            {{ exercise.name }}: {{ exercise.weight }}lbs × {{ exercise.sets }}×{{ exercise.reps }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
 </div>
 
 <div id="editModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
@@ -180,6 +326,7 @@ canvas {
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('nutritionChart').getContext('2d');
@@ -190,35 +337,48 @@ document.addEventListener('DOMContentLoaded', function() {
     const proteinValues = chartData.map(d => d.protein).filter(v => v !== null);
     const calorieValues = chartData.map(d => d.calories).filter(v => v !== null);
     
-    const minProtein = Math.min(...proteinValues) * 0.8;  
-    const maxProtein = Math.max(...proteinValues) * 1.2;  
-    const minCalories = Math.min(...calorieValues) * 0.8;
-    const maxCalories = Math.max(...calorieValues) * 1.2;
+    // Better axis scaling - round to nearest significant number
+    const minProtein = Math.floor(Math.min(...proteinValues) * 0.9 / 10) * 10;
+    const maxProtein = Math.ceil(Math.max(...proteinValues) * 1.1 / 10) * 10;
+    const minCalories = Math.floor(Math.min(...calorieValues) * 0.9 / 100) * 100;
+    const maxCalories = Math.ceil(Math.max(...calorieValues) * 1.1 / 100) * 100;
     
+    // Format dates for X axis
+    const dates = chartData.map(d => {
+        const today = new Date();
+        const date = new Date(today);
+        date.setDate(today.getDate() - (30 - d.day));
+        return date;
+    });
+
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: chartData.map(d => `Day ${d.day}`),
+            labels: dates,
             datasets: [
                 {
                     label: 'Protein (g)',
                     data: chartData.map(d => d.protein),
-                    borderColor: '#2196F3',  
-                    backgroundColor: '#2196F3',
+                    borderColor: '#2196F3',
+                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
                     yAxisID: 'y-protein',
-                    tension: 0.3,  
-                    pointRadius: 4,
-                    pointHoverRadius: 6
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    fill: true,
+                    borderWidth: 2
                 },
                 {
                     label: 'Calories',
                     data: chartData.map(d => d.calories),
-                    borderColor: '#9E9E9E',  
-                    backgroundColor: '#9E9E9E',
+                    borderColor: '#9E9E9E',
+                    backgroundColor: 'rgba(158, 158, 158, 0.1)',
                     yAxisID: 'y-calories',
-                    tension: 0.3,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    fill: true,
+                    borderWidth: 2
                 }
             ]
         },
@@ -235,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     min: minProtein,
                     max: maxProtein,
                     grid: {
-                        drawOnChartArea: false
+                        color: 'rgba(0, 0, 0, 0.05)',
                     },
                     title: {
                         display: true,
@@ -249,7 +409,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     min: minCalories,
                     max: maxCalories,
                     grid: {
-                        drawOnChartArea: false
+                        display: false,
                     },
                     title: {
                         display: true,
@@ -258,53 +418,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 },
                 x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        displayFormats: {
+                            day: 'MMM d'
+                        }
+                    },
                     grid: {
                         display: false
-                    }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    titleColor: '#000',
-                    bodyColor: '#000',
-                    borderColor: '#ddd',
-                    borderWidth: 1,
-                    padding: 10,
-                    displayColors: true,
-                },
-                annotation: {
-                    annotations: {
-                        proteinGoalLine: {
-                            type: 'line',
-                            yMin: proteinGoal,
-                            yMax: proteinGoal,
-                            borderColor: '#2196F3',
-                            borderDash: [5, 5],
-                            borderWidth: 1,
-                            yScaleID: 'y-protein',
-                            label: {
-                                content: 'Protein Goal',
-                                display: true,
-                                backgroundColor: 'rgba(33, 150, 243, 0.1)',
-                                color: '#2196F3'
-                            }
-                        },    
-                        calorieGoalLine: {
-                            type: 'line',
-                            yMin: maxCalories,
-                            yMax: maxCalories,
-                            borderColor: '#9E9E9E',
-                            borderDash: [5, 5],
-                            borderWidth: 1,
-                            yScaleID: 'y-calories',
-                            label: {
-                                content: 'Calorie Target',
-                                display: true,
-                                backgroundColor: 'rgba(158, 158, 158, 0.1)',
-                                color: '#9E9E9E'
-                            }
-                        }
                     }
                 }
             }
@@ -352,12 +474,19 @@ function submitEdit() {
     });
 }
 
+function toggleWorkout(element) {
+    const content = element.nextElementSibling;
+    const chevron = element.querySelector('.chevron');
+    
+    content.classList.toggle('show');
+    chevron.classList.toggle('rotated');
+}
+
 window.onclick = function(event) {
     const modal = document.getElementById('editModal');
     if (event.target == modal) {
         closeEditModal();
     }
 }
-
 </script>
 {% endblock %}

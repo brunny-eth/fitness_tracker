@@ -24,56 +24,6 @@
     </div>
 </div>
 
-<div class="section">
-    <h2>Workout Days</h2>
-    
-    {% for category in workout_categories %}
-    <div class="category-card">
-        <div class="category-header">
-            <h3>{{ category.name }}</h3>
-            <div class="button-group">
-                <button class="btn-secondary" onclick="editCategory('{{ category.id }}')">Edit</button>
-                <button class="btn-danger" onclick="deleteCategory('{{ category.id }}')">Delete</button>
-            </div>
-        </div>
-        <div class="category-content">
-            <div class="exercises-list">
-                {% for exercise in category.get_exercises() %}
-                <div class="exercise-item">
-                    <span class="exercise-name">{{ exercise }}</span>
-                    <span class="exercise-history" id="history-{{ category.name }}-{{ exercise }}">
-                    </span>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-
-    <div class="category-card" id="add-category">
-        <h3>Add New Workout Days</h3>
-        
-        <div class="add-category-section">
-            <div class="form-group">
-                <label for="categoryName">Workout Day Name:</label>
-                <input type="text" id="categoryName" class="form-input">
-            </div>
-        </div>
-    
-        <div class="add-category-section exercises-section">
-            <label class="exercises-label">Exercises:</label>
-            <div id="exercisesList">
-                <input type="text" class="exercise-input">
-            </div>
-            <button onclick="addExerciseInput()" class="btn-secondary">+ Add Exercise</button>
-        </div>
-        
-        <div class="form-buttons">
-            <button onclick="saveCategory()" class="btn-primary">Save Category</button>
-        </div>
-    </div>
-</div>
-
 <style>
 .section {
     background: white;

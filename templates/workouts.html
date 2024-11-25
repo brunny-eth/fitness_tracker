@@ -6,6 +6,7 @@
   <div style="color: {% if worked_out_today %}green{% else %}black{% endif %}">
     {% if worked_out_today %}
       <p>Worked out today!</p>
+      <p style="font-size: 0.9em; margin-top: 4px;">{{ workout_summary }}</p>
     {% else %}
       <p>No workout logged yet today</p>
     {% endif %}
@@ -25,7 +26,14 @@
         </div>
         <div class="category-info">
           <h3>{{ category.name }}</h3>
-          <p>{{ category.get_exercises()|length }} exercises • Last used {{ category.last_used }}</p>
+          <p>
+            {{ category.get_exercises()|length }} exercises • 
+            {% if category.last_completed %}
+              Last completed {{ category.last_completed.strftime('%B %d, %Y') }}
+            {% else %}
+              Not completed yet
+            {% endif %}
+          </p>
         </div>
       </div>
       <div class="category-actions">
@@ -305,6 +313,12 @@
     border: 1px solid #d1d5db;
     border-radius: 4px;
     width: 100%;
+}
+
+.workout-summary {
+  font-size: 0.9em;
+  color: #4b5563;
+  margin-top: 4px;
 }
 
 @media (max-width: 640px) {

@@ -247,21 +247,39 @@ def add_nutrition():
 @login_required
 def workouts():
     today = date.today()
-    worked_out_today = Workout.query.filter(
+    
+    todays_workout = Workout.query.filter(
         Workout.user_id == current_user.id,
         Workout.date >= today,
         Workout.date < datetime.combine(today, datetime.max.time())
-    ).first() is not None
+    ).first()
     
-    workouts = Workout.query.filter_by(user_id=current_user.id).order_by(Workout.date.desc()).limit(10).all()
-    workout_categories = WorkoutCategory.query.filter_by(user_id=current_user.id).all()  
+    worked_out_today = todays_workout is not None
+    
+    workout_summary = None
+    if todays_workout:
+        exercises = json.loads(todays_workout.exercises)
+        workout_summary = f"{todays_workout.type}; {len(exercises)} exercises"
+    
+    workout_categories = WorkoutCategory.query.filter_by(user_id=current_user.id).all()
+    
+    for category in workout_categories:
+        last_workout = Workout.query.filter_by(
+            user_id=current_user.id,
+            type=category.name
+        ).order_by(Workout.date.desc()).first()
+        
+        if last_workout:
+            category.last_completed = last_workout.date
+        else:
+            category.last_completed = None
     
     return render_template('workouts.html',
                          active_tab='workouts',
                          date=today.strftime("%B %d, %Y"),
                          worked_out_today=worked_out_today,
-                         workouts=workouts,
-                         workout_categories=workout_categories,  
+                         workout_summary=workout_summary,
+                         workout_categories=workout_categories,
                          json=json)
 
 @app.route('/log_workout', methods=['POST'])
@@ -310,12 +328,13 @@ def saved_meals():
 def history():
     end_date = date.today()
     start_date = end_date - timedelta(days=29)
+    settings = UserSettings.query.filter_by(user_id=current_user.id).first()
     
     nutrition_entries = NutritionEntry.query.filter(
         NutritionEntry.user_id == current_user.id,
         NutritionEntry.date >= start_date,
         NutritionEntry.date <= end_date
-    ).order_by(NutritionEntry.date.asc()).all()
+    ).order_by(NutritionEntry.date.desc()).all()  
 
     workouts = Workout.query.filter(
         Workout.user_id == current_user.id,
@@ -323,15 +342,45 @@ def history():
         Workout.date <= datetime.combine(end_date, datetime.max.time())
     ).order_by(Workout.date.desc()).all()
 
-    settings = UserSettings.query.first()
     protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
     
+    nutrition_by_date = {}
+    for entry in nutrition_entries:
+        if entry.date not in nutrition_by_date:
+            nutrition_by_date[entry.date] = []
+        nutrition_by_date[entry.date].append(entry)
+    
+    history = []
+    current_date = end_date
+    while current_date >= start_date:
+        day_entries = nutrition_by_date.get(current_date, [])
+        protein_total = sum(entry.protein_amount for entry in day_entries)
+        calorie_total = sum(entry.calorie_amount for entry in day_entries)
+        
+        day_workout = next((w for w in workouts if w.date.date() == current_date), None)
+        
+        if day_entries or day_workout:  
+            history.append({
+                'date': current_date,
+                'nutrition': {
+                    'protein': protein_total,
+                    'calories': calorie_total,
+                    'protein_goal': protein_goal
+                } if day_entries else None,
+                'workout': {
+                    'type': day_workout.type,
+                    'exercises': json.loads(day_workout.exercises)
+                } if day_workout else None
+            })
+        
+        current_date -= timedelta(days=1)
+
     chart_data = []
     current_date = start_date
     while current_date <= end_date:
-        day_nutrition = [e for e in nutrition_entries if e.date == current_date]
-        protein_total = sum(entry.protein_amount for entry in day_nutrition)
-        calorie_total = sum(entry.calorie_amount for entry in day_nutrition)
+        day_entries = nutrition_by_date.get(current_date, [])
+        protein_total = sum(entry.protein_amount for entry in day_entries)
+        calorie_total = sum(entry.calorie_amount for entry in day_entries)
         
         chart_data.append({
             'day': (current_date - start_date).days + 1,
@@ -339,35 +388,13 @@ def history():
             'calories': calorie_total if calorie_total > 0 else None
         })
         current_date += timedelta(days=1)
-    
-    history = []
-    current_date = end_date
-    while current_date >= start_date:
-        day_nutrition = [e for e in nutrition_entries if e.date == current_date]
-        protein_total = sum(entry.protein_amount for entry in day_nutrition)
-        calorie_total = sum(entry.calorie_amount for entry in day_nutrition)
-        
-        day_workout = next((w for w in workouts if w.date.date() == current_date), None)
-        
-        history.append({
-            'date': current_date,
-            'nutrition': {
-                'protein': protein_total,
-                'calories': calorie_total,
-                'protein_goal': protein_goal
-            } if day_nutrition else None,
-            'workout': {
-                'type': day_workout.type,
-                'exercises': json.loads(day_workout.exercises) if day_workout else []
-            } if day_workout else None
-        })
-        current_date -= timedelta(days=1)
-    
+
     return render_template('history.html',
                          active_tab='history',
                          history=history,
                          protein_goal=protein_goal,
-                         chart_data=chart_data)  
+                         max_calories=settings.max_calories,  
+                         chart_data=chart_data)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
