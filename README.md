@@ -19,13 +19,17 @@ Simple Flask-based web app for tracking protein intake, calorie intake, and work
 + Daily workout status indicator
 + Track exercise progress over time
 
+### Prerequisites
+- Python 3.8 or higher
+- SQLite3
+- Anthropic API key (for Claude integration)
 
 ### Setup
 1. Clone the repository
 2. Create an activate virtual environment
    '''bash
    python -m venv venv
-   source venv/bin/activate  # On Unix/macOS
+   source venv/bin/activate  
 3. Install dependencies: `pip install -r requirements.txt`
 4. Set up env variables
 3. Initialize the database: 
@@ -35,3 +39,7 @@ Simple Flask-based web app for tracking protein intake, calorie intake, and work
    flask db migrate
    flask db upgrade
 4. Run the application: `python app.py`
+
+### Contributing
+
+This is a personal project for my own usage, but feel free to suggest improvements, provide improvements yourself, or fork and modify for your own use. 
