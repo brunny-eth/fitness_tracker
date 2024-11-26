@@ -14,10 +14,6 @@
 </div>
 
 <div class="workout-categories">
-  <button class="add-category-btn" onclick="showCategoryModal()">
-    + Add New Workout Day
-  </button>
-
   {% for category in workout_categories %}
     <div class="category-card" onclick="showWorkoutForm('{{ category.name }}')">
       <div class="category-content">
@@ -44,6 +40,11 @@
       </div>
     </div>
   {% endfor %}
+
+  <button class="add-category-btn" onclick="showCategoryModal()">
+    + Add New Workout Day
+  </button>
+
 </div>
 
 <div id="categoryModal" class="modal">

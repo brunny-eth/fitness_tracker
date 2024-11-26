@@ -98,7 +98,7 @@ class WorkoutCategory(db.Model):
 
 def calculate_protein_goal(weight_lbs, ratio):
     weight_kg = weight_lbs * 0.453592
-    return weight_kg * ratio
+    return round(weight_kg * ratio, 1)
 
 def get_llm_nutrition_estimate(meal_description):
     anthropic = Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))

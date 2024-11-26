@@ -475,3 +475,42 @@
 2024-11-25 17:34:01,824 INFO: 127.0.0.1 - - [25/Nov/2024 17:34:01] "GET /workouts HTTP/1.1" 200 -
 2024-11-25 17:34:02,973 INFO: 127.0.0.1 - - [25/Nov/2024 17:34:02] "GET /settings HTTP/1.1" 200 -
 2024-11-25 17:34:03,760 INFO: 127.0.0.1 - - [25/Nov/2024 17:34:03] "GET /history HTTP/1.1" 200 -
+2024-11-26 11:18:00,993 INFO: Application startup
+2024-11-26 11:18:01,200 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.99:5001
+2024-11-26 11:18:01,200 INFO: [33mPress CTRL+C to quit[0m
+2024-11-26 11:18:01,200 INFO:  * Restarting with stat
+2024-11-26 11:18:01,541 INFO: Application startup
+2024-11-26 11:18:01,573 WARNING:  * Debugger is active!
+2024-11-26 11:18:01,580 INFO:  * Debugger PIN: 133-619-259
+2024-11-26 11:18:06,997 INFO: 127.0.0.1 - - [26/Nov/2024 11:18:06] "GET / HTTP/1.1" 200 -
+2024-11-26 11:18:15,816 INFO: 127.0.0.1 - - [26/Nov/2024 11:18:15] "GET /workouts HTTP/1.1" 200 -
+2024-11-26 11:18:23,988 INFO: 127.0.0.1 - - [26/Nov/2024 11:18:23] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-26 11:18:24,000 INFO: 127.0.0.1 - - [26/Nov/2024 11:18:24] "GET /get_last_workout/Back HTTP/1.1" 200 -
+2024-11-26 11:18:24,005 INFO: 127.0.0.1 - - [26/Nov/2024 11:18:24] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-26 11:18:24,009 INFO: 127.0.0.1 - - [26/Nov/2024 11:18:24] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-26 11:18:24,012 INFO: 127.0.0.1 - - [26/Nov/2024 11:18:24] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-26 11:19:09,549 INFO: 127.0.0.1 - - [26/Nov/2024 11:19:09] "GET /workouts HTTP/1.1" 200 -
+2024-11-26 11:19:21,482 INFO: 127.0.0.1 - - [26/Nov/2024 11:19:21] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-26 11:19:27,059 INFO: 127.0.0.1 - - [26/Nov/2024 11:19:27] "GET / HTTP/1.1" 200 -
+2024-11-26 11:19:33,129 INFO: 127.0.0.1 - - [26/Nov/2024 11:19:33] "POST /delete_saved_meal/1 HTTP/1.1" 200 -
+2024-11-26 11:19:33,140 INFO: 127.0.0.1 - - [26/Nov/2024 11:19:33] "GET / HTTP/1.1" 200 -
+2024-11-26 11:19:40,869 INFO: 127.0.0.1 - - [26/Nov/2024 11:19:40] "GET /history HTTP/1.1" 200 -
+2024-11-26 11:22:48,529 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-26 11:22:48,656 INFO:  * Restarting with stat
+2024-11-26 11:22:49,016 INFO: Application startup
+2024-11-26 11:22:49,046 WARNING:  * Debugger is active!
+2024-11-26 11:22:49,052 INFO:  * Debugger PIN: 133-619-259
+2024-11-26 11:22:50,072 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-26 11:22:50,174 INFO:  * Restarting with stat
+2024-11-26 11:22:50,560 INFO: Application startup
+2024-11-26 11:22:50,591 WARNING:  * Debugger is active!
+2024-11-26 11:22:50,597 INFO:  * Debugger PIN: 133-619-259
+2024-11-26 11:24:19,940 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-26 11:24:20,033 INFO:  * Restarting with stat
+2024-11-26 11:24:20,409 INFO: Application startup
+2024-11-26 11:24:20,444 WARNING:  * Debugger is active!
+2024-11-26 11:24:20,448 INFO:  * Debugger PIN: 133-619-259
+2024-11-26 11:24:24,414 INFO: 127.0.0.1 - - [26/Nov/2024 11:24:24] "GET /history HTTP/1.1" 200 -
