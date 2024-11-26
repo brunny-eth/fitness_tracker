@@ -57,9 +57,30 @@ class User(UserMixin, db.Model):
 class UserSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
     weight_lbs = db.Column(db.Float, nullable=False)
     protein_ratio = db.Column(db.Float, nullable=False)
     max_calories = db.Column(db.Integer, nullable=False, default=2500)
+    
+    start_date = db.Column(db.DateTime, nullable=True) 
+    starting_weight = db.Column(db.Float, nullable=True)
+    starting_bodyfat = db.Column(db.Float, nullable=True)
+    age = db.Column(db.Integer, nullable=True)
+    gender = db.Column(db.String(10), nullable=True)
+    height_inches = db.Column(db.Float, nullable=True)
+    
+    target_weight = db.Column(db.Float, nullable=True)
+    target_bodyfat = db.Column(db.Float, nullable=True)
+    goal_months = db.Column(db.Integer, nullable=True)
+
+class WeightEntry(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    weight = db.Column(db.Float, nullable=False)
+    bodyfat = db.Column(db.Float, nullable=True)
+    
+    user = db.relationship('User', backref='weight_entries')
 
 class SavedMeal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -295,6 +316,29 @@ def log_workout():
     db.session.commit()
     return jsonify({"message": "Workout logged successfully"}), 201
 
+@app.route('/add_weight', methods=['POST'])
+@login_required
+def add_weight():
+    try:
+        data = request.json
+        weight = float(data['weight'])
+        bodyfat = data.get('bodyfat')  
+        
+        entry = WeightEntry(
+            user_id=current_user.id,
+            date=date.today(),
+            weight=weight,
+            bodyfat=bodyfat if bodyfat else None
+        )
+        
+        db.session.add(entry)
+        db.session.commit()
+        
+        return jsonify({"message": "Weight saved successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/saved_meals', methods=['GET', 'POST'])
 @login_required
 def saved_meals():
@@ -425,8 +469,11 @@ def register():
         
         settings = UserSettings(
             user=user,
-            weight_lbs=150,  
-            protein_ratio=1.0  
+            weight_lbs=150,
+            protein_ratio=1.0,
+            max_calories=2500,
+            start_date=datetime.utcnow(),
+            starting_weight=150 
         )
         
         db.session.add(user)
@@ -438,11 +485,48 @@ def register():
     
     return render_template('register.html')
 
+
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+@app.route('/settings')
+@login_required
+def settings():
+    settings = UserSettings.query.filter_by(user_id=current_user.id).first()
+    if not settings:
+        settings = UserSettings(
+            user_id=current_user.id,
+            weight_lbs=195,
+            protein_ratio=1.5,
+            max_calories=2500,
+            start_date=datetime.utcnow(),  
+            starting_weight=195
+        )
+        db.session.add(settings)
+        db.session.commit()
+    
+    latest_weight_entry = WeightEntry.query.filter_by(
+        user_id=current_user.id
+    ).order_by(WeightEntry.date.desc()).first()
+    
+    latest_weight = latest_weight_entry.weight if latest_weight_entry else settings.weight_lbs
+    
+    progress = None
+    if settings.target_weight and settings.starting_weight:
+        total_change_needed = abs(settings.target_weight - settings.starting_weight)
+        if total_change_needed > 0:
+            current_change = abs(latest_weight - settings.starting_weight)
+            progress = round((current_change / total_change_needed) * 100, 1)
+    
+    return render_template('settings.html',
+                         active_tab='settings',
+                         settings=settings,
+                         latest_weight=latest_weight,
+                         progress=progress)
 
 @app.route('/update_settings', methods=['POST'])
 @login_required
@@ -451,6 +535,9 @@ def update_settings():
     settings = UserSettings.query.filter_by(user_id=current_user.id).first()
     
     try:
+        if not settings.start_date:
+            settings.start_date = datetime.utcnow()
+            
         if data.get('weight') and data['weight'].strip():
             settings.weight_lbs = float(data['weight'])
         if data.get('ratio') and data['ratio'].strip():
@@ -458,14 +545,23 @@ def update_settings():
         if data.get('max_calories') and data['max_calories'].strip():
             settings.max_calories = int(data['max_calories'])
             
-        if not settings:
-            settings = UserSettings(
-                user_id=current_user.id,
-                weight_lbs=float(data.get('weight', 150)),
-                protein_ratio=float(data.get('ratio', 1.0)),
-                max_calories=int(data.get('max_calories', 2500))
-            )
-            db.session.add(settings)
+        if data.get('starting_weight') and data['starting_weight'].strip():
+            settings.starting_weight = float(data['starting_weight'])
+        if data.get('starting_bodyfat') and data['starting_bodyfat'].strip():
+            settings.starting_bodyfat = float(data['starting_bodyfat'])
+        if data.get('age') and data['age'].strip():
+            settings.age = int(data['age'])
+        if data.get('gender'):
+            settings.gender = data['gender']
+        if data.get('height_inches') and data['height_inches'].strip():
+            settings.height_inches = float(data['height_inches'])
+            
+        if data.get('target_weight') and data['target_weight'].strip():
+            settings.target_weight = float(data['target_weight'])
+        if data.get('target_bodyfat') and data['target_bodyfat'].strip():
+            settings.target_bodyfat = float(data['target_bodyfat'])
+        if data.get('goal_months') and data['goal_months'].strip():
+            settings.goal_months = int(data['goal_months'])
             
         db.session.commit()
         return jsonify({"message": "Settings updated successfully"}), 200
@@ -628,27 +724,6 @@ def update_nutrition():
         logging.error(f"Error updating nutrition: {str(e)}")
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
-
-@app.route('/settings')
-@login_required  
-def settings():
-    settings = UserSettings.query.filter_by(user_id=current_user.id).first()
-    if not settings:
-        settings = UserSettings(
-            user_id=current_user.id,
-            weight_lbs=195, 
-            protein_ratio=1.5
-        )
-        db.session.add(settings)
-        db.session.commit()
-    
-    workout_categories = WorkoutCategory.query.filter_by(user_id=current_user.id).all()
-    
-    return render_template('settings.html',
-                         active_tab='settings',
-                         weight=settings.weight_lbs,
-                         ratio=settings.protein_ratio,
-                         workout_categories=workout_categories)
 
 @app.route('/get_workout_category/<int:category_id>')
 @login_required
