@@ -587,3 +587,83 @@
 2024-11-26 11:46:28,915 INFO: 127.0.0.1 - - [26/Nov/2024 11:46:28] "GET / HTTP/1.1" 200 -
 2024-11-26 11:46:45,062 INFO: 127.0.0.1 - - [26/Nov/2024 11:46:45] "GET /settings HTTP/1.1" 200 -
 2024-11-26 11:47:08,903 INFO: 127.0.0.1 - - [26/Nov/2024 11:47:08] "GET / HTTP/1.1" 200 -
+2024-11-27 11:30:01,975 INFO: Application startup
+2024-11-27 11:30:02,040 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.99:5001
+2024-11-27 11:30:02,040 INFO: [33mPress CTRL+C to quit[0m
+2024-11-27 11:30:02,040 INFO:  * Restarting with stat
+2024-11-27 11:30:02,376 INFO: Application startup
+2024-11-27 11:30:02,406 WARNING:  * Debugger is active!
+2024-11-27 11:30:02,412 INFO:  * Debugger PIN: 133-619-259
+2024-11-27 11:32:15,737 INFO: 127.0.0.1 - - [27/Nov/2024 11:32:15] "GET / HTTP/1.1" 200 -
+2024-11-27 11:36:18,144 INFO: 127.0.0.1 - - [27/Nov/2024 11:36:18] "POST /add_weight HTTP/1.1" 200 -
+2024-11-27 11:36:22,842 INFO: 127.0.0.1 - - [27/Nov/2024 11:36:22] "GET /settings HTTP/1.1" 200 -
+2024-11-27 11:36:23,782 INFO: 127.0.0.1 - - [27/Nov/2024 11:36:23] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:36:28,828 INFO: 127.0.0.1 - - [27/Nov/2024 11:36:28] "GET / HTTP/1.1" 200 -
+2024-11-27 11:36:29,789 INFO: 127.0.0.1 - - [27/Nov/2024 11:36:29] "GET /workouts HTTP/1.1" 200 -
+2024-11-27 11:36:30,268 INFO: 127.0.0.1 - - [27/Nov/2024 11:36:30] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:36:30,770 INFO: 127.0.0.1 - - [27/Nov/2024 11:36:30] "GET /settings HTTP/1.1" 200 -
+2024-11-27 11:36:34,150 INFO: 127.0.0.1 - - [27/Nov/2024 11:36:34] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:38:29,108 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-27 11:38:29,216 INFO:  * Restarting with stat
+2024-11-27 11:38:29,718 INFO: Application startup
+2024-11-27 11:38:29,753 WARNING:  * Debugger is active!
+2024-11-27 11:38:29,758 INFO:  * Debugger PIN: 133-619-259
+2024-11-27 11:40:06,538 INFO: 127.0.0.1 - - [27/Nov/2024 11:40:06] "GET / HTTP/1.1" 200 -
+2024-11-27 11:40:42,385 INFO: 127.0.0.1 - - [27/Nov/2024 11:40:42] "GET / HTTP/1.1" 200 -
+2024-11-27 11:40:51,133 INFO: 127.0.0.1 - - [27/Nov/2024 11:40:51] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:47:05,150 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-27 11:47:05,267 INFO:  * Restarting with stat
+2024-11-27 11:47:05,854 INFO: Application startup
+2024-11-27 11:47:05,892 WARNING:  * Debugger is active!
+2024-11-27 11:47:05,899 INFO:  * Debugger PIN: 133-619-259
+2024-11-27 11:47:08,950 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-27 11:47:09,059 INFO:  * Restarting with stat
+2024-11-27 11:47:09,419 INFO: Application startup
+2024-11-27 11:47:09,454 WARNING:  * Debugger is active!
+2024-11-27 11:47:09,459 INFO:  * Debugger PIN: 133-619-259
+2024-11-27 11:47:15,802 INFO: 127.0.0.1 - - [27/Nov/2024 11:47:15] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:47:16,716 INFO: 127.0.0.1 - - [27/Nov/2024 11:47:16] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:47:16,882 INFO: 127.0.0.1 - - [27/Nov/2024 11:47:16] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:48:01,864 INFO: 127.0.0.1 - - [27/Nov/2024 11:48:01] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:48:02,590 INFO: 127.0.0.1 - - [27/Nov/2024 11:48:02] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:48:02,774 INFO: 127.0.0.1 - - [27/Nov/2024 11:48:02] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:48:02,956 INFO: 127.0.0.1 - - [27/Nov/2024 11:48:02] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:49:17,539 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-27 11:49:17,655 INFO:  * Restarting with stat
+2024-11-27 11:49:18,024 INFO: Application startup
+2024-11-27 11:49:18,055 WARNING:  * Debugger is active!
+2024-11-27 11:49:18,059 INFO:  * Debugger PIN: 133-619-259
+2024-11-27 11:49:24,201 INFO: 127.0.0.1 - - [27/Nov/2024 11:49:24] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:49:24,727 INFO: 127.0.0.1 - - [27/Nov/2024 11:49:24] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:49:24,859 INFO: 127.0.0.1 - - [27/Nov/2024 11:49:24] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:49:25,026 INFO: 127.0.0.1 - - [27/Nov/2024 11:49:25] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:49:38,964 INFO: 127.0.0.1 - - [27/Nov/2024 11:49:38] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:49:40,086 INFO: 127.0.0.1 - - [27/Nov/2024 11:49:40] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:51:28,736 INFO: 127.0.0.1 - - [27/Nov/2024 11:51:28] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:52:56,201 INFO: 127.0.0.1 - - [27/Nov/2024 11:52:56] "GET /settings HTTP/1.1" 200 -
+2024-11-27 11:53:02,191 INFO: 127.0.0.1 - - [27/Nov/2024 11:53:02] "POST /update_settings HTTP/1.1" 200 -
+2024-11-27 11:53:03,685 INFO: 127.0.0.1 - - [27/Nov/2024 11:53:03] "GET /settings HTTP/1.1" 200 -
+2024-11-27 11:53:05,179 INFO: 127.0.0.1 - - [27/Nov/2024 11:53:05] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:56:42,360 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-27 11:56:42,470 INFO:  * Restarting with stat
+2024-11-27 11:56:42,831 INFO: Application startup
+2024-11-27 11:56:42,862 WARNING:  * Debugger is active!
+2024-11-27 11:56:42,867 INFO:  * Debugger PIN: 133-619-259
+2024-11-27 11:56:46,404 INFO: 127.0.0.1 - - [27/Nov/2024 11:56:46] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:56:47,641 INFO: 127.0.0.1 - - [27/Nov/2024 11:56:47] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:58:50,918 INFO: 127.0.0.1 - - [27/Nov/2024 11:58:50] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:58:51,714 INFO: 127.0.0.1 - - [27/Nov/2024 11:58:51] "GET /history HTTP/1.1" 200 -
+2024-11-27 11:58:52,511 INFO: 127.0.0.1 - - [27/Nov/2024 11:58:52] "GET /history HTTP/1.1" 200 -
+2024-11-27 12:00:12,653 INFO: 127.0.0.1 - - [27/Nov/2024 12:00:12] "GET /history HTTP/1.1" 200 -
+2024-11-27 12:00:13,405 INFO: 127.0.0.1 - - [27/Nov/2024 12:00:13] "GET /history HTTP/1.1" 200 -
+2024-11-27 12:00:13,871 INFO: 127.0.0.1 - - [27/Nov/2024 12:00:13] "GET /history HTTP/1.1" 200 -
+2024-11-27 12:00:14,236 INFO: 127.0.0.1 - - [27/Nov/2024 12:00:14] "GET /history HTTP/1.1" 200 -
+2024-11-27 12:00:14,636 INFO: 127.0.0.1 - - [27/Nov/2024 12:00:14] "GET /history HTTP/1.1" 200 -
+2024-11-27 12:05:06,363 INFO: 127.0.0.1 - - [27/Nov/2024 12:05:06] "GET /history HTTP/1.1" 200 -
+2024-11-27 12:06:34,865 INFO: 127.0.0.1 - - [27/Nov/2024 12:06:34] "GET /history HTTP/1.1" 200 -
+2024-11-27 12:06:35,926 INFO: 127.0.0.1 - - [27/Nov/2024 12:06:35] "GET /history HTTP/1.1" 200 -
+2024-11-27 12:06:36,375 INFO: 127.0.0.1 - - [27/Nov/2024 12:06:36] "GET /history HTTP/1.1" 200 -
+2024-11-27 12:07:11,688 INFO: 127.0.0.1 - - [27/Nov/2024 12:07:11] "GET /history HTTP/1.1" 200 -

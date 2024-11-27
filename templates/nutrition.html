@@ -60,6 +60,7 @@
         placeholder="Remember to weigh yourself at the same time of day each day!"
         class="weight-input"
       >
+      <span class="weight-unit">in kilograms</span>
       <button onclick="saveWeight()" class="action-btn">Save</button>
     </div>
   </div>
@@ -384,6 +385,27 @@
 .edit-meal-btn:hover {
   background-color: #f3f4f6;
   border-color: #d1d5db;
+}
+
+.weight-unit {
+    padding: 0 8px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.weight-input-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.weight-input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
 }
 
 /* Modal Styles */

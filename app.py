@@ -119,7 +119,7 @@ class WorkoutCategory(db.Model):
 
 def calculate_protein_goal(weight_lbs, ratio):
     weight_kg = weight_lbs * 0.453592
-    return round(weight_kg * ratio, 1)
+    return round(weight_kg * ratio)  
 
 def get_llm_nutrition_estimate(meal_description):
     anthropic = Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
@@ -419,6 +419,8 @@ def history():
         
         current_date -= timedelta(days=1)
 
+    settings = UserSettings.query.filter_by(user_id=current_user.id).first()
+    
     chart_data = []
     current_date = start_date
     while current_date <= end_date:
@@ -426,10 +428,17 @@ def history():
         protein_total = sum(entry.protein_amount for entry in day_entries)
         calorie_total = sum(entry.calorie_amount for entry in day_entries)
         
+        weight_entry = WeightEntry.query.filter_by(
+            user_id=current_user.id,
+            date=current_date
+        ).first()
+        
         chart_data.append({
             'day': (current_date - start_date).days + 1,
             'protein': protein_total if protein_total > 0 else None,
-            'calories': calorie_total if calorie_total > 0 else None
+            'calories': calorie_total if calorie_total > 0 else None,
+            'weight': weight_entry.weight if weight_entry else None,
+            'date': current_date.strftime('%Y-%m-%d')
         })
         current_date += timedelta(days=1)
 
@@ -437,7 +446,8 @@ def history():
                          active_tab='history',
                          history=history,
                          protein_goal=protein_goal,
-                         max_calories=settings.max_calories,  
+                         settings=settings,  
+                         max_calories=settings.max_calories,
                          chart_data=chart_data)
 
 @app.route('/login', methods=['GET', 'POST'])
