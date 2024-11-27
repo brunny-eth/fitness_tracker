@@ -60,7 +60,7 @@
         placeholder="Remember to weigh yourself at the same time of day each day!"
         class="weight-input"
       >
-      <span class="weight-unit">in kilograms</span>
+      <span class="weight-unit">kilograms</span>
       <button onclick="saveWeight()" class="action-btn">Save</button>
     </div>
   </div>
@@ -83,7 +83,7 @@
 <!-- Claude Input -->
 <div id="claude_input" class="input-group">
   <textarea id="meal_description" placeholder="Describe what you ate (e.g., '2 eggs with toast and a banana')" rows="3"></textarea>
-  <button type="button" onclick="analyzeMeal()" id="analyze_button">Analyze Meal</button>
+  <button type="button" onclick="analyzeMeal()" id="analyze_button" class="action-btn">Analyze Meal</button>
   <div id="analysis_result"></div>
 </div>
 
@@ -119,8 +119,8 @@
         <div class="or-container">
           <span class="or-text">or</span>
         </div>
-        <button class="secondary-btn" onclick="showNewMealForm()">Add New Saved Meal</button>
-    </div>
+        <button class="action-btn" onclick="showNewMealForm()">Add New Saved Meal</button>
+      </div>
 
     <div id="newMealForm" class="modal-section hidden">
         <h3>Add New Saved Meal</h3>
@@ -345,20 +345,24 @@
   color: #6b7280;
 }
 
-.action-btn {
-    padding: 8px 16px;
-    min-width: 80px;
+.action-btn, 
+#analyze_button,
+.secondary-btn {  
+    width: 100%;
+    padding: 12px;
+    background-color: #3b82f6;
+    color: white;
     border: none;
     border-radius: 6px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    background-color: #3b82f6;
-    color: white;
     transition: background-color 0.2s;
 }
 
-.action-btn:hover {
+.action-btn:hover, 
+#analyze_button:hover,
+.secondary-btn:hover {
     background-color: #2563eb;
 }
 
@@ -394,11 +398,12 @@
     font-weight: 500;
 }
 
-.weight-input-container {
-    display: flex;
-    gap: 12px;
-    align-items: center;
+.weight-input-container .action-btn {
+    width: auto; 
+    min-width: 80px;  
+    padding: 8px 16px;  
 }
+
 
 .weight-input {
     flex: 1;
@@ -566,16 +571,6 @@
   cursor: pointer;
 }
 
-.secondary-btn {
-  width: 100%;
-  padding: 12px;
-  background: #f3f4f6;
-  border: none;
-  border-radius: 6px;
-  color: #374151;
-  cursor: pointer;
-}
-
 .close-btn {
   background: none;
   border: none;
@@ -702,28 +697,6 @@
     outline: none;
     border-color: #9ca3af;
     box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.2);
-}
-
-#analyze_button {
-    background-color: #f9fafb;
-    color: #374151;
-    padding: 8px 16px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-#analyze_button:hover {
-    background-color: #f3f4f6;
-    border-color: #d1d5db;
-}
-
-#analyze_button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 
 #analysis_result {

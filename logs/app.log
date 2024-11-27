@@ -667,3 +667,24 @@
 2024-11-27 12:06:35,926 INFO: 127.0.0.1 - - [27/Nov/2024 12:06:35] "GET /history HTTP/1.1" 200 -
 2024-11-27 12:06:36,375 INFO: 127.0.0.1 - - [27/Nov/2024 12:06:36] "GET /history HTTP/1.1" 200 -
 2024-11-27 12:07:11,688 INFO: 127.0.0.1 - - [27/Nov/2024 12:07:11] "GET /history HTTP/1.1" 200 -
+2024-11-27 15:56:02,587 INFO: Application startup
+2024-11-27 15:56:02,635 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.99:5001
+2024-11-27 15:56:02,635 INFO: [33mPress CTRL+C to quit[0m
+2024-11-27 15:56:02,635 INFO:  * Restarting with stat
+2024-11-27 15:56:03,002 INFO: Application startup
+2024-11-27 15:56:03,032 WARNING:  * Debugger is active!
+2024-11-27 15:56:03,037 INFO:  * Debugger PIN: 133-619-259
+2024-11-27 15:56:04,723 INFO: 127.0.0.1 - - [27/Nov/2024 15:56:04] "GET / HTTP/1.1" 200 -
+2024-11-27 15:58:46,998 INFO: 127.0.0.1 - - [27/Nov/2024 15:58:46] "GET / HTTP/1.1" 200 -
+2024-11-27 15:58:49,750 INFO: 127.0.0.1 - - [27/Nov/2024 15:58:49] "GET / HTTP/1.1" 200 -
+2024-11-27 16:00:18,197 INFO: 127.0.0.1 - - [27/Nov/2024 16:00:18] "GET / HTTP/1.1" 200 -
+2024-11-27 16:00:42,894 INFO: 127.0.0.1 - - [27/Nov/2024 16:00:42] "GET / HTTP/1.1" 200 -
+2024-11-27 16:00:44,500 INFO: 127.0.0.1 - - [27/Nov/2024 16:00:44] "GET /workouts HTTP/1.1" 200 -
+2024-11-27 16:00:46,248 INFO: 127.0.0.1 - - [27/Nov/2024 16:00:46] "GET / HTTP/1.1" 200 -
+2024-11-27 16:00:46,776 INFO: 127.0.0.1 - - [27/Nov/2024 16:00:46] "GET /workouts HTTP/1.1" 200 -
+2024-11-27 16:00:47,724 INFO: 127.0.0.1 - - [27/Nov/2024 16:00:47] "GET /history HTTP/1.1" 200 -
+2024-11-27 16:00:56,459 INFO: 127.0.0.1 - - [27/Nov/2024 16:00:56] "GET /workouts HTTP/1.1" 200 -
+2024-11-27 16:00:58,048 INFO: 127.0.0.1 - - [27/Nov/2024 16:00:58] "GET /history HTTP/1.1" 200 -
