@@ -295,10 +295,7 @@ canvas {
 
         <div class="summary-card">
             {% if latest_weight_entry %}
-            <p>Weight: {{ (latest_weight_entry.weight * 0.453592)|round(1) }} kg</p>
-            {% endif %}
-            <h3>{% if latest_weight_entry %}Today, you are at:{% else %}On {{ latest_weight_entry.date.strftime('%B %d, %Y') }}, you were at:{% endif %}</h3>
-            {% if latest_weight_entry %}
+            <h3>Today, you are at:</h3>
             <p>Weight: {{ (latest_weight_entry.weight * 0.453592)|round(1) }} kg</p>
             {% else %}
             <p class="weight-reminder">
@@ -453,48 +450,22 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Protein Data:', proteinData);
 
     function interpolateNulls(data) {
-    console.log('Interpolating data:', data); 
-    
     if (!data || !Array.isArray(data)) {
-        console.log('Invalid data provided to interpolateNulls');
         return [];
     }
 
     const result = [...data];
-    let start = null;
-    let end = null;
-    let i = 0;
     
-    while (i < result.length) {
-        if (result[i] === null || result[i] === undefined) {
-            start = i > 0 ? {index: i-1, value: result[i-1]} : null;
-            
-            end = null;
-            for (let j = i + 1; j < result.length; j++) {
-                if (result[j] !== null && result[j] !== undefined) {
-                    end = {index: j, value: result[j]};
-                    break;
-                }
-            }
-            
-            if (start && end) {
-                const gap = end.index - start.index;
-                const increment = (end.value - start.value) / gap;
-                for (let x = 1; x < gap; x++) {
-                    result[start.index + x] = start.value + (increment * x);
-                }
-                i = end.index;
-            } else {
-                const lastGoodValue = start ? start.value : (end ? end.value : null);
-                if (lastGoodValue !== null) {
-                    result[i] = lastGoodValue;
-                }
-            }
+    let lastValidValue = result.find(x => x !== null);
+    
+    for (let i = 0; i < result.length; i++) {
+        if (result[i] === null) {
+            result[i] = lastValidValue;
+        } else {
+            lastValidValue = result[i];
         }
-        i++;
     }
     
-    console.log('Interpolated result:', result); 
     return result;
 }
 
@@ -505,47 +476,37 @@ document.addEventListener('DOMContentLoaded', function() {
     data: {
         labels: dates,
         datasets: [
-            {
-                label: 'Weight (kg)',
-                data: interpolateNulls(weightData.map(w => w ? w * 0.453592 : null)),
-                borderColor: '#2196F3',
-                backgroundColor: 'rgba(33, 150, 243, 0.1)',
-                yAxisID: 'y-weight',
-                tension: 0.4,
-                pointRadius: 0,  
-                fill: {
-                    target: 'origin',
-                    above: 'rgba(33, 150, 243, 0.1)'
-                },
-                borderWidth: 2,
-                spanGaps: true
-            },
-            {
-                label: 'Calories',
-                data: interpolateNulls(caloriesData),
-                borderColor: '#9E9E9E',
-                backgroundColor: 'rgba(158, 158, 158, 0.1)',
-                yAxisID: 'y-calories',
-                tension: 0.4,
-                pointRadius: 0,  
-                fill: {
-                    target: 'origin',
-                    above: 'rgba(158, 158, 158, 0.1)'
-                },
-                borderWidth: 2,
-                spanGaps: true
-            },
-            {
-                label: 'Weight Goal',
-                data: Array(dates.length).fill(weightGoal * 0.453592),
-                borderColor: '#ef4444',
-                borderDash: [5, 5],
-                borderWidth: 2,
-                pointRadius: 0,
-                yAxisID: 'y-weight',
-                fill: false
-            }
-        ]
+    {
+        label: 'Weight (kg)',
+        data: weightData.map(w => w ? (w * 0.453592).toFixed(1) : null),  
+        borderColor: '#2196F3',
+        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+        yAxisID: 'y-weight',
+        tension: 0.4,
+        pointRadius: 2,  
+        fill: true
+    },
+    {
+        label: 'Calories',
+        data: caloriesData,
+        borderColor: '#9E9E9E',
+        backgroundColor: 'rgba(158, 158, 158, 0.1)',
+        yAxisID: 'y-calories',
+        tension: 0.4,
+        pointRadius: 2,  
+        fill: true
+    },
+    {
+        label: 'Weight Goal',
+        data: Array(dates.length).fill(weightGoal * 0.453592),
+        borderColor: '#ef4444',
+        borderDash: [5, 5],
+        borderWidth: 2,
+        pointRadius: 0,
+        yAxisID: 'y-weight',
+        fill: false
+    }
+]
     },
     options: {
         responsive: true,
@@ -563,81 +524,87 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
         scales: {
-            'y-weight': {
-                type: 'linear',
-                position: 'left',
-                title: {
-                    display: true,
-                    text: 'Weight (kgs)',
-                    color: '#2196F3',
-                    font: {
-                        size: 12,
-                        weight: 'bold'
-                    }
-                },
-                grid: {
-                    color: 'rgba(0, 0, 0, 0.05)'
-                },
-                ticks: {
-                    padding: 10
-                }
-            },
-            'y-calories': {
-                type: 'linear',
-                position: 'right',
-                title: {
-                    display: true,
-                    text: 'Calories',
-                    color: '#9E9E9E',
-                    font: {
-                        size: 12,
-                        weight: 'bold'
-                    }
-                },
-                grid: {
-                    display: false
-                },
-                ticks: {
-                    padding: 10
-                }
-            },
-            x: {
-                type: 'time',
-                time: {
-                    unit: 'day',
-                    displayFormats: {
-                        day: 'MMM d'
-                    }
-                },
-                grid: {
-                    display: false
-                },
-                ticks: {
-                    maxRotation: 0,
-                    autoSkip: true,
-                    maxTicksLimit: 10
-                }
+    'y-weight': {
+        type: 'linear',
+        position: 'left',
+        title: {
+            display: true,
+            text: 'Weight (kg)',
+            color: '#2196F3'
+        },
+        min: 0, 
+        ticks: {
+            padding: 10,
+            callback: function(value) {
+                return value.toFixed(1);  
             }
         },
-        plugins: {
-            legend: {
-                labels: {
-                    usePointStyle: true,
-                    padding: 20
-                }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                titleColor: '#111827',
-                bodyColor: '#374151',
-                borderColor: '#e5e7eb',
-                borderWidth: 1,
-                padding: 12,
-                boxPadding: 6,
-                usePointStyle: true
+        grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+        }
+    },
+    'y-calories': {
+        type: 'linear',
+        position: 'right',
+        title: {
+            display: true,
+            text: 'Calories',
+            color: '#9E9E9E'
+        },
+        min: 0,
+        ticks: {
+            padding: 10
+        },
+        grid: {
+            display: false
+        }
+    },
+    x: {
+        type: 'time',
+        time: {
+            unit: 'day',
+            tooltipFormat: 'MMM d, yyyy',
+            displayFormats: {
+                day: 'MMM d'
             }
+        },
+        grid: {
+            display: false
+        },
+        ticks: {
+            maxRotation: 0,
+            autoSkip: true,
+            maxTicksLimit: 10
         }
     }
+}
+        },
+        plugins: {
+    tooltip: {
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+            label: function(context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                    label += ': ';
+                }
+                if (context.dataset.yAxisID === 'y-weight') {
+                    label += context.parsed.y.toFixed(1) + ' kg';
+                } else {
+                    label += context.parsed.y.toFixed(0);
+                }
+                return label;
+            }
+        }
+    },
+    legend: {
+        labels: {
+            usePointStyle: true,
+            padding: 20
+        }
+    }
+}
 });
 
 

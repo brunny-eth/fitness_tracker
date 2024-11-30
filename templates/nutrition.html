@@ -53,17 +53,21 @@
   <div class="section weight-section">
     <h2>Today's Weight</h2>
     <div class="weight-input-container">
-      <input 
-        type="number" 
-        id="today_weight" 
-        step="0.1" 
-        placeholder="Remember to weigh yourself at the same time of day each day!"
-        class="weight-input"
-      >
-      <span class="weight-unit">kilograms</span>
-      <button onclick="saveWeight()" class="action-btn">Save</button>
+        {% if todays_weight %}
+            <p class="weight-status">Already weighed yourself at {{ (todays_weight.weight * 0.453592)|round(1) }} kg today</p>
+        {% else %}
+            <input 
+                type="number" 
+                id="today_weight" 
+                step="0.1" 
+                placeholder="Remember to weigh yourself at the same time of day each day!"
+                class="weight-input"
+            >
+            <span class="weight-unit">kilograms</span>
+            <button onclick="saveWeight()" class="action-btn">Save</button>
+        {% endif %}
     </div>
-  </div>
+</div>
 
 <div class="section">
   <h2>Add A Meal</h2>
@@ -656,6 +660,17 @@
     font-weight: 500;
 }
 
+.weight-status {
+    color: #6b7280;  
+    font-size: 14px;
+    padding: 12px;
+    background: #f3f4f6;  
+    border-radius: 8px;
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+}
+
 /* Media Queries */
 @media (max-width: 640px) {
   .input-row {
@@ -770,18 +785,21 @@ function saveWeight() {
             weight: parseFloat(weight)
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw new Error(err.error || 'Server error');
+            });
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data.error) {
-            alert(data.error);
-        } else {
-            alert('Weight saved successfully');
-            document.getElementById('today_weight').value = '';
+        if (data.message) {
+            location.reload(); 
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Error saving weight');
+        alert(error.message);
     });
 }
 

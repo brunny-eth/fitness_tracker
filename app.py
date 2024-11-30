@@ -187,6 +187,12 @@ def home():
     total_protein = sum(entry.protein_amount for entry in entries)
     total_calories = sum(entry.calorie_amount for entry in entries)
 
+    today = date.today()
+    todays_weight = WeightEntry.query.filter_by(
+        user_id=current_user.id,
+        date=today
+    ).first()
+
     return render_template('nutrition.html',
                          active_tab='nutrition',
                          date=today.strftime("%B %d, %Y"),
@@ -200,6 +206,7 @@ def home():
                          ratio=settings.protein_ratio,
                          saved_meals=saved_meals,
                          entries=entries,  
+                         todays_weight=todays_weight,
                          entry_type=request.args.get('entry_type', 'manual'))
 
 @app.route('/analyze_meal', methods=['POST'])
@@ -318,12 +325,24 @@ def log_workout():
 def add_weight():
     try:
         data = request.json
+        today = date.today()
+        
+        existing_entry = WeightEntry.query.filter_by(
+            user_id=current_user.id,
+            date=today
+        ).first()
+        
+        if existing_entry:
+            return jsonify({
+                "error": f"Already logged weight of {(existing_entry.weight * 0.453592):.1f} kg today"
+            }), 400
+            
         weight_kg = float(data['weight'])
         weight_lbs = weight_kg * 2.20462  
         
         entry = WeightEntry(
             user_id=current_user.id,
-            date=date.today(),
+            date=today,
             weight=weight_lbs  
         )
         
@@ -370,64 +389,67 @@ def history():
     settings = UserSettings.query.filter_by(user_id=current_user.id).first()
     
     latest_weight_entry = WeightEntry.query.filter_by(
-                user_id=current_user.id
+        user_id=current_user.id
     ).order_by(WeightEntry.date.desc()).first()
 
     nutrition_entries = NutritionEntry.query.filter(
         NutritionEntry.user_id == current_user.id,
         NutritionEntry.date >= start_date,
         NutritionEntry.date <= end_date
-    ).order_by(NutritionEntry.date.desc()).all()  
+    ).all()
 
     workouts = Workout.query.filter(
         Workout.user_id == current_user.id,
         Workout.date >= datetime.combine(start_date, datetime.min.time()),
         Workout.date <= datetime.combine(end_date, datetime.max.time())
-    ).order_by(Workout.date.desc()).all()
+    ).all()
 
     protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
     
     nutrition_by_date = {}
     for entry in nutrition_entries:
         if entry.date not in nutrition_by_date:
-            nutrition_by_date[entry.date] = {
-                'protein': 0,
-                'calories': 0
-            }
+            nutrition_by_date[entry.date] = {'protein': 0, 'calories': 0}
         nutrition_by_date[entry.date]['protein'] += entry.protein_amount
         nutrition_by_date[entry.date]['calories'] += entry.calorie_amount
 
-    weight_by_date = {}
     weight_entries = WeightEntry.query.filter(
         WeightEntry.user_id == current_user.id,
         WeightEntry.date >= start_date,
         WeightEntry.date <= end_date
     ).all()
-    for entry in weight_entries:
-        weight_by_date[entry.date] = entry.weight
+    
+    weight_by_date = {entry.date: entry.weight for entry in weight_entries}
 
     chart_data = []
     current_date = start_date
-    day_count = 0
     while current_date <= end_date:
-        day_count += 1
         nutrition = nutrition_by_date.get(current_date, {'protein': None, 'calories': None})
+        weight = weight_by_date.get(current_date)
+        
         chart_data.append({
-            'day': day_count,
+            'date': current_date.strftime('%Y-%m-%d'),
             'protein': nutrition['protein'],
             'calories': nutrition['calories'],
-            'weight': weight_by_date.get(current_date),
-            'date': current_date.strftime('%Y-%m-%d')
+            'weight': weight  
         })
         current_date += timedelta(days=1)
 
-    progress = None
-    if (latest_weight_entry and settings.target_weight and 
-        settings.starting_weight):
-        total_change_needed = settings.target_weight - settings.starting_weight
-        if total_change_needed != 0:
-            current_change = latest_weight_entry.weight - settings.starting_weight
-            progress = round((current_change / total_change_needed) * 100, 1)
+    if latest_weight_entry and settings.target_weight and settings.starting_weight:
+        latest_kg = latest_weight_entry.weight * 0.453592
+        target_kg = settings.target_weight * 0.453592
+        starting_kg = settings.starting_weight * 0.453592
+        
+        total_change = target_kg - starting_kg
+        if total_change != 0:
+            current_change = latest_kg - starting_kg
+            progress = round((current_change / total_change) * 100, 1)
+        else:
+            progress = 0
+    else:
+        total_change = None
+        current_change = None
+        progress = None
 
     history = []
     current_date = end_date
@@ -450,19 +472,6 @@ def history():
             })
         current_date -= timedelta(days=1)
 
-    if latest_weight_entry and settings.target_weight and settings.starting_weight:
-        latest_kg = latest_weight_entry.weight * 0.453592
-        target_kg = settings.target_weight * 0.453592
-        starting_kg = settings.starting_weight * 0.453592
-        
-        total_change = target_kg - starting_kg
-        if total_change != 0:
-            current_change = latest_kg - starting_kg
-            progress = round((current_change / total_change) * 100, 1)
-    else:
-        total_change = None
-        current_change = None   
-
     return render_template('history.html',
                          active_tab='history',
                          history=history,
@@ -473,8 +482,7 @@ def history():
                          latest_weight_entry=latest_weight_entry,
                          progress=progress,
                          total_change=total_change,
-                         current_change=current_change,
-                         today=date.today())
+                         current_change=current_change)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
