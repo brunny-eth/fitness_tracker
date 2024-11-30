@@ -838,3 +838,231 @@
 2024-11-29 20:02:48,111 INFO: 127.0.0.1 - - [29/Nov/2024 20:02:48] "GET /history HTTP/1.1" 200 -
 2024-11-29 20:05:25,455 INFO: 127.0.0.1 - - [29/Nov/2024 20:05:25] "GET /history HTTP/1.1" 200 -
 2024-11-29 20:08:53,487 INFO: 127.0.0.1 - - [29/Nov/2024 20:08:53] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:12:02,037 INFO: 127.0.0.1 - - [29/Nov/2024 20:12:02] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:13:34,572 INFO: 127.0.0.1 - - [29/Nov/2024 20:13:34] "[32mGET /logout HTTP/1.1[0m" 302 -
+2024-11-29 20:13:34,575 INFO: 127.0.0.1 - - [29/Nov/2024 20:13:34] "GET /login HTTP/1.1" 200 -
+2024-11-29 20:13:35,933 INFO: 127.0.0.1 - - [29/Nov/2024 20:13:35] "GET /register HTTP/1.1" 200 -
+2024-11-29 20:13:47,368 INFO: 127.0.0.1 - - [29/Nov/2024 20:13:47] "[32mPOST /register HTTP/1.1[0m" 302 -
+2024-11-29 20:13:47,376 INFO: 127.0.0.1 - - [29/Nov/2024 20:13:47] "GET / HTTP/1.1" 200 -
+2024-11-29 20:13:50,947 INFO: 127.0.0.1 - - [29/Nov/2024 20:13:50] "[32mGET /logout HTTP/1.1[0m" 302 -
+2024-11-29 20:13:50,950 INFO: 127.0.0.1 - - [29/Nov/2024 20:13:50] "GET /login HTTP/1.1" 200 -
+2024-11-29 20:13:52,254 INFO: 127.0.0.1 - - [29/Nov/2024 20:13:52] "GET /register HTTP/1.1" 200 -
+2024-11-29 20:15:37,201 INFO: 127.0.0.1 - - [29/Nov/2024 20:15:37] "[32mGET /settings HTTP/1.1[0m" 302 -
+2024-11-29 20:15:37,204 INFO: 127.0.0.1 - - [29/Nov/2024 20:15:37] "GET /login?next=/settings HTTP/1.1" 200 -
+2024-11-29 20:15:44,018 INFO: 127.0.0.1 - - [29/Nov/2024 20:15:44] "[32mPOST /login HTTP/1.1[0m" 302 -
+2024-11-29 20:15:44,021 INFO: 127.0.0.1 - - [29/Nov/2024 20:15:44] "GET / HTTP/1.1" 200 -
+2024-11-29 20:15:45,396 INFO: 127.0.0.1 - - [29/Nov/2024 20:15:45] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:21:10,655 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-29 20:21:10,775 INFO:  * Restarting with stat
+2024-11-29 20:21:11,143 INFO: Application startup
+2024-11-29 20:21:11,174 WARNING:  * Debugger is active!
+2024-11-29 20:21:11,179 INFO:  * Debugger PIN: 133-619-259
+2024-11-29 20:21:13,429 INFO: 127.0.0.1 - - [29/Nov/2024 20:21:13] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:21:14,938 INFO: 127.0.0.1 - - [29/Nov/2024 20:21:14] "[32mGET /logout HTTP/1.1[0m" 302 -
+2024-11-29 20:21:14,942 INFO: 127.0.0.1 - - [29/Nov/2024 20:21:14] "GET /login HTTP/1.1" 200 -
+2024-11-29 20:21:16,124 INFO: 127.0.0.1 - - [29/Nov/2024 20:21:16] "GET /register HTTP/1.1" 200 -
+2024-11-29 20:22:01,622 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:01] "[32mGET /settings HTTP/1.1[0m" 302 -
+2024-11-29 20:22:01,626 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:01] "GET /login?next=/settings HTTP/1.1" 200 -
+2024-11-29 20:22:06,403 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:06] "[32mPOST /login HTTP/1.1[0m" 302 -
+2024-11-29 20:22:06,416 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:06] "GET / HTTP/1.1" 200 -
+2024-11-29 20:22:08,890 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:08] "GET /workouts HTTP/1.1" 200 -
+2024-11-29 20:22:09,718 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:09] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:22:10,623 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:10] "GET / HTTP/1.1" 200 -
+2024-11-29 20:22:15,024 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:15] "GET /workouts HTTP/1.1" 200 -
+2024-11-29 20:22:15,513 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:15] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:22:17,434 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:17] "GET / HTTP/1.1" 200 -
+2024-11-29 20:22:19,432 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:19] "GET /workouts HTTP/1.1" 200 -
+2024-11-29 20:22:20,647 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:20] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-29 20:22:20,652 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:20] "GET /get_last_workout/Legs HTTP/1.1" 200 -
+2024-11-29 20:22:20,658 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:20] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-29 20:22:20,660 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:20] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-29 20:22:20,661 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:20] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-11-29 20:22:25,367 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:25] "[32mGET /logout HTTP/1.1[0m" 302 -
+2024-11-29 20:22:25,371 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:25] "GET /login HTTP/1.1" 200 -
+2024-11-29 20:22:26,539 INFO: 127.0.0.1 - - [29/Nov/2024 20:22:26] "GET /register HTTP/1.1" 200 -
+2024-11-29 20:23:12,883 INFO: 127.0.0.1 - - [29/Nov/2024 20:23:12] "GET /register HTTP/1.1" 200 -
+2024-11-29 20:24:08,195 INFO: 127.0.0.1 - - [29/Nov/2024 20:24:08] "GET /register HTTP/1.1" 200 -
+2024-11-29 20:25:17,344 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:17] "[32mPOST /register HTTP/1.1[0m" 302 -
+2024-11-29 20:25:17,347 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:17] "GET / HTTP/1.1" 200 -
+2024-11-29 20:25:20,029 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:20] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:25:21,989 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:21] "GET / HTTP/1.1" 200 -
+2024-11-29 20:25:24,566 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:24] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:25:27,567 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:27] "GET / HTTP/1.1" 200 -
+2024-11-29 20:25:29,390 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:29] "GET /workouts HTTP/1.1" 200 -
+2024-11-29 20:25:30,094 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:30] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:25:32,275 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:32] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:25:34,468 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:34] "GET / HTTP/1.1" 200 -
+2024-11-29 20:25:38,282 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:38] "POST /add_weight HTTP/1.1" 200 -
+2024-11-29 20:25:41,427 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:41] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:25:42,549 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:42] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:25:46,573 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:46] "GET / HTTP/1.1" 200 -
+2024-11-29 20:25:49,051 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:49] "POST /add_weight HTTP/1.1" 200 -
+2024-11-29 20:25:51,869 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:51] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:25:54,889 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:54] "GET / HTTP/1.1" 200 -
+2024-11-29 20:25:56,255 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:56] "GET /workouts HTTP/1.1" 200 -
+2024-11-29 20:25:58,484 INFO: 127.0.0.1 - - [29/Nov/2024 20:25:58] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:26:02,720 INFO: 127.0.0.1 - - [29/Nov/2024 20:26:02] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:26:03,020 INFO: 127.0.0.1 - - [29/Nov/2024 20:26:03] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:26:11,922 INFO: 127.0.0.1 - - [29/Nov/2024 20:26:11] "GET / HTTP/1.1" 200 -
+2024-11-29 20:26:15,671 INFO: 127.0.0.1 - - [29/Nov/2024 20:26:15] "GET /workouts HTTP/1.1" 200 -
+2024-11-29 20:26:16,319 INFO: 127.0.0.1 - - [29/Nov/2024 20:26:16] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:26:17,249 INFO: 127.0.0.1 - - [29/Nov/2024 20:26:17] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:26:18,299 INFO: 127.0.0.1 - - [29/Nov/2024 20:26:18] "GET / HTTP/1.1" 200 -
+2024-11-29 20:26:18,987 INFO: 127.0.0.1 - - [29/Nov/2024 20:26:18] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:26:22,145 INFO: 127.0.0.1 - - [29/Nov/2024 20:26:22] "GET / HTTP/1.1" 200 -
+2024-11-29 20:26:23,535 INFO: 127.0.0.1 - - [29/Nov/2024 20:26:23] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:27:34,212 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-29 20:27:34,309 INFO:  * Restarting with stat
+2024-11-29 20:29:37,323 INFO: Application startup
+2024-11-29 20:29:37,364 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.99:5001
+2024-11-29 20:29:37,365 INFO: [33mPress CTRL+C to quit[0m
+2024-11-29 20:29:37,365 INFO:  * Restarting with stat
+2024-11-29 20:29:37,710 INFO: Application startup
+2024-11-29 20:29:37,740 WARNING:  * Debugger is active!
+2024-11-29 20:29:37,744 INFO:  * Debugger PIN: 133-619-259
+2024-11-29 20:29:38,901 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:38] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:29:38,915 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:38] "GET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2024-11-29 20:29:38,915 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:38] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:29:39,045 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:39] "GET /history?__debugger__=yes&cmd=resource&f=console.png&s=5INDry0tU1CV53B970Fk HTTP/1.1" 200 -
+2024-11-29 20:29:39,046 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:39] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:29:39,185 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:39] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:29:40,305 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:40] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:29:40,314 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:40] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:29:40,316 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:40] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:29:40,384 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:40] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=5INDry0tU1CV53B970Fk HTTP/1.1[0m" 304 -
+2024-11-29 20:29:40,385 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:40] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:29:40,405 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:40] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:29:40,926 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:40] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:29:40,934 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:40] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:29:40,936 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:40] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:29:40,984 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:40] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=5INDry0tU1CV53B970Fk HTTP/1.1[0m" 304 -
+2024-11-29 20:29:40,985 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:40] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:29:41,027 INFO: 127.0.0.1 - - [29/Nov/2024 20:29:41] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:30:07,168 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-29 20:30:07,295 INFO:  * Restarting with stat
+2024-11-29 20:30:07,650 INFO: Application startup
+2024-11-29 20:30:07,681 WARNING:  * Debugger is active!
+2024-11-29 20:30:07,685 INFO:  * Debugger PIN: 133-619-259
+2024-11-29 20:30:07,979 INFO: 127.0.0.1 - - [29/Nov/2024 20:30:07] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:30:14,793 INFO: 127.0.0.1 - - [29/Nov/2024 20:30:14] "GET / HTTP/1.1" 200 -
+2024-11-29 20:30:18,035 INFO: 127.0.0.1 - - [29/Nov/2024 20:30:18] "POST /add_weight HTTP/1.1" 200 -
+2024-11-29 20:30:21,114 INFO: 127.0.0.1 - - [29/Nov/2024 20:30:21] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:30:22,143 INFO: 127.0.0.1 - - [29/Nov/2024 20:30:22] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:30:23,837 INFO: 127.0.0.1 - - [29/Nov/2024 20:30:23] "GET / HTTP/1.1" 200 -
+2024-11-29 20:30:33,313 INFO: 127.0.0.1 - - [29/Nov/2024 20:30:33] "POST /add_weight HTTP/1.1" 200 -
+2024-11-29 20:30:38,396 INFO: 127.0.0.1 - - [29/Nov/2024 20:30:38] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:30:49,036 INFO: 127.0.0.1 - - [29/Nov/2024 20:30:49] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:32:45,057 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-11-29 20:32:45,166 INFO:  * Restarting with stat
+2024-11-29 20:32:45,524 INFO: Application startup
+2024-11-29 20:32:45,578 WARNING:  * Debugger is active!
+2024-11-29 20:32:45,582 INFO:  * Debugger PIN: 133-619-259
+2024-11-29 20:33:17,947 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:17] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:33:17,958 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:17] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:33:17,959 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:17] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:33:18,014 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:18] "GET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1" 200 -
+2024-11-29 20:33:18,015 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:18] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:33:18,057 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:18] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:33:18,656 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:18] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:33:18,668 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:18] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:33:18,672 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:18] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:33:18,731 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:18] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:33:18,731 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:18] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:33:18,771 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:18] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:33:19,220 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:19] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:33:19,236 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:33:19,238 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:33:19,296 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:33:19,297 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:33:19,337 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:33:19,408 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:19] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:33:19,416 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:33:19,419 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:33:19,469 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:33:19,470 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:33:19,507 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:33:34,077 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:34] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:33:34,089 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:34] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:33:34,093 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:34] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:33:34,147 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:34] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:33:34,149 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:34] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:33:34,186 INFO: 127.0.0.1 - - [29/Nov/2024 20:33:34] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:35:14,200 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:14] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:35:14,218 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:14] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:35:14,221 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:14] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:35:14,281 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:14] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:35:14,283 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:14] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:35:14,324 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:14] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:35:14,882 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:14] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:35:14,893 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:14] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:35:14,895 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:14] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:35:14,953 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:14] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:35:14,955 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:14] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:35:14,994 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:14] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:35:15,069 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:15] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:35:15,077 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:15] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:35:15,079 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:15] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:35:15,133 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:15] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:35:15,134 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:15] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:35:15,175 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:15] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:35:15,277 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:15] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:35:15,286 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:15] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:35:15,288 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:15] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:35:15,338 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:15] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:35:15,340 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:15] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:35:15,376 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:15] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:35:18,896 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:18] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:35:18,906 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:18] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:35:18,908 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:18] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:35:18,965 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:18] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:35:18,966 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:18] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:35:19,004 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:35:19,235 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:19] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:35:19,245 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:35:19,247 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:35:19,302 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:35:19,303 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:35:19,340 INFO: 127.0.0.1 - - [29/Nov/2024 20:35:19] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:36:04,712 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:04] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:36:04,723 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:04] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:36:04,725 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:04] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:36:04,784 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:04] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:36:04,785 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:04] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:36:04,827 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:04] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:36:05,061 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:05] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:36:05,071 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:05] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:36:05,073 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:05] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:36:05,131 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:05] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:36:05,132 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:05] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:36:05,168 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:05] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:36:05,389 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:05] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-11-29 20:36:05,399 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:05] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-29 20:36:05,401 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:05] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-29 20:36:05,459 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:05] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=OA85Bt47rag1hfNQXGX4 HTTP/1.1[0m" 304 -
+2024-11-29 20:36:05,460 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:05] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:36:05,500 INFO: 127.0.0.1 - - [29/Nov/2024 20:36:05] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-29 20:38:16,730 INFO: 127.0.0.1 - - [29/Nov/2024 20:38:16] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:38:18,975 INFO: 127.0.0.1 - - [29/Nov/2024 20:38:18] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:38:19,830 INFO: 127.0.0.1 - - [29/Nov/2024 20:38:19] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:38:20,604 INFO: 127.0.0.1 - - [29/Nov/2024 20:38:20] "GET /workouts HTTP/1.1" 200 -
+2024-11-29 20:38:21,927 INFO: 127.0.0.1 - - [29/Nov/2024 20:38:21] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:38:22,450 INFO: 127.0.0.1 - - [29/Nov/2024 20:38:22] "GET / HTTP/1.1" 200 -
+2024-11-29 20:38:23,508 INFO: 127.0.0.1 - - [29/Nov/2024 20:38:23] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:39:28,993 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:28] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:39:31,805 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:31] "GET / HTTP/1.1" 200 -
+2024-11-29 20:39:33,840 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:33] "POST /add_weight HTTP/1.1" 200 -
+2024-11-29 20:39:37,196 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:37] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:39:38,137 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:38] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:39:40,089 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:40] "GET /workouts HTTP/1.1" 200 -
+2024-11-29 20:39:40,678 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:40] "GET / HTTP/1.1" 200 -
+2024-11-29 20:39:41,207 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:41] "GET /workouts HTTP/1.1" 200 -
+2024-11-29 20:39:41,779 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:41] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:39:42,373 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:42] "GET / HTTP/1.1" 200 -
+2024-11-29 20:39:56,246 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:56] "GET / HTTP/1.1" 200 -
+2024-11-29 20:39:57,145 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:57] "GET /history HTTP/1.1" 200 -
+2024-11-29 20:39:57,680 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:57] "GET /settings HTTP/1.1" 200 -
+2024-11-29 20:39:58,214 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:58] "GET /workouts HTTP/1.1" 200 -
+2024-11-29 20:39:59,704 INFO: 127.0.0.1 - - [29/Nov/2024 20:39:59] "GET /history HTTP/1.1" 200 -

@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="section">
-    <h2>Register</h2>
+    <h2>Welcome to your fitness tracking journey!</h2>
+    
+    <p class="welcome-text">
+        You can use the Fitness Tracker app to easily track your nutrition intake and your workout history on your path to reaching your target goal.
+    
+        <p class="auth-links">
+            Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+        </p>
+    </p>
     
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -11,71 +19,228 @@
         {% endif %}
     {% endwith %}
     
-    <form method="POST" action="{{ url_for('register') }}" class="auth-form">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+    <form method="POST" action="{{ url_for('register') }}" class="registration-form">
+        <div class="form-section">
+            <h3>Account Details</h3>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Your Goals</h3>
+            <div class="form-group">
+                <label for="target_weight">Target Weight (kg)</label>
+                <input type="number" id="target_weight" name="target_weight" step="0.1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="goal_months">Time to Achieve Goal (months)</label>
+                <input type="number" id="goal_months" name="goal_months" required>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Starting Point</h3>
+            <div class="form-group">
+                <label for="starting_weight">Starting Weight (kg)</label>
+                <input type="number" id="starting_weight" name="starting_weight" step="0.1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="height">Height (cm)</label>
+                <input type="number" id="height" name="height" step="0.1" required>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Protein Intake Goal</h3>
+            <p class="helper-text">Getting enough protein is good for your fitness journey, so you can gain muscle while losing fat.</p>
+            <div class="protein-options">
+                <div class="radio-group">
+                    <input type="radio" id="protein_high" name="protein_goal" value="high" required>
+                    <label for="protein_high">A lot</label>
+                </div>
+                
+                <div class="radio-group">
+                    <input type="radio" id="protein_medium" name="protein_goal" value="medium">
+                    <label for="protein_medium">A medium amount</label>
+                </div>
+                
+                <div class="radio-group">
+                    <input type="radio" id="protein_low" name="protein_goal" value="low">
+                    <label for="protein_low">Probably less than I need to</label>
+                </div>
+            </div>
         </div>
         
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        
-        <button type="submit">Register</button>
+        <button type="submit" class="btn-get-started">Get Started</button>
     </form>
-    
-    <p class="auth-links">
-        Already have an account? <a href="{{ url_for('login') }}">Login here</a>
-    </p>
 </div>
 
 <style>
-.auth-form {
-    max-width: 400px;
+.section {
+    max-width: 600px;
     margin: 0 auto;
+    padding: 24px;
 }
 
-.alert {
-    padding: 12px;
+.welcome-text {
+    font-size: 1.1em;
+    color: #374151;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.form-section {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.form-section h3 {
+    margin-top: 0;
     margin-bottom: 16px;
-    border-radius: 6px;
+    color: #111827;
+    font-size: 1.25em;
 }
 
-.alert-error {
-    background-color: #fee2e2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
+.helper-text {
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+.protein-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.radio-group input[type="radio"] {
+    width: 16px;
+    height: 16px;
+}
+
+.radio-group label {
+    color: #374151;
+    font-size: 1em;
+}
+
+.btn-get-started {
+    background-color: #2196F3;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-get-started:hover {
+    background-color: #1976D2;
 }
 
 .auth-links {
     text-align: center;
-    margin-top: 16px;
+    margin-top: 24px;
+    color: #6b7280;
 }
 
+.auth-links a {
+    color: #2196F3;
+    text-decoration: none;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group input,
+.form-group select {
+    width: calc(100% - 24px);  
+    padding: 8px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #ffffff;
+}
+
+.form-group select {
+    height: 38px;  
+    cursor: pointer;
+    appearance: none;  
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+    padding-right: 32px;  
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 1px #2196F3;
+}
+
+
 @media (max-width: 640px) {
-    .auth-form {
-        max-width: none;
-        width: 100%;
-        padding: 0 16px;
+    .section {
+        padding: 16px;
     }
     
-    .form-group input {
-        width: 100%;
-        padding: 12px;
-        font-size: 16px;
-        margin-bottom: 12px;
+    .form-section {
+        padding: 16px;
     }
     
-    button[type="submit"] {
+    .btn-get-started {
         width: 100%;
-        padding: 12px;
-        min-height: 44px;
-        font-size: 16px;
-    }
-    
-    .alert {
-        margin: 16px;
     }
 }
 </style>

@@ -318,12 +318,13 @@ def log_workout():
 def add_weight():
     try:
         data = request.json
-        weight = float(data['weight'])
+        weight_kg = float(data['weight'])
+        weight_lbs = weight_kg * 2.20462  
         
         entry = WeightEntry(
             user_id=current_user.id,
             date=date.today(),
-            weight=weight
+            weight=weight_lbs  
         )
         
         db.session.add(entry)
@@ -422,12 +423,11 @@ def history():
 
     progress = None
     if (latest_weight_entry and settings.target_weight and 
-        settings.starting_weight and 
-        latest_weight_entry.weight <= settings.starting_weight):
-        total_change = settings.target_weight - settings.starting_weight
-        if total_change != 0:  
+        settings.starting_weight):
+        total_change_needed = settings.target_weight - settings.starting_weight
+        if total_change_needed != 0:
             current_change = latest_weight_entry.weight - settings.starting_weight
-            progress = round((current_change / total_change) * 100, 1)
+            progress = round((current_change / total_change_needed) * 100, 1)
 
     history = []
     current_date = end_date
@@ -450,7 +450,18 @@ def history():
             })
         current_date -= timedelta(days=1)
 
-    print("Chart data:", chart_data)
+    if latest_weight_entry and settings.target_weight and settings.starting_weight:
+        latest_kg = latest_weight_entry.weight * 0.453592
+        target_kg = settings.target_weight * 0.453592
+        starting_kg = settings.starting_weight * 0.453592
+        
+        total_change = target_kg - starting_kg
+        if total_change != 0:
+            current_change = latest_kg - starting_kg
+            progress = round((current_change / total_change) * 100, 1)
+    else:
+        total_change = None
+        current_change = None   
 
     return render_template('history.html',
                          active_tab='history',
@@ -461,6 +472,8 @@ def history():
                          chart_data=chart_data,
                          latest_weight_entry=latest_weight_entry,
                          progress=progress,
+                         total_change=total_change,
+                         current_change=current_change,
                          today=date.today())
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -480,31 +493,59 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        
-        if User.query.filter_by(email=email).first():
-            flash('Email already registered')
+        try:
+            email = request.form.get('email')
+            password = request.form.get('password')
+            
+            if User.query.filter_by(email=email).first():
+                flash('Email already registered')
+                return redirect(url_for('register'))
+            
+            user = User(email=email)
+            user.set_password(password)
+            
+            starting_weight_kg = float(request.form.get('starting_weight'))
+            target_weight_kg = float(request.form.get('target_weight'))
+            height_cm = float(request.form.get('height'))
+            
+            starting_weight_lbs = starting_weight_kg * 2.20462
+            target_weight_lbs = target_weight_kg * 2.20462
+            height_inches = height_cm / 2.54
+            
+            protein_goal = request.form.get('protein_goal')
+            if protein_goal == 'high':
+                protein_ratio = 1.6
+            elif protein_goal == 'medium':
+                protein_ratio = 1.3
+            else:  
+                protein_ratio = 1.0
+            
+            settings = UserSettings(
+                user=user,
+                weight_lbs=starting_weight_lbs,
+                starting_weight=starting_weight_lbs,
+                target_weight=target_weight_lbs,
+                goal_months=int(request.form.get('goal_months')),
+                age=int(request.form.get('age')),
+                gender=request.form.get('gender'),
+                height_inches=height_inches,
+                protein_ratio=protein_ratio,
+                max_calories=2500,  
+                start_date=datetime.utcnow()
+            )
+            
+            db.session.add(user)
+            db.session.add(settings)
+            db.session.commit()
+            
+            login_user(user)
+            return redirect(url_for('home'))
+            
+        except Exception as e:
+            db.session.rollback()
+            flash('Error during registration. Please try again.')
+            print(f"Registration error: {str(e)}")
             return redirect(url_for('register'))
-        
-        user = User(email=email)
-        user.set_password(password)
-        
-        settings = UserSettings(
-            user=user,
-            weight_lbs=150,
-            protein_ratio=1.0,
-            max_calories=2500,
-            start_date=datetime.utcnow(),
-            starting_weight=150 
-        )
-        
-        db.session.add(user)
-        db.session.add(settings)
-        db.session.commit()
-        
-        login_user(user)
-        return redirect(url_for('home'))
     
     return render_template('register.html')
 

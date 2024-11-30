@@ -277,6 +277,7 @@ canvas {
     }
 }
 </style>
+
 <div class="section">
     <h2>Summary</h2>
     <div class="summary-grid">
@@ -294,32 +295,29 @@ canvas {
 
         <div class="summary-card">
             {% if latest_weight_entry %}
-                {% if latest_weight_entry.date == today %}
-                    <h3>Today, you are at:</h3>
-                {% else %}
-                    <h3>On {{ latest_weight_entry.date.strftime('%B %d, %Y') }}, you were at:</h3>
-                    <p class="weight-reminder">
-                        <a href="/" class="summary-link">Weigh yourself every day to get the most accurate tracking</a>
+            <p>Weight: {{ (latest_weight_entry.weight * 0.453592)|round(1) }} kg</p>
+            {% endif %}
+            <h3>{% if latest_weight_entry %}Today, you are at:{% else %}On {{ latest_weight_entry.date.strftime('%B %d, %Y') }}, you were at:{% endif %}</h3>
+            {% if latest_weight_entry %}
+            <p>Weight: {{ (latest_weight_entry.weight * 0.453592)|round(1) }} kg</p>
+            {% else %}
+            <p class="weight-reminder">
+                <a href="/" class="summary-link">Weigh yourself every day to get the most accurate tracking</a>
+            </p>
+            {% endif %}
+            {% if settings.target_weight and settings.starting_weight %}
+                {% if total_change != 0 %}
+                    {% set progress = ((current_change / total_change) * 100)|round(1) %}
+                    <p>
+                    {% if progress > 100 %}
+                        You've exceeded your goal!
+                    {% elif progress < 0 %}
+                        Keep working towards your goal
+                    {% else %}
+                        {{ progress }}% of the way to your goal
+                    {% endif %}
                     </p>
                 {% endif %}
-                <p>Weight: {{ (latest_weight_entry.weight * 0.453592)|round(1) }} kg</p>
-                {% if settings.target_weight and settings.starting_weight %}
-                    {% if latest_weight_entry.weight <= settings.starting_weight %}
-                        {% set total_change = settings.target_weight - settings.starting_weight %}
-                        {% set current_change = latest_weight_entry.weight - settings.starting_weight %}
-                        {% if total_change != 0 %}
-                            {% set progress = ((current_change / total_change) * 100)|round(1) %}
-                            <p>{{ progress }}% of the way to your goal</p>
-                        {% endif %}
-                    {% else %}
-                        <p>Keep working towards your goal</p>
-                    {% endif %}
-                {% endif %}
-            {% else %}
-                <h3>No Weight Data</h3>
-                <p class="weight-reminder">
-                    <a href="/" class="summary-link">Start tracking your weight for progress insights</a>
-                </p>
             {% endif %}
         </div>
     </div>
