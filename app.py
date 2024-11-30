@@ -386,25 +386,35 @@ def saved_meals():
 def history():
     end_date = date.today()
     start_date = end_date - timedelta(days=29)
+    
     settings = UserSettings.query.filter_by(user_id=current_user.id).first()
+    if not settings:
+        flash('Please configure your settings first')
+        return redirect(url_for('settings'))
+    
+    protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
+    
+    weight_entries = WeightEntry.query.filter(
+        WeightEntry.user_id == current_user.id,
+        WeightEntry.date >= start_date,
+        WeightEntry.date <= end_date
+    ).all()
     
     latest_weight_entry = WeightEntry.query.filter_by(
         user_id=current_user.id
     ).order_by(WeightEntry.date.desc()).first()
-
+    
     nutrition_entries = NutritionEntry.query.filter(
         NutritionEntry.user_id == current_user.id,
         NutritionEntry.date >= start_date,
         NutritionEntry.date <= end_date
     ).all()
-
+    
     workouts = Workout.query.filter(
         Workout.user_id == current_user.id,
         Workout.date >= datetime.combine(start_date, datetime.min.time()),
         Workout.date <= datetime.combine(end_date, datetime.max.time())
     ).all()
-
-    protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
     
     nutrition_by_date = {}
     for entry in nutrition_entries:
@@ -412,29 +422,24 @@ def history():
             nutrition_by_date[entry.date] = {'protein': 0, 'calories': 0}
         nutrition_by_date[entry.date]['protein'] += entry.protein_amount
         nutrition_by_date[entry.date]['calories'] += entry.calorie_amount
-
-    weight_entries = WeightEntry.query.filter(
-        WeightEntry.user_id == current_user.id,
-        WeightEntry.date >= start_date,
-        WeightEntry.date <= end_date
-    ).all()
     
     weight_by_date = {entry.date: entry.weight for entry in weight_entries}
-
+    
     chart_data = []
     current_date = start_date
     while current_date <= end_date:
         nutrition = nutrition_by_date.get(current_date, {'protein': None, 'calories': None})
-        weight = weight_by_date.get(current_date)
-        
         chart_data.append({
             'date': current_date.strftime('%Y-%m-%d'),
             'protein': nutrition['protein'],
             'calories': nutrition['calories'],
-            'weight': weight  
+            'weight': weight_by_date.get(current_date)
         })
         current_date += timedelta(days=1)
-
+    
+    progress = None
+    total_change = None
+    current_change = None
     if latest_weight_entry and settings.target_weight and settings.starting_weight:
         latest_kg = latest_weight_entry.weight * 0.453592
         target_kg = settings.target_weight * 0.453592
@@ -444,13 +449,7 @@ def history():
         if total_change != 0:
             current_change = latest_kg - starting_kg
             progress = round((current_change / total_change) * 100, 1)
-        else:
-            progress = 0
-    else:
-        total_change = None
-        current_change = None
-        progress = None
-
+    
     history = []
     current_date = end_date
     while current_date >= start_date:
@@ -471,14 +470,18 @@ def history():
                 } if day_workout else None
             })
         current_date -= timedelta(days=1)
-
+    
+    print(f"Date range: {start_date} to {end_date}")
+    print(f"Chart data points: {len(chart_data)}")
+    print(f"Sample data point: {chart_data[0] if chart_data else 'No data'}")
+    
     return render_template('history.html',
                          active_tab='history',
                          history=history,
+                         chart_data=chart_data,
                          protein_goal=protein_goal,
                          settings=settings,
                          max_calories=settings.max_calories,
-                         chart_data=chart_data,
                          latest_weight_entry=latest_weight_entry,
                          progress=progress,
                          total_change=total_change,

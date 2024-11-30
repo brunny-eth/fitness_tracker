@@ -58,6 +58,26 @@ canvas {
     padding: 0;
 }
 
+.chart-placeholder {
+    background: #f9fafb;
+    border: 1px dashed #e5e7eb;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    color: #6b7280;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.placeholder-subtitle {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #9ca3af;
+}
+
 .workout-section h4 {
     color: #4b5563;
     margin: 0 0 0.5rem 0;
@@ -320,15 +340,48 @@ canvas {
     </div>
 </div>
 
-<div class="section">
-    <h2>Weight and Calories</h2>
-    <canvas id="weightCaloriesChart"></canvas>
-</div>
+{% with has_valid_data = chart_data and chart_data|length >= 3 %}
+    <div class="section">
+        <h2>Weight and Calories</h2>
+        {% if has_valid_data %}
+            {% set valid_weight_points = chart_data|selectattr('weight', 'defined')|selectattr('weight', 'ne', None)|list %}
+            {% set valid_calorie_points = chart_data|selectattr('calories', 'defined')|selectattr('calories', 'ne', None)|list %}
+            {% if valid_weight_points|length >= 3 or valid_calorie_points|length >= 3 %}
+                <canvas id="weightCaloriesChart"></canvas>
+            {% else %}
+                <div class="chart-placeholder">
+                    <p>Charts will appear here once you have at least 3 days of data.</p>
+                    <p class="placeholder-subtitle">This helps show meaningful trends in your progress!</p>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="chart-placeholder">
+                <p>Charts will appear here once you have at least 3 days of data.</p>
+                <p class="placeholder-subtitle">This helps show meaningful trends in your progress!</p>
+            </div>
+        {% endif %}
+    </div>
 
-<div class="section">
-    <h2>Protein Intake</h2>
-    <canvas id="proteinChart"></canvas>
-</div>
+    <div class="section">
+        <h2>Protein Intake</h2>
+        {% if has_valid_data %}
+            {% set valid_protein_points = chart_data|selectattr('protein', 'defined')|selectattr('protein', 'ne', None)|list %}
+            {% if valid_protein_points|length >= 3 %}
+                <canvas id="proteinChart"></canvas>
+            {% else %}
+                <div class="chart-placeholder">
+                    <p>Charts will appear here once you have at least 3 days of data.</p>
+                    <p class="placeholder-subtitle">This helps show meaningful trends in your progress!</p>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="chart-placeholder">
+                <p>Charts will appear here once you have at least 3 days of data.</p>
+                <p class="placeholder-subtitle">This helps show meaningful trends in your progress!</p>
+            </div>
+        {% endif %}
+    </div>
+{% endwith %}
 
 <div class="history-cards">
     {% for entry in history %}
@@ -424,298 +477,283 @@ canvas {
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const chartData = {{ chart_data|tojson|safe }};
-    console.log('Chart Data:', chartData);  
-    const proteinGoal = {{ protein_goal }};
-    const weightGoal = {{ settings.target_weight if settings.target_weight else 'null' }};
-
-    if (!chartData || chartData.length === 0) {
-        console.log('No chart data available');
-        return;
-    }
-
-    const dates = chartData.map(d => new Date(d.date));
-    console.log('Generated Dates:', dates);
-
-    function getDataPoints(key) {
-        return chartData.map(d => d[key] !== null ? d[key] : null);
-    }
-
-    const weightData = getDataPoints('weight');
-    const caloriesData = getDataPoints('calories');
-    const proteinData = getDataPoints('protein');
-
-    console.log('Weight Data:', weightData);  
-    console.log('Calories Data:', caloriesData);
-    console.log('Protein Data:', proteinData);
-
-    function interpolateNulls(data) {
-    if (!data || !Array.isArray(data)) {
-        return [];
-    }
-
-    const result = [...data];
-    
-    let lastValidValue = result.find(x => x !== null);
-    
-    for (let i = 0; i < result.length; i++) {
-        if (result[i] === null) {
-            result[i] = lastValidValue;
-        } else {
-            lastValidValue = result[i];
+    try {
+        // Get data from template
+        const chartData = {{ chart_data|tojson|safe }} || [];
+        const proteinGoal = {{ protein_goal }};
+        const weightGoal = {{ settings.target_weight if settings.target_weight else 'null' }};
+        
+        console.log('Chart data:', chartData);
+        
+        const validDataPoints = chartData.filter(d => 
+            d.weight !== null || 
+            d.calories !== null || 
+            d.protein !== null
+        );
+        
+        if (validDataPoints.length < 3) {
+            console.log('Not enough valid data points for charts');
+            return;
         }
-    }
-    
-    return result;
-}
 
+        // Early validation
+        if (!Array.isArray(chartData) || chartData.length < 3) {
+            console.log('Not enough data points for charts');
+            return;
+        }
 
-    const weightCaloriesCtx = document.getElementById('weightCaloriesChart').getContext('2d');
-    new Chart(weightCaloriesCtx, {
-    type: 'line',
-    data: {
-        labels: dates,
-        datasets: [
-    {
-        label: 'Weight (kg)',
-        data: weightData.map(w => w ? (w * 0.453592).toFixed(1) : null),  
-        borderColor: '#2196F3',
-        backgroundColor: 'rgba(33, 150, 243, 0.1)',
-        yAxisID: 'y-weight',
-        tension: 0.4,
-        pointRadius: 2,  
-        fill: true
-    },
-    {
-        label: 'Calories',
-        data: caloriesData,
-        borderColor: '#9E9E9E',
-        backgroundColor: 'rgba(158, 158, 158, 0.1)',
-        yAxisID: 'y-calories',
-        tension: 0.4,
-        pointRadius: 2,  
-        fill: true
-    },
-    {
-        label: 'Weight Goal',
-        data: Array(dates.length).fill(weightGoal * 0.453592),
-        borderColor: '#ef4444',
-        borderDash: [5, 5],
-        borderWidth: 2,
-        pointRadius: 0,
-        yAxisID: 'y-weight',
-        fill: false
-    }
-]
-    },
-    options: {
-        responsive: true,
-        interaction: {
-            mode: 'index',
-            intersect: false,
-        },
-        elements: {
-            line: {
-                tension: 0.4
+        // Get DOM elements
+        const weightChart = document.getElementById('weightCaloriesChart');
+        const proteinChart = document.getElementById('proteinChart');
+        
+        if (!weightChart || !proteinChart) {
+            console.log('Chart elements not found');
+            return;
+        }
+
+        // Process dates and data points
+        const dates = chartData.map(d => new Date(d.date));
+        
+        function getDataPoints(key) {
+            return chartData.map(d => d[key] !== null ? d[key] : null);
+        }
+
+        const weightData = getDataPoints('weight');
+        const caloriesData = getDataPoints('calories');
+        const proteinData = getDataPoints('protein');
+
+        const validWeightData = weightData.filter(w => w !== null).map(w => w * 0.453592);
+        const validCaloriesData = caloriesData.filter(c => c !== null);
+        const validProteinData = proteinData.filter(p => p !== null);
+
+        // Common chart configuration
+        const commonConfig = {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
             },
-            point: {
-                radius: 0,  
-                hoverRadius: 0  
-            }
-        },
-        scales: {
-    'y-weight': {
-        type: 'linear',
-        position: 'left',
-        title: {
-            display: true,
-            text: 'Weight (kg)',
-            color: '#2196F3'
-        },
-        min: 0, 
-        ticks: {
-            padding: 10,
-            callback: function(value) {
-                return value.toFixed(1);  
-            }
-        },
-        grid: {
-            color: 'rgba(0, 0, 0, 0.05)'
-        }
-    },
-    'y-calories': {
-        type: 'linear',
-        position: 'right',
-        title: {
-            display: true,
-            text: 'Calories',
-            color: '#9E9E9E'
-        },
-        min: 0,
-        ticks: {
-            padding: 10
-        },
-        grid: {
-            display: false
-        }
-    },
-    x: {
-        type: 'time',
-        time: {
-            unit: 'day',
-            tooltipFormat: 'MMM d, yyyy',
-            displayFormats: {
-                day: 'MMM d'
-            }
-        },
-        grid: {
-            display: false
-        },
-        ticks: {
-            maxRotation: 0,
-            autoSkip: true,
-            maxTicksLimit: 10
-        }
-    }
-}
-        },
-        plugins: {
-    tooltip: {
-        mode: 'index',
-        intersect: false,
-        callbacks: {
-            label: function(context) {
-                let label = context.dataset.label || '';
-                if (label) {
-                    label += ': ';
-                }
-                if (context.dataset.yAxisID === 'y-weight') {
-                    label += context.parsed.y.toFixed(1) + ' kg';
-                } else {
-                    label += context.parsed.y.toFixed(0);
-                }
-                return label;
-            }
-        }
-    },
-    legend: {
-        labels: {
-            usePointStyle: true,
-            padding: 20
-        }
-    }
-}
-});
-
-
-const proteinCtx = document.getElementById('proteinChart').getContext('2d');
-new Chart(proteinCtx, {
-    type: 'line',
-    data: {
-        labels: dates,
-        datasets: [
-            {
-                label: 'Protein (g)',
-                data: interpolateNulls(chartData.map(d => d.protein)),
-                borderColor: '#2196F3',
-                backgroundColor: 'rgba(33, 150, 243, 0.1)',
-                tension: 0.4,
-                pointRadius: 0,  
-                fill: {
-                    target: 'origin',
-                    above: 'rgba(33, 150, 243, 0.1)'
+            elements: {
+                line: {
+                    tension: chartData.length < 5 ? 0.1 : 0.4
                 },
-                borderWidth: 2,
-                spanGaps: true
-            },
-            {
-                label: 'Protein Goal',
-                data: Array(dates.length).fill(proteinGoal),
-                borderColor: '#ef4444',
-                borderDash: [5, 5],
-                borderWidth: 2,
-                pointRadius: 0,
-                fill: false
+                point: {
+                    radius: chartData.length < 7 ? 4 : 2,
+                    hoverRadius: 6,
+                    backgroundColor: '#fff',
+                    borderWidth: 2
+                }
             }
-        ]
-    },
-    options: {
-        responsive: true,
-        interaction: {
-            mode: 'index',
-            intersect: false,
-        },
-        elements: {
-            line: {
-                tension: 0.4
-            },
-            point: {
-                radius: 0,  
-                hoverRadius: 0
-            }
-        },
-        scales: {
-            y: {
-                title: {
-                    display: true,
-                    text: 'Protein (g)',
-                    color: '#2196F3',
-                    font: {
-                        size: 12,
-                        weight: 'bold'
+        };
+
+        // Initialize weight/calories chart
+        if (weightChart) {
+            const weightCaloriesCtx = weightChart.getContext('2d');
+            new Chart(weightCaloriesCtx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Weight (kg)',
+                            data: weightData.map(w => w ? (w * 0.453592).toFixed(1) : null),
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            yAxisID: 'y-weight',
+                            tension: chartData.length < 5 ? 0.1 : 0.4,
+                            pointRadius: chartData.length < 7 ? 4 : 2,
+                            fill: true,
+                            spanGaps: true
+                        },
+                        {
+                            label: 'Calories',
+                            data: caloriesData,
+                            borderColor: '#9E9E9E',
+                            backgroundColor: 'rgba(158, 158, 158, 0.1)',
+                            yAxisID: 'y-calories',
+                            tension: chartData.length < 5 ? 0.1 : 0.4,
+                            pointRadius: chartData.length < 7 ? 4 : 2,
+                            fill: true,
+                            spanGaps: true
+                        },
+                        weightGoal ? {
+                            label: 'Weight Goal',
+                            data: Array(dates.length).fill(weightGoal * 0.453592),
+                            borderColor: '#ef4444',
+                            borderDash: [5, 5],
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            yAxisID: 'y-weight',
+                            fill: false
+                        } : null
+                    ].filter(Boolean),  // Remove null datasets
+                },
+                options: {
+                    ...commonConfig,
+                    scales: {
+                        'y-weight': {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Weight (kg)',
+                                color: '#2196F3'
+                            },
+                            min: Math.min(...validWeightData) * 0.99,
+                            max: Math.max(...validWeightData) * 1.01,
+                            ticks: {
+                                padding: 10,
+                                callback: value => value.toFixed(1)
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        'y-calories': {
+                            type: 'linear',
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Calories',
+                                color: '#9E9E9E'
+                            },
+                            min: 0,
+                            max: Math.max(...validCaloriesData) * 1.1 || 2500,
+                            ticks: {
+                                padding: 10,
+                                callback: value => Math.round(value)
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                tooltipFormat: 'MMM d, yyyy',
+                                displayFormats: {
+                                    day: 'MMM d'
+                                }
+                            },
+                            min: dates[chartData.findIndex(d => d.weight !== null || d.calories !== null || d.protein !== null)],
+                            max: dates[dates.length - 1],
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                maxRotation: 0,
+                                autoSkip: true,
+                                maxTicksLimit: dates.length < 7 ? dates.length : 7
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    if (!context.parsed.y) return null;
+                                    let label = context.dataset.label || '';
+                                    if (label) label += ': ';
+                                    return label + (context.dataset.yAxisID === 'y-weight' ? 
+                                        context.parsed.y.toFixed(1) + ' kg' : 
+                                        context.parsed.y.toFixed(0));
+                                }
+                            }
+                        },
+                        legend: {
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        }
                     }
-                },
-                grid: {
-                    color: 'rgba(0, 0, 0, 0.05)'
-                },
-                ticks: {
-                    padding: 10
-                },
-                min: 0,
-                suggestedMax: Math.max(
-                    Math.max(...chartData.map(d => d.protein || 0).filter(p => p !== null)) * 1.1,
-                    proteinGoal * 1.1
-                ) || 100
-            },
-            x: {
-                type: 'time',
-                time: {
-                    unit: 'day',
-                    displayFormats: {
-                        day: 'MMM d'
-                    }
-                },
-                grid: {
-                    display: false
-                },
-                ticks: {
-                    maxRotation: 0,
-                    autoSkip: true,
-                    maxTicksLimit: 10
                 }
-            }
-        },
-        plugins: {
-            legend: {
-                labels: {
-                    usePointStyle: true,
-                    padding: 20
-                }
-            },
-            tooltip: {
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                titleColor: '#111827',
-                bodyColor: '#374151',
-                borderColor: '#e5e7eb',
-                borderWidth: 1,
-                padding: 12,
-                boxPadding: 6,
-                usePointStyle: true
-            }
+            });
         }
+
+        // Initialize protein chart
+        if (proteinChart) {
+            const proteinCtx = proteinChart.getContext('2d');
+            new Chart(proteinCtx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Protein (g)',
+                            data: proteinData,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            tension: chartData.length < 5 ? 0.1 : 0.4,
+                            pointRadius: chartData.length < 7 ? 4 : 2,
+                            fill: true,
+                            spanGaps: true
+                        },
+                        {
+                            label: 'Protein Goal',
+                            data: Array(dates.length).fill(proteinGoal),
+                            borderColor: '#ef4444',
+                            borderDash: [5, 5],
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    ...commonConfig,
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Protein (g)',
+                                color: '#2196F3'
+                            },
+                            min: 0,
+                            max: Math.max(
+                                Math.max(...validProteinData) * 1.1,
+                                proteinGoal * 1.1
+                            ) || 100,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                padding: 10
+                            }
+                        },
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                tooltipFormat: 'MMM d, yyyy',
+                                displayFormats: {
+                                    day: 'MMM d'
+                                }
+                            },
+                            min: dates[chartData.findIndex(d => d.protein !== null)],
+                            max: dates[dates.length - 1],
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                maxRotation: 0,
+                                autoSkip: true,
+                                maxTicksLimit: dates.length < 7 ? dates.length : 7
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Error initializing charts:', error);
     }
 });
 
+// Modal functions
 function openEditModal(date, protein, calories) {
     document.getElementById('editModal').style.display = 'block';
     document.getElementById('editDate').value = date;
@@ -737,11 +775,7 @@ function submitEdit() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            date: date,
-            protein: protein,
-            calories: calories
-        })
+        body: JSON.stringify({ date, protein, calories })
     })
     .then(response => response.json())
     .then(data => {
@@ -759,17 +793,16 @@ function submitEdit() {
 function toggleWorkout(element) {
     const content = element.nextElementSibling;
     const chevron = element.querySelector('.chevron');
-    
     content.classList.toggle('show');
     chevron.classList.toggle('rotated');
 }
 
+// Close modal on outside click
 window.onclick = function(event) {
     const modal = document.getElementById('editModal');
-    if (event.target == modal) {
+    if (event.target === modal) {
         closeEditModal();
     }
 }
-});
 </script>
 {% endblock %}
