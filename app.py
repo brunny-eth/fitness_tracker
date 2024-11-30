@@ -64,13 +64,11 @@ class UserSettings(db.Model):
     
     start_date = db.Column(db.DateTime, nullable=True) 
     starting_weight = db.Column(db.Float, nullable=True)
-    starting_bodyfat = db.Column(db.Float, nullable=True)
     age = db.Column(db.Integer, nullable=True)
     gender = db.Column(db.String(10), nullable=True)
     height_inches = db.Column(db.Float, nullable=True)
     
     target_weight = db.Column(db.Float, nullable=True)
-    target_bodyfat = db.Column(db.Float, nullable=True)
     goal_months = db.Column(db.Integer, nullable=True)
 
 class WeightEntry(db.Model):
@@ -78,7 +76,6 @@ class WeightEntry(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     date = db.Column(db.Date, nullable=False)
     weight = db.Column(db.Float, nullable=False)
-    bodyfat = db.Column(db.Float, nullable=True)
     
     user = db.relationship('User', backref='weight_entries')
 
@@ -322,13 +319,11 @@ def add_weight():
     try:
         data = request.json
         weight = float(data['weight'])
-        bodyfat = data.get('bodyfat')  
         
         entry = WeightEntry(
             user_id=current_user.id,
             date=date.today(),
-            weight=weight,
-            bodyfat=bodyfat if bodyfat else None
+            weight=weight
         )
         
         db.session.add(entry)
@@ -366,7 +361,6 @@ def saved_meals():
         "calories_per_serving": meal.calories_per_serving
     } for meal in saved_meals])
 
-
 @app.route('/history')
 @login_required
 def history():
@@ -374,6 +368,10 @@ def history():
     start_date = end_date - timedelta(days=29)
     settings = UserSettings.query.filter_by(user_id=current_user.id).first()
     
+    latest_weight_entry = WeightEntry.query.filter_by(
+                user_id=current_user.id
+    ).order_by(WeightEntry.date.desc()).first()
+
     nutrition_entries = NutritionEntry.query.filter(
         NutritionEntry.user_id == current_user.id,
         NutritionEntry.date >= start_date,
@@ -391,64 +389,79 @@ def history():
     nutrition_by_date = {}
     for entry in nutrition_entries:
         if entry.date not in nutrition_by_date:
-            nutrition_by_date[entry.date] = []
-        nutrition_by_date[entry.date].append(entry)
-    
+            nutrition_by_date[entry.date] = {
+                'protein': 0,
+                'calories': 0
+            }
+        nutrition_by_date[entry.date]['protein'] += entry.protein_amount
+        nutrition_by_date[entry.date]['calories'] += entry.calorie_amount
+
+    weight_by_date = {}
+    weight_entries = WeightEntry.query.filter(
+        WeightEntry.user_id == current_user.id,
+        WeightEntry.date >= start_date,
+        WeightEntry.date <= end_date
+    ).all()
+    for entry in weight_entries:
+        weight_by_date[entry.date] = entry.weight
+
+    chart_data = []
+    current_date = start_date
+    day_count = 0
+    while current_date <= end_date:
+        day_count += 1
+        nutrition = nutrition_by_date.get(current_date, {'protein': None, 'calories': None})
+        chart_data.append({
+            'day': day_count,
+            'protein': nutrition['protein'],
+            'calories': nutrition['calories'],
+            'weight': weight_by_date.get(current_date),
+            'date': current_date.strftime('%Y-%m-%d')
+        })
+        current_date += timedelta(days=1)
+
+    progress = None
+    if (latest_weight_entry and settings.target_weight and 
+        settings.starting_weight and 
+        latest_weight_entry.weight <= settings.starting_weight):
+        total_change = settings.target_weight - settings.starting_weight
+        if total_change != 0:  
+            current_change = latest_weight_entry.weight - settings.starting_weight
+            progress = round((current_change / total_change) * 100, 1)
+
     history = []
     current_date = end_date
     while current_date >= start_date:
-        day_entries = nutrition_by_date.get(current_date, [])
-        protein_total = sum(entry.protein_amount for entry in day_entries)
-        calorie_total = sum(entry.calorie_amount for entry in day_entries)
-        
+        nutrition = nutrition_by_date.get(current_date)
         day_workout = next((w for w in workouts if w.date.date() == current_date), None)
         
-        if day_entries or day_workout:  
+        if nutrition or day_workout:
             history.append({
                 'date': current_date,
                 'nutrition': {
-                    'protein': protein_total,
-                    'calories': calorie_total,
+                    'protein': nutrition['protein'] if nutrition else 0,
+                    'calories': nutrition['calories'] if nutrition else 0,
                     'protein_goal': protein_goal
-                } if day_entries else None,
+                } if nutrition else None,
                 'workout': {
                     'type': day_workout.type,
                     'exercises': json.loads(day_workout.exercises)
                 } if day_workout else None
             })
-        
         current_date -= timedelta(days=1)
 
-    settings = UserSettings.query.filter_by(user_id=current_user.id).first()
-    
-    chart_data = []
-    current_date = start_date
-    while current_date <= end_date:
-        day_entries = nutrition_by_date.get(current_date, [])
-        protein_total = sum(entry.protein_amount for entry in day_entries)
-        calorie_total = sum(entry.calorie_amount for entry in day_entries)
-        
-        weight_entry = WeightEntry.query.filter_by(
-            user_id=current_user.id,
-            date=current_date
-        ).first()
-        
-        chart_data.append({
-            'day': (current_date - start_date).days + 1,
-            'protein': protein_total if protein_total > 0 else None,
-            'calories': calorie_total if calorie_total > 0 else None,
-            'weight': weight_entry.weight if weight_entry else None,
-            'date': current_date.strftime('%Y-%m-%d')
-        })
-        current_date += timedelta(days=1)
+    print("Chart data:", chart_data)
 
     return render_template('history.html',
                          active_tab='history',
                          history=history,
                          protein_goal=protein_goal,
-                         settings=settings,  
+                         settings=settings,
                          max_calories=settings.max_calories,
-                         chart_data=chart_data)
+                         chart_data=chart_data,
+                         latest_weight_entry=latest_weight_entry,
+                         progress=progress,
+                         today=date.today())
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
