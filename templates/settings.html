@@ -57,10 +57,38 @@
         </div>
     </div>
 
-    <button onclick="updateAllSettings()" class="btn-primary update-btn">Save All Settings</button>
+    <div class="button-container">
+        <button onclick="updateAllSettings()" class="action-btn">Save All Settings</button>
+    </div>
 </div>
 
 <style>
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.button-container .action-btn {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.button-container .action-btn:hover {
+    background-color: #2563eb;
+}
+
 .section {
     background: white;
     border-radius: 8px;

@@ -118,6 +118,46 @@ def calculate_protein_goal(weight_lbs, ratio):
     weight_kg = weight_lbs * 0.453592
     return round(weight_kg * ratio)  
 
+def create_default_workout_categories(user_id):
+    default_categories = [
+        {
+            "name": "High Intensity Interval Training",
+            "exercises": ["4x4 Run"]
+        },
+        {
+            "name": "Upper Body",
+            "exercises": [
+                "Bench Press",
+                "Shoulder Press", 
+                "Bicep Curls",
+                "Tricep Pulldowns"
+            ]
+        },
+        {
+            "name": "Lower Body",
+            "exercises": [
+                "Squat",
+                "Calf Raises",
+                "Deadlifts"
+            ]
+        },
+        {
+            "name": "Abs",
+            "exercises": [
+                "Crunches",
+                "Planks"
+            ]
+        }
+    ]
+    
+    for category in default_categories:
+        workout_category = WorkoutCategory(
+            user_id=user_id,
+            name=category["name"],
+            exercises=json.dumps(category["exercises"])
+        )
+        db.session.add(workout_category)
+
 def get_llm_nutrition_estimate(meal_description):
     anthropic = Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
     
@@ -166,8 +206,14 @@ def get_llm_nutrition_estimate(meal_description):
         return None
 
 @app.route('/')
+def landing():
+    if current_user.is_authenticated:
+        return redirect(url_for('nutrition'))
+    return render_template('homepage.html')
+
+@app.route('/nutrition')
 @login_required
-def home():
+def nutrition():
     settings = UserSettings.query.filter_by(user_id=current_user.id).first()
     if not settings:
         settings = UserSettings(user_id=current_user.id, weight_lbs=195, protein_ratio=1.5)
@@ -523,6 +569,17 @@ def register():
             target_weight_lbs = target_weight_kg * 2.20462
             height_inches = height_cm / 2.54
             
+            goal_months = int(request.form.get('goal_months'))
+            maintenance_calories = int(request.form.get('maintenance_calories'))
+            
+            weight_diff_kg = starting_weight_kg - target_weight_kg
+            total_calorie_deficit_needed = weight_diff_kg * 7700
+            days_to_goal = goal_months * 30.44 
+            
+            daily_deficit = total_calorie_deficit_needed / days_to_goal
+            target_daily_calories = maintenance_calories - daily_deficit
+            target_daily_calories = round(target_daily_calories / 50) * 50
+            
             protein_goal = request.form.get('protein_goal')
             if protein_goal == 'high':
                 protein_ratio = 1.6
@@ -530,25 +587,29 @@ def register():
                 protein_ratio = 1.3
             else:  
                 protein_ratio = 1.0
-            
+
             settings = UserSettings(
                 user=user,
                 weight_lbs=starting_weight_lbs,
                 starting_weight=starting_weight_lbs,
                 target_weight=target_weight_lbs,
-                goal_months=int(request.form.get('goal_months')),
+                goal_months=goal_months,
                 age=int(request.form.get('age')),
                 gender=request.form.get('gender'),
                 height_inches=height_inches,
                 protein_ratio=protein_ratio,
-                max_calories=2500,  
+                max_calories=int(target_daily_calories),
                 start_date=datetime.utcnow()
             )
             
             db.session.add(user)
             db.session.add(settings)
             db.session.commit()
-            
+
+            create_default_workout_categories(user.id)
+            db.session.commit()
+
+
             login_user(user)
             return redirect(url_for('home'))
             
@@ -559,8 +620,6 @@ def register():
             return redirect(url_for('register'))
     
     return render_template('register.html')
-
-
 
 @app.route('/logout')
 @login_required

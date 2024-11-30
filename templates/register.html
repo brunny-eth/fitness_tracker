@@ -74,7 +74,7 @@
 
         <div class="form-section">
             <h3>Protein Intake Goal</h3>
-            <p class="helper-text">Getting enough protein is good for your fitness journey, so you can gain muscle while losing fat.</p>
+            <p class="helper-text">How much protein are you going to eat daily to achieve your weight goal?</p>
             <div class="protein-options">
                 <div class="radio-group">
                     <input type="radio" id="protein_high" name="protein_goal" value="high" required>
@@ -90,6 +90,18 @@
                     <input type="radio" id="protein_low" name="protein_goal" value="low">
                     <label for="protein_low">Probably less than I need to</label>
                 </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h3>Calorie Intake Goal</h3>
+            <p class="helper-text">If you want to lose weight, you need to spend more calories than you take in.</p>
+            <div class="form-group">
+                <label for="maintenance_calories">
+                    Use this energy expenditure chart (<a href="https://tdeecalculator.net/" target="_blank">TDEE Calculator</a>) 
+                    to estimate your average maintenance calories expenditure per day
+                </label>
+                <input type="number" id="maintenance_calories" name="maintenance_calories" required>
             </div>
         </div>
         

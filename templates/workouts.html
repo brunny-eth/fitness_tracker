@@ -331,23 +331,24 @@
 </style>
 
 <script>
-function showCategoryModal(categoryName = '') {
+function showCategoryModal(categoryIdParam = null) {
     const modal = document.getElementById('categoryModal');
     const modalTitle = document.getElementById('modalTitle');
     const categoryForm = document.getElementById('categoryForm');
-    const categoryId = document.getElementById('categoryId');
+    const categoryIdInput = document.getElementById('categoryId');  
     const categoryNameInput = document.getElementById('categoryName');
     const exercisesList = document.getElementById('exercisesList');
     
-    modalTitle.textContent = categoryName ? 'Edit Workout Day' : 'Add New Workout Day';
+    modalTitle.textContent = categoryIdParam ? 'Edit Workout Day' : 'Add New Workout Day';
     categoryNameInput.value = '';
     exercisesList.innerHTML = '';
+    categoryIdInput.value = ''; 
     
-    if (categoryName) {
-        fetch(`/get_workout_category/${categoryName}`)
+    if (categoryIdParam) {
+        fetch(`/get_workout_category/${categoryIdParam}`)
             .then(response => response.json())
             .then(data => {
-                categoryId.value = data.id;
+                categoryIdInput.value = data.id;  
                 categoryNameInput.value = data.name;
                 data.exercises.forEach(exercise => addExerciseInput(exercise));
             });
@@ -357,6 +358,38 @@ function showCategoryModal(categoryName = '') {
     
     modal.style.display = 'block';
 }
+
+document.getElementById('categoryForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const exercises = Array.from(document.querySelectorAll('.exercise-input input'))
+        .map(input => input.value)
+        .filter(value => value.trim() !== '');
+        
+    fetch('/update_workout_category', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: document.getElementById('categoryId').value || null,
+            name: document.getElementById('categoryName').value,
+            exercises: exercises
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else if (data.error) {
+            alert(data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving category');
+    });
+});
 
 function closeCategoryModal() {
     document.getElementById('categoryModal').style.display = 'none';

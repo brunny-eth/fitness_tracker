@@ -319,23 +319,23 @@ canvas {
             <p>Weight: {{ (latest_weight_entry.weight * 0.453592)|round(1) }} kg</p>
             {% else %}
             <p class="weight-reminder">
-                <a href="/" class="summary-link">Weigh yourself every day to get the most accurate tracking</a>
+                <a href="/nutrition" class="summary-link">Weigh yourself every day to get the most accurate tracking</a>
             </p>
             {% endif %}
             {% if settings.target_weight and settings.starting_weight %}
-                {% if total_change != 0 %}
-                    {% set progress = ((current_change / total_change) * 100)|round(1) %}
-                    <p>
-                    {% if progress > 100 %}
-                        You've exceeded your goal!
-                    {% elif progress < 0 %}
-                        Keep working towards your goal
-                    {% else %}
-                        {{ progress }}% of the way to your goal
-                    {% endif %}
-                    </p>
+            {% if total_change != 0 and total_change is not none and current_change is not none %}
+                {% set progress = ((current_change / total_change) * 100)|round(1) %}
+                <p>
+                {% if progress > 100 %}
+                    You've exceeded your goal!
+                {% elif progress < 0 %}
+                    Keep working towards your goal
+                {% else %}
+                    {{ progress }}% of the way to your goal
                 {% endif %}
+                </p>
             {% endif %}
+        {% endif %}
         </div>
     </div>
 </div>
