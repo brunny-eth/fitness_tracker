@@ -2,20 +2,18 @@
 
 {% block content %}
 <div class="settings-container">
+
+
     <div class="section">
-        <h2>Summary</h2>
-        <div class="summary-grid">
-            <div class="summary-card">
-                <h3>You started at:</h3>
-                <p>Weight: {{ settings.starting_weight }} lbs</p>
-                <p>Body Fat: {% if settings.starting_bodyfat %}{{ settings.starting_bodyfat }}%{% else %}Not set{% endif %}</p>
-                <p>Date: {% if settings.start_date %}{{ settings.start_date.strftime('%B %d, %Y') }}{% else %}Not set{% endif %}</p>            </div>
-            <div class="summary-card">
-                <h3>Today, you are at:</h3>
-                <p>Weight: {{ latest_weight }} lbs</p>
-                {% if settings.target_weight %}
-                    <p>{{ progress }}% of the way to your goal</p>
-                {% endif %}
+        <h2>Goals</h2>
+        <div class="settings-form">
+            <div class="form-group">
+                <label for="target_weight">Target Weight (kg)</label>
+                <input type="number" id="target_weight" value="{{ (settings.target_weight * 0.453592)|round(1) }}" step="0.1">
+            </div>
+            <div class="form-group">
+                <label for="goal_months">Time to Achieve Goals (months)</label>
+                <input type="number" id="goal_months" value="{{ settings.goal_months }}">
             </div>
         </div>
     </div>
@@ -24,12 +22,8 @@
         <h2>Starting Metrics</h2>
         <div class="settings-form">
             <div class="form-group">
-                <label for="starting_weight">Starting Weight (lbs)</label>
-                <input type="number" id="starting_weight" value="{{ settings.starting_weight }}" step="0.1">
-            </div>
-            <div class="form-group">
-                <label for="starting_bodyfat">Starting Body Fat % (estimated)</label>
-                <input type="number" id="starting_bodyfat" value="{{ settings.starting_bodyfat }}" step="0.1">
+                <label for="starting_weight">Starting Weight (kg)</label>
+                <input type="number" id="starting_weight" value="{{ (settings.starting_weight * 0.453592)|round(1) }}" step="0.1">
             </div>
             <div class="form-group">
                 <label for="age">Age</label>
@@ -43,26 +37,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="height">Height (inches)</label>
-                <input type="number" id="height" value="{{ settings.height_inches }}" step="0.1">
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Goals</h2>
-        <div class="settings-form">
-            <div class="form-group">
-                <label for="target_weight">Target Weight (lbs)</label>
-                <input type="number" id="target_weight" value="{{ settings.target_weight }}" step="0.1">
-            </div>
-            <div class="form-group">
-                <label for="target_bodyfat">Target Body Fat %</label>
-                <input type="number" id="target_bodyfat" value="{{ settings.target_bodyfat }}" step="0.1">
-            </div>
-            <div class="form-group">
-                <label for="goal_months">Time to Achieve Goals (months)</label>
-                <input type="number" id="goal_months" value="{{ settings.goal_months }}">
+                <label for="height">Height (cm)</label>
+                <input type="number" id="height" value="{{ (settings.height_inches * 2.54)|round(1) }}" step="0.1">
             </div>
         </div>
     </div>
@@ -305,32 +281,6 @@
     padding: 20px;
 }
 
-.summary-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-top: 16px;
-}
-
-.summary-card {
-    background: #f9fafb;
-    padding: 16px;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-}
-
-.summary-card h3 {
-    margin-top: 0;
-    margin-bottom: 12px;
-    font-size: 16px;
-    color: #374151;
-}
-
-.summary-card p {
-    margin: 8px 0;
-    color: #6b7280;
-}
-
 .section {
     background: white;
     border-radius: 8px;
@@ -380,14 +330,12 @@ let editingCategoryId = null;
 
 function updateAllSettings() {
     const data = {
-        starting_weight: document.getElementById('starting_weight').value,
-        starting_bodyfat: document.getElementById('starting_bodyfat').value,
+        starting_weight: (document.getElementById('starting_weight').value / 0.453592).toFixed(1), // Convert kg to lbs
         age: document.getElementById('age').value,
         gender: document.getElementById('gender').value,
-        height_inches: document.getElementById('height').value,
+        height_inches: (document.getElementById('height').value / 2.54).toFixed(1), // Convert cm to inches
         
-        target_weight: document.getElementById('target_weight').value,
-        target_bodyfat: document.getElementById('target_bodyfat').value,
+        target_weight: (document.getElementById('target_weight').value / 0.453592).toFixed(1), // Convert kg to lbs
         goal_months: document.getElementById('goal_months').value,
         
         protein_ratio: document.getElementById('protein-ratio').value,
