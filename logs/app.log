@@ -1443,3 +1443,34 @@
 2024-12-01 09:43:14,773 INFO: 127.0.0.1 - - [01/Dec/2024 09:43:14] "GET /history HTTP/1.1" 200 -
 2024-12-01 09:43:16,206 INFO: 127.0.0.1 - - [01/Dec/2024 09:43:16] "GET /settings HTTP/1.1" 200 -
 2024-12-01 09:43:17,189 INFO: 127.0.0.1 - - [01/Dec/2024 09:43:17] "GET /nutrition HTTP/1.1" 200 -
+2024-12-01 09:44:22,999 INFO: Received nutrition data: {'protein_amount': '-2', 'calorie_amount': '-2', 'meal_name': 'chicken'}
+2024-12-01 09:44:23,003 INFO: Successfully added nutrition entry
+2024-12-01 09:44:23,004 INFO: 127.0.0.1 - - [01/Dec/2024 09:44:23] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-12-01 09:44:23,015 INFO: 127.0.0.1 - - [01/Dec/2024 09:44:23] "GET /nutrition HTTP/1.1" 200 -
+2024-12-01 09:44:55,138 INFO: 127.0.0.1 - - [01/Dec/2024 09:44:55] "GET /workouts HTTP/1.1" 200 -
+2024-12-01 09:44:55,944 INFO: 127.0.0.1 - - [01/Dec/2024 09:44:55] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-01 09:44:55,953 INFO: 127.0.0.1 - - [01/Dec/2024 09:44:55] "[33mGET /get_last_workout/High%20Intensity%20Interval%20Training HTTP/1.1[0m" 404 -
+2024-12-01 09:44:55,959 INFO: 127.0.0.1 - - [01/Dec/2024 09:44:55] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-01 09:45:07,072 INFO: 127.0.0.1 - - [01/Dec/2024 09:45:07] "GET /nutrition HTTP/1.1" 200 -
+2024-12-01 09:47:39,930 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-01 09:47:40,057 INFO:  * Restarting with stat
+2024-12-01 09:47:40,418 INFO: Application startup
+2024-12-01 09:47:40,450 WARNING:  * Debugger is active!
+2024-12-01 09:47:40,455 INFO:  * Debugger PIN: 133-619-259
+2024-12-01 09:48:19,097 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-01 09:48:19,215 INFO:  * Restarting with stat
+2024-12-01 09:48:19,587 INFO: Application startup
+2024-12-01 09:48:19,619 WARNING:  * Debugger is active!
+2024-12-01 09:48:19,623 INFO:  * Debugger PIN: 133-619-259
+2024-12-01 09:48:21,656 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-01 09:48:21,774 INFO:  * Restarting with stat
+2024-12-01 09:48:22,123 INFO: Application startup
+2024-12-01 09:48:22,153 WARNING:  * Debugger is active!
+2024-12-01 09:48:22,158 INFO:  * Debugger PIN: 133-619-259
+2024-12-01 09:48:22,965 INFO: 127.0.0.1 - - [01/Dec/2024 09:48:22] "GET /nutrition HTTP/1.1" 200 -
+2024-12-01 09:48:26,667 INFO: 127.0.0.1 - - [01/Dec/2024 09:48:26] "POST /delete_nutrition/19 HTTP/1.1" 200 -
+2024-12-01 09:48:26,681 INFO: 127.0.0.1 - - [01/Dec/2024 09:48:26] "GET /nutrition HTTP/1.1" 200 -
+2024-12-01 09:48:37,293 INFO: Received nutrition data: {'protein_amount': '0', 'calorie_amount': '0', 'meal_name': 'chicken'}
+2024-12-01 09:48:37,298 INFO: Successfully added nutrition entry
+2024-12-01 09:48:37,299 INFO: 127.0.0.1 - - [01/Dec/2024 09:48:37] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-12-01 09:48:37,314 INFO: 127.0.0.1 - - [01/Dec/2024 09:48:37] "GET /nutrition HTTP/1.1" 200 -

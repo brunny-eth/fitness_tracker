@@ -156,14 +156,16 @@
           class="search-input">
   <div class="input-row">
       <input type="number" 
-              step="0.1" 
-              id="protein_amount" 
-              placeholder="Protein (g)"
-              class="search-input">
-      <input type="number" 
-              id="calorie_amount" 
-              placeholder="Calories"
-              class="search-input">
+          step="0.1" 
+          min="0"
+          id="protein_amount" 
+          placeholder="Protein (g)"
+          class="search-input">
+    <input type="number" 
+          min="0"
+          id="calorie_amount" 
+          placeholder="Calories"
+          class="search-input">
   </div>
   <button class="action-btn" onclick="addNutrition()">Add to Today</button>
 </div>
@@ -808,6 +810,11 @@ function addNutrition() {
     const calorie_amount = document.getElementById('calorie_amount').value;
     const meal_name = document.getElementById('manual_meal_name').value || 'Manual entry';  // Default if empty
 
+    if (protein_amount < 0 || calorie_amount < 0) {
+        alert('Protein and calories cannot be negative');
+        return;
+    }
+
     console.log('Sending nutrition data:', { 
         protein_amount, 
         calorie_amount, 
@@ -872,6 +879,11 @@ function saveNewMeal() {
 
     if (!name || !protein || !calories) {
         alert('Please fill in all fields');
+        return;
+    }
+
+    if (protein < 0 || calories < 0) {
+        alert('Protein and calories cannot be negative');
         return;
     }
 

@@ -288,6 +288,11 @@ def add_nutrition():
         data = request.json
         logging.info(f"Received nutrition data: {data}")
         
+        if data.get('protein_amount') and float(data['protein_amount']) < 0:
+            return jsonify({"error": "Protein amount cannot be negative"}), 400
+        if data.get('calorie_amount') and int(data['calorie_amount']) < 0:
+            return jsonify({"error": "Calorie amount cannot be negative"}), 400
+
         if data.get('saved_meal_id'):
             meal = SavedMeal.query.filter_by(
                 id=data['saved_meal_id'],
@@ -411,15 +416,22 @@ def saved_meals():
     if request.method == 'POST':
         data = request.json
         try:
+            protein = float(data['protein_per_serving'])
+            calories = int(data['calories_per_serving'])
+            
+            if protein < 0 or calories < 0:
+                return jsonify({"error": "Protein and calories cannot be negative"}), 400
+                
             new_meal = SavedMeal(
                 user_id=current_user.id,
                 name=data['name'],
-                protein_per_serving=float(data['protein_per_serving']),
-                calories_per_serving=int(data['calories_per_serving'])
+                protein_per_serving=protein,
+                calories_per_serving=calories
             )
             db.session.add(new_meal)
             db.session.commit()
             return jsonify({"message": "Meal saved successfully", "id": new_meal.id}), 201
+        
         except Exception as e:
             db.session.rollback()
             return jsonify({"error": str(e)}), 500
