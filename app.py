@@ -116,7 +116,7 @@ class WorkoutCategory(db.Model):
 
 def calculate_protein_goal(weight_lbs, ratio):
     weight_kg = weight_lbs * 0.453592
-    return round(weight_kg * ratio)  
+    return round(weight_kg * ratio) 
 
 def create_default_workout_categories(user_id):
     default_categories = [
@@ -220,7 +220,13 @@ def nutrition():
         db.session.add(settings)
         db.session.commit()
     
-    protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
+    latest_weight = WeightEntry.query.filter_by(
+        user_id=current_user.id
+    ).order_by(WeightEntry.date.desc()).first()
+    
+    current_weight = latest_weight.weight if latest_weight else settings.weight_lbs
+    protein_goal = calculate_protein_goal(current_weight, settings.protein_ratio)
+    
     today = date.today()
     
     entries = NutritionEntry.query.filter_by(
@@ -233,7 +239,6 @@ def nutrition():
     total_protein = sum(entry.protein_amount for entry in entries)
     total_calories = sum(entry.calorie_amount for entry in entries)
 
-    today = date.today()
     todays_weight = WeightEntry.query.filter_by(
         user_id=current_user.id,
         date=today
@@ -542,7 +547,7 @@ def login():
         
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for('home'))
+            return redirect(url_for('nutrition'))
         
         flash('Invalid email or password')
     return render_template('login.html')
@@ -611,7 +616,7 @@ def register():
 
 
             login_user(user)
-            return redirect(url_for('home'))
+            return redirect(url_for('nutrition'))
             
         except Exception as e:
             db.session.rollback()
