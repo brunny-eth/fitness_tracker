@@ -1474,3 +1474,35 @@
 2024-12-01 09:48:37,298 INFO: Successfully added nutrition entry
 2024-12-01 09:48:37,299 INFO: 127.0.0.1 - - [01/Dec/2024 09:48:37] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
 2024-12-01 09:48:37,314 INFO: 127.0.0.1 - - [01/Dec/2024 09:48:37] "GET /nutrition HTTP/1.1" 200 -
+2024-12-08 11:14:43,026 INFO: Application startup
+2024-12-08 11:14:43,085 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.99:5001
+2024-12-08 11:14:43,085 INFO: [33mPress CTRL+C to quit[0m
+2024-12-08 11:14:43,085 INFO:  * Restarting with stat
+2024-12-08 11:14:43,427 INFO: Application startup
+2024-12-08 11:14:43,466 WARNING:  * Debugger is active!
+2024-12-08 11:14:43,472 INFO:  * Debugger PIN: 133-619-259
+2024-12-08 11:14:49,538 INFO: 127.0.0.1 - - [08/Dec/2024 11:14:49] "[32mGET / HTTP/1.1[0m" 302 -
+2024-12-08 11:14:49,556 INFO: 127.0.0.1 - - [08/Dec/2024 11:14:49] "GET /nutrition HTTP/1.1" 200 -
+2024-12-08 11:15:11,500 INFO: 127.0.0.1 - - [08/Dec/2024 11:15:11] "[35m[1mPOST /saved_meals HTTP/1.1[0m" 201 -
+2024-12-08 11:15:11,523 INFO: 127.0.0.1 - - [08/Dec/2024 11:15:11] "GET /nutrition HTTP/1.1" 200 -
+2024-12-08 11:22:18,856 INFO: 127.0.0.1 - - [08/Dec/2024 11:22:18] "GET /nutrition HTTP/1.1" 200 -
+2024-12-08 11:25:24,512 INFO: 127.0.0.1 - - [08/Dec/2024 11:25:24] "GET /nutrition HTTP/1.1" 200 -
+2024-12-08 11:28:02,169 INFO: 127.0.0.1 - - [08/Dec/2024 11:28:02] "GET /nutrition HTTP/1.1" 200 -
+2024-12-08 11:28:10,010 INFO: Received nutrition data: {'saved_meal_id': 1}
+2024-12-08 11:28:10,016 INFO: Successfully added nutrition entry
+2024-12-08 11:28:10,017 INFO: 127.0.0.1 - - [08/Dec/2024 11:28:10] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-12-08 11:28:10,031 INFO: 127.0.0.1 - - [08/Dec/2024 11:28:10] "GET /nutrition HTTP/1.1" 200 -
+2024-12-08 11:28:14,267 INFO: 127.0.0.1 - - [08/Dec/2024 11:28:14] "POST /delete_saved_meal/1 HTTP/1.1" 200 -
+2024-12-08 11:28:14,281 INFO: 127.0.0.1 - - [08/Dec/2024 11:28:14] "GET /nutrition HTTP/1.1" 200 -
+2024-12-08 11:28:19,279 INFO: 127.0.0.1 - - [08/Dec/2024 11:28:19] "POST /delete_nutrition/20 HTTP/1.1" 200 -
+2024-12-08 11:28:19,292 INFO: 127.0.0.1 - - [08/Dec/2024 11:28:19] "GET /nutrition HTTP/1.1" 200 -
+2024-12-08 11:28:27,373 INFO: HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2024-12-08 11:28:27,381 INFO: 127.0.0.1 - - [08/Dec/2024 11:28:27] "POST /analyze_meal HTTP/1.1" 200 -
+2024-12-08 11:28:28,793 INFO: Received nutrition data: {'protein_amount': 38.5, 'calorie_amount': 370, 'meal_name': 'chicken with corn'}
+2024-12-08 11:28:28,797 INFO: Successfully added nutrition entry
+2024-12-08 11:28:28,798 INFO: 127.0.0.1 - - [08/Dec/2024 11:28:28] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-12-08 11:28:28,816 INFO: 127.0.0.1 - - [08/Dec/2024 11:28:28] "GET /nutrition HTTP/1.1" 200 -
+2024-12-08 11:30:20,421 INFO: 127.0.0.1 - - [08/Dec/2024 11:30:20] "GET /nutrition HTTP/1.1" 200 -

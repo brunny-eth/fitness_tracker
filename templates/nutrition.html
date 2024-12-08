@@ -103,18 +103,17 @@
     <div id="modalMealsContainer" class="saved-meals-list">
         {% for meal in saved_meals %}
         <div class="saved-meal-item" data-meal-name="{{ meal.name.lower() }}">
-            <div class="meal-content">
-                <div class="meal-info">
-                    <h4>{{ meal.name }}</h4>
-                    <p>{{ meal.protein_per_serving }}g protein • {{ meal.calories_per_serving }} calories</p>
-                </div>
-                <div class="meal-actions">
-                    <button class="action-btn" onclick="addSavedMeal({{ meal.id }})">Add to Today</button>
-                    <button class="action-btn" onclick="editSavedMeal({{ meal.id }})">Edit</button>
-                    <button class="action-btn delete" onclick="deleteSavedMeal({{ meal.id }})">Delete</button>
-                </div>
-            </div>
-        </div>
+          <div class="meal-content">
+              <div class="meal-info">
+                  <h4 class="meal-name">{{ meal.name }}</h4>
+                  <p class="meal-stats">{{ meal.protein_per_serving }}g protein • {{ meal.calories_per_serving }} calories</p>
+              </div>
+              <div class="meal-actions">
+                  <button class="btn-add" onclick="addSavedMeal({{ meal.id }})">Add</button>
+                  <button class="btn-delete" onclick="deleteSavedMeal({{ meal.id }})">Delete</button>
+              </div>
+          </div>
+      </div>
         {% endfor %}
         <p id="no-results-message" style="display: none;">No meals found</p>
     </div>
@@ -307,26 +306,51 @@
 }
 
 .meal-icon {
-  background-color: #f3f4f6;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 500;
-  color: #6b7280;
+    flex-shrink: 0;  
+    min-width: 40px; 
+    height: 40px;
+    background-color: #f3f4f6;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
 }
+
 
 .meal-info {
-    flex-grow: 1;
+    flex: 1;
+    min-width: 0; 
 }
 
-.meal-info h4 {
+.meal-name {
+    font-weight: 500;
+    margin: 0;
+    font-size: 14px;
+    color: #111827;
+}
+
+.meal-stats {
+    color: #6b7280;
+    font-size: 13px;
+    margin: 2px 0 0 0;
+}
+
+.meal-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.meal-info h3 {
     margin: 0;
     font-size: 16px;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;    
+    text-overflow: ellipsis; 
 }
 
 .meal-info p {
@@ -351,9 +375,8 @@
   color: #6b7280;
 }
 
-.action-btn, 
-#analyze_button,
-.secondary-btn {  
+/* Base button styles */
+.action-btn {
     width: 100%;
     padding: 12px;
     background-color: #3b82f6;
@@ -366,18 +389,58 @@
     transition: background-color 0.2s;
 }
 
-.action-btn:hover, 
-#analyze_button:hover,
-.secondary-btn:hover {
+.action-btn:hover {
     background-color: #2563eb;
 }
 
-.action-btn.delete {
-    background-color: #ef4444;
+/* Different button types */
+.btn-add, .btn-delete {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
 }
 
-.action-btn.delete:hover {
+.btn-add {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.btn-add:hover {
+    background-color: #2563eb;
+}
+
+
+.btn-delete {
+    background-color: #ef4444;
+    color: white;
+}
+
+.btn-delete:hover {
     background-color: #dc2626;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.dropdown-item {
+    padding: 8px 16px;
+    color: #374151;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f3f4f6;
 }
 
 .edit-meal-btn {
@@ -455,18 +518,22 @@
 }
 
 .saved-meal-item {
-    margin: 8px 16px;
-    padding: 12px;
+    background: white;
+    padding: 8px 12px;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
-    background-color: white;
+    margin-bottom: 8px;
+}
+
+.saved-meal-item:hover {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .meal-content {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
+    gap: 12px;
+    align-items: flex-start; 
+    width: 100%;
 }
 
 /* Modal Components */
@@ -486,12 +553,11 @@
 }
 
 .saved-meals-list {
-    max-height: 300px;
-    overflow-y: auto;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    background-color: #f9fafb;
-    margin: 0 16px;
+    border: none;
+    background-color: transparent;
+    margin: 12px 0;
+    max-height: none;
+    overflow-y: visible;
 }
 
 .modal-header {
@@ -802,6 +868,26 @@ function saveWeight() {
     })
     .catch(error => {
         alert(error.message);
+    });
+}
+
+function toggleDropdown(mealId) {
+    const dropdown = document.getElementById(`dropdown-${mealId}`);
+    const allDropdowns = document.querySelectorAll('.dropdown-menu');
+    
+    allDropdowns.forEach(d => {
+        if (d.id !== `dropdown-${mealId}`) {
+            d.style.display = 'none';
+        }
+    });
+    
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    
+    document.addEventListener('click', function closeDropdown(e) {
+        if (!e.target.closest('.dropdown')) {
+            dropdown.style.display = 'none';
+            document.removeEventListener('click', closeDropdown);
+        }
     });
 }
 
