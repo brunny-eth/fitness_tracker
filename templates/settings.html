@@ -28,26 +28,67 @@
                     <div class="radio-group">
                         <input type="radio" id="protein_high" name="protein_goal" value="1.6" 
                                {% if settings.protein_ratio == 1.6 %}checked{% endif %}>
-                        <label for="protein_high">A lot</label>
+                        <label for="protein_high">A lot (recommended for building muscle!)</label>
                     </div>
                     <div class="radio-group">
                         <input type="radio" id="protein_medium" name="protein_goal" value="1.3"
                                {% if settings.protein_ratio == 1.3 %}checked{% endif %}>
-                        <label for="protein_medium">A medium amount</label>
+                        <label for="protein_medium">A medium amount (enough to maintain muscle while losing weight)</label>
                     </div>
                     <div class="radio-group">
                         <input type="radio" id="protein_low" name="protein_goal" value="1.0"
                                {% if settings.protein_ratio == 1.0 %}checked{% endif %}>
-                        <label for="protein_low">Probably less than I need to</label>
+                        <label for="protein_low">Probably less than I need to (This is the minimum recommended amount)</label>
                     </div>
                 </div>
             </div>
     
             <div class="form-section">
-                <h3>Daily Calorie Target</h3>
-                <p class="helper-text">Note that this calorie target is based on your current weight, your target weight, and your goals. You can manually change it, but it will impact your goals.</p>
-                <div class="form-group">
-                    <input type="number" id="max-calories" value="{{ settings.max_calories }}">
+                <h3>Activity Level</h3>
+                <p class="helper-text">How active are you on a weekly basis?</p>
+                <div class="protein-options">
+                    <div class="radio-group">
+                        <input type="radio" id="activity_sedentary" name="activity_level" value="sedentary" 
+                               {% if settings.activity_level == 'sedentary' %}checked{% endif %} required>
+                        <label for="activity_sedentary">Mostly sedentary (office job, little exercise)</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="activity_light" name="activity_level" value="light"
+                               {% if settings.activity_level == 'light' %}checked{% endif %}>
+                        <label for="activity_light">Light exercise 1-3 times/week</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="activity_moderate" name="activity_level" value="moderate"
+                               {% if settings.activity_level == 'moderate' %}checked{% endif %}>
+                        <label for="activity_moderate">Moderate exercise 3-5 times/week</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="activity_heavy" name="activity_level" value="heavy"
+                               {% if settings.activity_level == 'heavy' %}checked{% endif %}>
+                        <label for="activity_heavy">Heavy exercise 6-7 times/week</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="activity_athlete" name="activity_level" value="athlete"
+                               {% if settings.activity_level == 'athlete' %}checked{% endif %}>
+                        <label for="activity_athlete">Athletic training + physical job</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Calorie Intake Goal</h3>
+                <p class="helper-text">If you want to lose weight, you need to spend more calories than you take in.</p>
+                <button type="button" class="btn-calculate-calories" onclick="calculateCalories()">Click to calculate your daily calories goal</button>
+                <div id="calories-result" class="calories-result" style="display: none;">
+                    <p class="calories-total">Your recommended daily calories: <span id="recommended-calories">-</span></p>
+                    <p class="calories-details">Based on your:</p>
+                    <ul class="calories-breakdown">
+                        <li>Current weight: <span id="calc-weight">-</span></li>
+                        <li>Height: <span id="calc-height">-</span></li>
+                        <li>Age: <span id="calc-age">-</span></li>
+                        <li>Activity level: <span id="calc-activity">-</span></li>
+                        <li>Goal: <span id="calc-goal">-</span></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -402,6 +443,41 @@
     max-width: 500px;
     margin-top: 24px;
 }
+
+.btn-calculate-calories {
+    width: 100%;
+    padding: 12px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 16px;
+}
+
+.calories-result {
+    background: #f9fafb;
+    padding: 16px;
+    border-radius: 6px;
+    margin-top: 16px;
+}
+
+.calories-total {
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.calories-breakdown {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0;
+}
+
+.calories-breakdown li {
+    margin: 4px 0;
+    color: #4b5563;
+}
 </style>
 
 <script>
@@ -497,6 +573,49 @@ function deleteCategory(categoryId) {
             alert('Error deleting category');
         });
     }
+}
+
+function calculateCalories() {
+    const weight = parseFloat(document.getElementById('starting_weight').value);
+    const height = parseFloat(document.getElementById('height').value);
+    const age = parseInt(document.getElementById('age').value);
+    const gender = document.getElementById('gender').value;
+    const activityLevel = document.querySelector('input[name="activity_level"]:checked').value;
+    const targetWeight = parseFloat(document.getElementById('target_weight').value);
+    
+    if (!weight || !height || !age || !activityLevel || !targetWeight) {
+        alert('Please fill in all required fields first');
+        return;
+    }
+
+    const activityMultipliers = {
+        sedentary: 1.2,
+        light: 1.375,
+        moderate: 1.55,
+        heavy: 1.725,
+        athlete: 1.9
+    };
+
+    let bmr;
+    if (gender === 'male') {
+        bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+    } else {
+        bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+    }
+
+    const maintenance = bmr * activityMultipliers[activityLevel];
+    const weightDiff = targetWeight - weight;
+    const calorieAdjustment = (weightDiff > 0 ? 500 : -500); // Add/subtract 500 calories for 0.5kg/week
+    const recommendedCalories = Math.round((maintenance + calorieAdjustment) / 50) * 50;
+
+    document.getElementById('recommended-calories').textContent = recommendedCalories;
+    document.getElementById('calc-weight').textContent = weight + ' kg';
+    document.getElementById('calc-height').textContent = height + ' cm';
+    document.getElementById('calc-age').textContent = age;
+    document.getElementById('calc-activity').textContent = activityLevel;
+    document.getElementById('calc-goal').textContent = weightDiff > 0 ? 'Gain weight' : 'Lose weight';
+    document.getElementById('calories-result').style.display = 'block';
+    document.getElementById('max-calories').value = recommendedCalories;
 }
 
 function editCategory(categoryId) {

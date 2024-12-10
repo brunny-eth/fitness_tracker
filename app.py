@@ -71,6 +71,8 @@ class UserSettings(db.Model):
     target_weight = db.Column(db.Float, nullable=True)
     goal_months = db.Column(db.Integer, nullable=True)
 
+    activity_level = db.Column(db.String(20), nullable=True)  
+
 class WeightEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -610,6 +612,7 @@ def register():
                 weight_lbs=starting_weight_lbs,
                 starting_weight=starting_weight_lbs,
                 target_weight=target_weight_lbs,
+                activity_level=request.form.get('activity_level'),
                 goal_months=goal_months,
                 age=int(request.form.get('age')),
                 gender=request.form.get('gender'),
@@ -706,7 +709,8 @@ def update_settings():
             settings.gender = data['gender']
         if data.get('height_inches') and data['height_inches'].strip():
             settings.height_inches = float(data['height_inches'])
-            
+        if data.get('activity_level'):
+            settings.activity_level = data['activity_level']
         if data.get('target_weight') and data['target_weight'].strip():
             settings.target_weight = float(data['target_weight'])
         if data.get('target_bodyfat') and data['target_bodyfat'].strip():
