@@ -120,7 +120,8 @@
         
         <div class="form-section">
             <h3>Calorie Intake Goal</h3>
-            <p class="helper-text">If you want to lose weight, you need to spend more calories than you take in.</p>
+            <p class="helper-text">If you want to lose weight, you need to spend more calories than you take in. If you want to gain weight, you need to eat more calories than you spend.</p>
+            <input type="hidden" id="max-calories" name="maintenance_calories">
             <button type="button" class="btn-calculate-calories" onclick="calculateCalories()">Click to calculate your daily calories goal</button>
             <div id="calories-result" class="calories-result" style="display: none;">
                 <p class="calories-total">Your recommended daily calories: <span id="recommended-calories">-</span></p>
@@ -323,16 +324,22 @@
 <script>
 
 function calculateCalories() {
-    const weight = parseFloat(document.getElementById('starting_weight').value);
+    const currentWeight = parseFloat(document.getElementById('starting_weight').value);
+    const targetWeight = parseFloat(document.getElementById('target_weight').value);
+    const goalMonths = parseFloat(document.getElementById('goal_months').value);
+    const gender = document.getElementById('gender').value;
     const height = parseFloat(document.getElementById('height').value);
     const age = parseInt(document.getElementById('age').value);
-    const gender = document.getElementById('gender').value;
     const activityLevel = document.querySelector('input[name="activity_level"]:checked').value;
-    const targetWeight = parseFloat(document.getElementById('target_weight').value);
-    
-    if (!weight || !height || !age || !activityLevel || !targetWeight) {
-        alert('Please fill in all required fields first');
-        return;
+
+    console.log('Inputs:', {currentWeight, targetWeight, goalMonths, gender, height, age, activityLevel});  // For debugging
+
+    // Calculate maintenance calories using Harris-Benedict
+    let bmr;
+    if (gender === 'male') {
+        bmr = 88.362 + (13.397 * currentWeight) + (4.799 * height) - (5.677 * age);
+    } else {
+        bmr = 447.593 + (9.247 * currentWeight) + (3.098 * height) - (4.330 * age);
     }
 
     const activityMultipliers = {
@@ -343,24 +350,27 @@ function calculateCalories() {
         athlete: 1.9
     };
 
-    let bmr;
-    if (gender === 'male') {
-        bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
-    } else {
-        bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
-    }
-
     const maintenance = bmr * activityMultipliers[activityLevel];
-    const weightDiff = targetWeight - weight;
-    const calorieAdjustment = (weightDiff > 0 ? 500 : -500); // Add/subtract 500 calories for 0.5kg/week
-    const recommendedCalories = Math.round((maintenance + calorieAdjustment) / 50) * 50;
+    console.log('Maintenance calories:', maintenance);  // For debugging
 
+    // Calculate required deficit
+    const weightToLose = currentWeight - targetWeight;  // if positive, need to lose weight
+    const totalCaloriesDeficit = weightToLose * 7700;  // 7700 calories per kg
+    const daysToGoal = goalMonths * 30.44;  // average days per month
+    const dailyDeficit = totalCaloriesDeficit / daysToGoal;
+
+    console.log('Deficit calculations:', {weightToLose, totalCaloriesDeficit, daysToGoal, dailyDeficit});  // For debugging
+
+    // Calculate target calories and round to nearest 50
+    const recommendedCalories = Math.round((maintenance - dailyDeficit) / 50) * 50;
+
+    // Update UI
     document.getElementById('recommended-calories').textContent = recommendedCalories;
-    document.getElementById('calc-weight').textContent = weight + ' kg';
+    document.getElementById('calc-weight').textContent = currentWeight + ' kg';
     document.getElementById('calc-height').textContent = height + ' cm';
     document.getElementById('calc-age').textContent = age;
     document.getElementById('calc-activity').textContent = activityLevel;
-    document.getElementById('calc-goal').textContent = weightDiff > 0 ? 'Gain weight' : 'Lose weight';
+    document.getElementById('calc-goal').textContent = weightToLose > 0 ? 'Lose weight' : 'Gain weight';
     document.getElementById('calories-result').style.display = 'block';
     document.getElementById('max-calories').value = recommendedCalories;
 }

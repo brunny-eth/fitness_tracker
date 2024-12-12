@@ -5,15 +5,38 @@
 
 
     <div class="section">
-        <h2>Goals</h2>
+        <div class="section-header">
+            <h2>Goals</h2>
+            <button onclick="toggleGoalsEdit()" class="action-btn-secondary" id="edit-goals-btn">
+                Update Goals?
+            </button>
+        </div>
+        
         <div class="settings-form">
-            <div class="form-group">
-                <label for="target_weight">Target Weight (kg)</label>
-                <input type="number" id="target_weight" value="{{ (settings.target_weight * 0.453592)|round(1) }}" step="0.1">
+            <div id="goals-view" class="goals-display">
+                <div class="info-row">
+                    <label>Target Weight:</label>
+                    <span>{{ settings.target_weight_kg }} kg</span>
+                </div>
+                <div class="info-row">
+                    <label>Target Date:</label>
+                    <span>{{ (settings.start_date + timedelta(days=settings.goal_months * 30.44)).strftime('%B %d, %Y') }}</span>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="goal_months">Time to Achieve Goals (months)</label>
-                <input type="number" id="goal_months" value="{{ settings.goal_months }}">
+    
+            <div id="goals-edit" class="goals-edit hidden">
+                <div class="form-group">
+                    <label for="target_weight">New Target Weight (kg)</label>
+                    <input type="number" id="target_weight" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label for="goal_months">Months to Achieve Goal</label>
+                    <input type="number" id="goal_months" min="1">
+                </div>
+                <div class="edit-buttons">
+                    <button onclick="cancelGoalsEdit()" class="btn-secondary">Cancel</button>
+                    <button onclick="saveNewGoals()" class="btn-primary">Save New Goals</button>
+                </div>
             </div>
         </div>
     </div>
@@ -78,7 +101,16 @@
             <div class="form-section">
                 <h3>Calorie Intake Goal</h3>
                 <p class="helper-text">If you want to lose weight, you need to spend more calories than you take in.</p>
-                <button type="button" class="btn-calculate-calories" onclick="calculateCalories()">Click to calculate your daily calories goal</button>
+                <input type="hidden" id="max-calories" name="max_calories" value="{{ settings.max_calories }}">
+                <input type="hidden" id="height" value="{{ settings.height_inches * 2.54 }}">
+                <input type="hidden" id="age" value="{{ settings.age }}">
+                <input type="hidden" id="gender" value="{{ settings.gender }}">
+                <input type="hidden" id="current_weight" value="{{ current_weight_kg }}">
+                <input type="hidden" id="target_weight" value="{{ settings.target_weight_kg }}">
+                <input type="hidden" id="goal_months" value="{{ settings.goal_months }}">
+                <button type="button" class="btn-calculate-calories" onclick="calculateCalories()">
+                    Click to calculate your daily calories goal
+                </button>            
                 <div id="calories-result" class="calories-result" style="display: none;">
                     <p class="calories-total">Your recommended daily calories: <span id="recommended-calories">-</span></p>
                     <p class="calories-details">Based on your:</p>
@@ -94,11 +126,20 @@
         </div>
     </div>
     
-
     <div class="button-container">
         <button onclick="updateAllSettings()" class="action-btn">Save All Settings</button>
     </div>
 </div>
+
+    <div style="display: none;">
+        <p>Debug Values:</p>
+        <p>Target Weight: {{ settings.target_weight }}</p>
+        <p>Goal Months: {{ settings.goal_months }}</p>
+        <p>Current Weight: {{ current_weight_kg }}</p>
+        <p>Hidden Input Values:</p>
+        <p>target_weight value: {{ (settings.target_weight * 0.453592)|round(1) if settings.target_weight else 'Not set' }}</p>
+        <p>goal_months value: {{ settings.goal_months if settings.goal_months else 'Not set' }}</p>
+    </div>
 
 <style>
 
@@ -319,6 +360,63 @@
     white-space: nowrap;  
 }
 
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.action-btn-secondary {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.action-btn-secondary:hover {
+    background-color: #2563eb;
+}
+
+.goals-display .info-row {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.goals-display .info-row label {
+    font-weight: 500;
+    width: 120px;
+    color: #374151;
+}
+
+.goals-display .info-row span {
+    color: #111827;
+}
+
+.goals-edit {
+    animation: fadeIn 0.3s ease;
+}
+
+.edit-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 @media (max-width: 640px) {
     .section {
         padding: 16px;
@@ -485,12 +583,13 @@ let editingCategoryId = null;
 
 function updateAllSettings() {
     const proteinGoal = document.querySelector('input[name="protein_goal"]:checked').value;
+    const activityLevel = document.querySelector('input[name="activity_level"]:checked').value;
     
     const data = {
-        target_weight: (document.getElementById('target_weight').value / 0.453592).toFixed(1), // Convert kg to lbs
-        goal_months: document.getElementById('goal_months').value,
+        target_weight: parseFloat(document.getElementById('target_weight').value),
+        goal_months: parseInt(document.getElementById('goal_months').value),
         protein_ratio: parseFloat(proteinGoal),
-        max_calories: document.getElementById('max-calories').value
+        activity_level: activityLevel
     };
 
     fetch('/update_settings', {
@@ -505,7 +604,6 @@ function updateAllSettings() {
         if (data.error) {
             alert(data.error);
         } else {
-            alert('Settings updated successfully');
             location.reload();
         }
     })
@@ -515,77 +613,73 @@ function updateAllSettings() {
     });
 }
 
-function addExerciseInput() {
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = 'exercise-input';
-    document.getElementById('exercisesList').appendChild(input);
-}
+function calculateCalories() {
+    const requiredValues = {
+        current_weight: document.getElementById('current_weight').value,
+        target_weight: document.getElementById('target_weight').value,
+        goal_months: document.getElementById('goal_months').value,
+        gender: document.getElementById('gender').value,
+        height: document.getElementById('height').value,
+        age: document.getElementById('age').value
+    };
 
-function saveCategory() {
-    const name = document.getElementById('categoryName').value;
-    const exercises = Array.from(document.querySelectorAll('.exercise-input'))
-        .map(input => input.value)
-        .filter(value => value.trim() !== '');
+    const missing = Object.entries(requiredValues)
+        .filter(([key, value]) => !value)
+        .map(([key]) => key.replace('_', ' '));
 
-    if (!name || exercises.length === 0) {
-        alert('Please provide a category name and at least one exercise');
+    if (missing.length > 0) {
+        alert(`Please set your ${missing.join(', ')} in the goals section before calculating calories.`);
+        return;
+    }
+    const proteinGoal = document.querySelector('input[name="protein_goal"]:checked');
+    const activityLevel = document.querySelector('input[name="activity_level"]:checked');
+    
+    if (!proteinGoal || !activityLevel) {
+        alert('Please select both a Protein Intake Goal and Activity Level before calculating calories');
         return;
     }
 
-    fetch('/update_workout_category', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            id: editingCategoryId,
-            name, 
-            exercises
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else if (data.error) {
-            alert(data.error);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error saving category');
-    });
-}
-
-function deleteCategory(categoryId) {
-    if (confirm('Are you sure you want to delete this workout category?')) {
-        fetch(`/delete_workout_category/${categoryId}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error deleting category');
-        });
-    }
-}
-
-function calculateCalories() {
-    const weight = parseFloat(document.getElementById('starting_weight').value);
+    // Get ALL values from hidden inputs
+    const currentWeightKg = parseFloat(document.getElementById('current_weight').value);
+    // Get target weight from hidden input, not the edit form input
+    const targetWeightKg = parseFloat(document.getElementById('target_weight').value);
+    // Get goal months from hidden input, not the edit form input
+    const goalMonths = parseFloat(document.getElementById('goal_months').value);
+    const gender = document.getElementById('gender').value;
     const height = parseFloat(document.getElementById('height').value);
     const age = parseInt(document.getElementById('age').value);
-    const gender = document.getElementById('gender').value;
-    const activityLevel = document.querySelector('input[name="activity_level"]:checked').value;
-    const targetWeight = parseFloat(document.getElementById('target_weight').value);
-    
-    if (!weight || !height || !age || !activityLevel || !targetWeight) {
-        alert('Please fill in all required fields first');
+    const activityValue = activityLevel.value;
+
+    // Debug logging
+    console.log('Input values:', {
+        currentWeightKg,
+        targetWeightKg,
+        goalMonths,
+        gender,
+        height,
+        age,
+        activityValue
+    });
+
+    if (!currentWeightKg || !targetWeightKg || !goalMonths || !height || !age || !activityValue) {
+        alert('Missing required values. Please make sure your goals and personal details are set.');
+        console.error('Missing required values:', {
+            currentWeightKg,
+            targetWeightKg,
+            goalMonths,
+            height,
+            age,
+            activityValue
+        });
         return;
+    }
+
+    // Calculate BMR using Harris-Benedict equation
+    let bmr;
+    if (gender === 'male') {
+        bmr = 88.362 + (13.397 * currentWeightKg) + (4.799 * height) - (5.677 * age);
+    } else {
+        bmr = 447.593 + (9.247 * currentWeightKg) + (3.098 * height) - (4.330 * age);
     }
 
     const activityMultipliers = {
@@ -596,74 +690,108 @@ function calculateCalories() {
         athlete: 1.9
     };
 
-    let bmr;
-    if (gender === 'male') {
-        bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
-    } else {
-        bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
-    }
+    const maintenance = Math.round(bmr * activityMultipliers[activityValue]);
 
-    const maintenance = bmr * activityMultipliers[activityLevel];
-    const weightDiff = targetWeight - weight;
-    const calorieAdjustment = (weightDiff > 0 ? 500 : -500); // Add/subtract 500 calories for 0.5kg/week
-    const recommendedCalories = Math.round((maintenance + calorieAdjustment) / 50) * 50;
+    // Calculate required deficit/surplus
+    const weightToLose = currentWeightKg - targetWeightKg;  // positive for weight loss
+    const totalCaloriesDeficit = weightToLose * 7700;  // 7700 calories per kg
+    const daysToGoal = goalMonths * 30.44;  // average days per month
+    const dailyDeficit = totalCaloriesDeficit / daysToGoal;
 
-    document.getElementById('recommended-calories').textContent = recommendedCalories;
-    document.getElementById('calc-weight').textContent = weight + ' kg';
-    document.getElementById('calc-height').textContent = height + ' cm';
+    // Calculate target calories and round to nearest 50
+    const recommendedCalories = Math.round((maintenance - dailyDeficit) / 50) * 50;
+
+    // Update UI with formatted numbers
+    document.getElementById('recommended-calories').textContent = recommendedCalories.toLocaleString();
+    document.getElementById('calc-weight').textContent = currentWeightKg.toFixed(1) + ' kg';
+    document.getElementById('calc-height').textContent = height.toFixed(1) + ' cm';
     document.getElementById('calc-age').textContent = age;
-    document.getElementById('calc-activity').textContent = activityLevel;
-    document.getElementById('calc-goal').textContent = weightDiff > 0 ? 'Gain weight' : 'Lose weight';
+    document.getElementById('calc-activity').textContent = activityValue;
+    document.getElementById('calc-goal').textContent = weightToLose > 0 ? 'Lose weight' : 'Gain weight';
     document.getElementById('calories-result').style.display = 'block';
     document.getElementById('max-calories').value = recommendedCalories;
 }
 
-function editCategory(categoryId) {
-    editingCategoryId = categoryId;
-    fetch(`/get_workout_category/${categoryId}`)
-        .then(response => response.json())
-        .then(category => {
-            document.getElementById('categoryName').value = category.name;
-            const exercisesList = document.getElementById('exercisesList');
-            exercisesList.innerHTML = '';
-            category.exercises.forEach(exercise => {
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.className = 'exercise-input';
-                input.value = exercise;
-                exercisesList.appendChild(input);
-            });
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error loading category');
-        });
+function toggleGoalsEdit() {
+    const viewMode = document.getElementById('goals-view');
+    const editMode = document.getElementById('goals-edit');
+    const editBtn = document.getElementById('edit-goals-btn');
+    
+    if (editMode.classList.contains('hidden')) {
+        viewMode.classList.add('hidden');
+        editMode.classList.remove('hidden');
+        editBtn.textContent = 'Cancel';
+        
+        const currentTargetKg = document.getElementById('target_weight').value;
+        document.getElementById('target_weight').value = currentTargetKg;
+        document.getElementById('goal_months').value = document.getElementById('goal_months').value;
+    } else {
+        cancelGoalsEdit();
+    }
 }
 
-function updateExerciseHistory() {
-    const categories = document.querySelectorAll('.category-card');
+function cancelGoalsEdit() {
+    const viewMode = document.getElementById('goals-view');
+    const editMode = document.getElementById('goals-edit');
+    const editBtn = document.getElementById('edit-goals-btn');
     
-    categories.forEach(category => {
-        const categoryName = category.querySelector('h3').textContent;
-        
-        fetch(`/get_last_workout/${categoryName}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.exercises) {
-                    data.exercises.forEach(exercise => {
-                        const historyElement = document.getElementById(`history-${categoryName}-${exercise.name}`);
-                        if (historyElement) {
-                            historyElement.textContent = 
-                                `Last workout: ${exercise.weight} lbs × ${exercise.sets} × ${exercise.reps}`;
-                        }
-                    });
-                }
-            })
-            .catch(error => console.error('Error:', error));
+    viewMode.classList.remove('hidden');
+    editMode.classList.add('hidden');
+    editBtn.textContent = 'Update Goals?';
+}
+
+function saveNewGoals() {
+    const targetWeightKg = parseFloat(document.getElementById('target_weight').value);
+    const goalMonths = parseInt(document.getElementById('goal_months').value);
+    
+    if (!targetWeightKg || !goalMonths) {
+        alert('Please fill in both target weight and months');
+        return;
+    }
+    
+    const data = {
+        target_weight: targetWeightKg,
+        goal_months: goalMonths
+    };
+    
+    fetch('/update_settings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => Promise.reject(err));
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            location.reload();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating settings: ' + (error.error || error.message || 'Unknown error'));
     });
 }
 
-document.addEventListener('DOMContentLoaded', updateExerciseHistory);
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Hidden input values:', {
+        current_weight: document.getElementById('current_weight').value,
+        target_weight: document.getElementById('target_weight').value,
+        goal_months: document.getElementById('goal_months').value,
+        gender: document.getElementById('gender').value,
+        height: document.getElementById('height').value,
+        age: document.getElementById('age').value
+    });
+});
+</script>
 
 </script>
 {% endblock %}
