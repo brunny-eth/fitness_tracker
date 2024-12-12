@@ -54,7 +54,7 @@
     <h2>Today's Weight</h2>
     <div class="weight-input-container">
         {% if todays_weight %}
-            <p class="weight-status">Already weighed yourself at {{ (todays_weight.weight * 0.453592)|round(1) }} kg today</p>
+          <p class="weight-status">Already weighed yourself at {{ todays_weight.weight|round(1) }} kg today</p>
         {% else %}
             <input 
                 type="number" 

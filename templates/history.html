@@ -301,10 +301,10 @@ canvas {
 <div class="section">
     <h2>Summary</h2>
     <div class="summary-grid">
-        {% if settings.start_date and settings.starting_weight %}
+        {% if settings.start_date and settings.starting_weight_kg %}
         <div class="summary-card">
             <h3>On {{ settings.start_date.strftime('%B %d, %Y') }}, you started at:</h3>
-            <p>Weight: {{ (settings.starting_weight * 0.453592)|round(1) }} kg</p>
+            <p>Weight: {{ settings.starting_weight_kg }} kg</p>
         </div>
         {% else %}
         <div class="summary-card">
@@ -316,7 +316,7 @@ canvas {
         <div class="summary-card">
             {% if latest_weight_entry %}
             <h3>Today, you are at:</h3>
-            <p>Weight: {{ (latest_weight_entry.weight * 0.453592)|round(1) }} kg</p>
+            <p>Weight: {{ latest_weight_entry.weight|round(1) }} kg</p>
             {% else %}
             <p class="weight-reminder">
                 <a href="/nutrition" class="summary-link">Weigh yourself every day to get the most accurate tracking</a>
@@ -556,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     datasets: [
                         {
                             label: 'Weight (kg)',
-                            data: weightData.map(w => w ? (w * 0.453592).toFixed(1) : null),
+                            data: weightData.map(w => w ? w.toFixed(1) : null),
                             borderColor: '#2196F3',
                             backgroundColor: 'rgba(33, 150, 243, 0.1)',
                             yAxisID: 'y-weight',
