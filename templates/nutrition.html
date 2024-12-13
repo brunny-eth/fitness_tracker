@@ -177,16 +177,13 @@
       {% for entry in entries %}
       <div class="meal-card">
         <div class="meal-content">
-          <div class="meal-icon">
-            <span>{{ entry.protein_amount | round }}g</span>
-          </div>
-          <div class="meal-info">
-            <h3>{{ entry.meal_name }}</h3>
-            <p>{{ entry.protein_amount }}g protein • {{ entry.calorie_amount }} calories</p>
-          </div>
+            <div class="meal-info">
+                <h3>{{ entry.meal_name }}</h3>
+                <p>{{ entry.protein_amount }}g protein • {{ entry.calorie_amount }} calories</p>
+            </div>
         </div>
         <button class="delete-btn" onclick="deleteMeal({{ entry.id }})">×</button>
-      </div>
+    </div>
       {% endfor %}
     {% else %}
       <div class="empty-state">
@@ -305,24 +302,8 @@
   align-items: center;
 }
 
-.meal-icon {
-    flex-shrink: 0;  
-    min-width: 40px; 
-    height: 40px;
-    background-color: #f3f4f6;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 500;
-    color: #6b7280;
-}
-
-
 .meal-info {
     flex: 1;
-    min-width: 0; 
 }
 
 .meal-name {
@@ -532,8 +513,7 @@
 .meal-content {
     display: flex;
     gap: 12px;
-    align-items: flex-start; 
-    width: 100%;
+    flex: 1;
 }
 
 /* Modal Components */
