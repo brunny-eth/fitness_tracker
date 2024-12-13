@@ -115,9 +115,8 @@ class WorkoutCategory(db.Model):
     def set_exercises(self, exercises_list):
         self.exercises = json.dumps(exercises_list)
 
-def calculate_protein_goal(weight_lbs, ratio):
-    weight_kg = weight_lbs * 0.453592
-    return round(weight_kg * ratio) 
+def calculate_protein_goal(weight_kg, ratio):
+    return round(weight_kg * ratio)
 
 def calculate_calorie_target(current_weight_kg, settings):
     """Calculate daily calorie target based on current weight and goals"""
@@ -293,7 +292,7 @@ def nutrition():
 
     # Calculate protein goal based on current weight
     current_weight_kg = todays_weight.weight if todays_weight else settings.current_weight_kg
-    protein_goal = calculate_protein_goal(current_weight_kg, settings.protein_ratio)
+    protein_goal = calculate_protein_goal(settings.target_weight_kg, settings.protein_ratio)
     
     saved_meals = SavedMeal.query.filter_by(user_id=current_user.id).all()
 
@@ -533,7 +532,13 @@ def history():
         flash('Please configure your settings first')
         return redirect(url_for('settings'))
     
-    protein_goal = calculate_protein_goal(settings.weight_lbs, settings.protein_ratio)
+    print("Debug - Settings:", {
+        'start_date': settings.start_date,
+        'starting_weight': settings.starting_weight_kg,
+        'target_weight': settings.target_weight_kg
+    })
+    
+    protein_goal = calculate_protein_goal(settings.target_weight_kg, settings.protein_ratio)
     
     weight_entries = WeightEntry.query.filter(
         WeightEntry.user_id == current_user.id,
@@ -581,11 +586,11 @@ def history():
     progress = None
     total_change = None
     current_change = None
-    if latest_weight_entry and settings.target_weight and settings.starting_weight:
-        latest_kg = latest_weight_entry.weight * 0.453592
-        target_kg = settings.target_weight * 0.453592
-        starting_kg = settings.starting_weight * 0.453592
-        
+    if latest_weight_entry and settings.target_weight_kg and settings.starting_weight_kg:
+        latest_kg = latest_weight_entry.weight
+        target_kg = settings.target_weight_kg
+        starting_kg = settings.starting_weight_kg  
+              
         total_change = target_kg - starting_kg
         if total_change != 0:
             current_change = latest_kg - starting_kg
@@ -793,6 +798,8 @@ def update_settings():
     settings = UserSettings.query.filter_by(user_id=current_user.id).first()
     
     try:
+        print("Before update - Current calories:", settings.max_calories)  
+        
         if not settings.start_date:
             settings.start_date = datetime.utcnow()
             
@@ -814,10 +821,14 @@ def update_settings():
             current_weight_kg=settings.current_weight_kg,
             settings=settings
         )
+
+        print("Calculated new calories:", new_calories)  # Add this
         settings.max_calories = new_calories
             
         db.session.commit()
         
+        print("After update - Current calories:", settings.max_calories)  # Add this
+
         return jsonify({
             "message": "Settings updated successfully",
             "target_weight": settings.target_weight_kg,

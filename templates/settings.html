@@ -3,16 +3,18 @@
 {% block content %}
 <div class="settings-container">
 
-
-    <div class="section">
-        <div class="section-header">
-            <h2>Goals</h2>
-            <button onclick="toggleGoalsEdit()" class="action-btn-secondary" id="edit-goals-btn">
-                Update Goals?
-            </button>
-        </div>
-        
-        <div class="settings-form">
+<div class="section">
+    <h2>Goals</h2>
+    <div class="settings-form">
+        <div class="form-section">
+            <div class="section-header">
+                <h3>Weight and Timeline</h3>
+                <button onclick="toggleGoalsEdit()" class="btn-secondary" id="edit-goals-btn">
+                    Update Goals
+                </button>
+            </div>
+            <p class="helper-text">Your target weight and timeline to achieve your fitness goals</p>
+            
             <div id="goals-view" class="goals-display">
                 <div class="info-row">
                     <label>Target Weight:</label>
@@ -23,19 +25,20 @@
                     <span>{{ (settings.start_date + timedelta(days=settings.goal_months * 30.44)).strftime('%B %d, %Y') }}</span>
                 </div>
             </div>
-    
+
             <div id="goals-edit" class="goals-edit hidden">
-                <div class="form-group">
-                    <label for="target_weight">New Target Weight (kg)</label>
-                    <input type="number" id="target_weight" step="0.1">
-                </div>
-                <div class="form-group">
-                    <label for="goal_months">Months to Achieve Goal</label>
-                    <input type="number" id="goal_months" min="1">
-                </div>
-                <div class="edit-buttons">
-                    <button onclick="cancelGoalsEdit()" class="btn-secondary">Cancel</button>
-                    <button onclick="saveNewGoals()" class="btn-primary">Save New Goals</button>
+                    <div class="form-group">
+                        <label for="target_weight">New Target Weight (kg)</label>
+                        <input type="number" id="target_weight" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="goal_months">Months to Achieve Goal</label>
+                        <input type="number" id="goal_months" min="1">
+                    </div>
+                    <div class="edit-buttons">
+                        <button onclick="cancelGoalsEdit()" class="btn-secondary">Cancel</button>
+                        <button onclick="saveNewGoals()" class="btn-primary">Save New Goals</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -95,32 +98,6 @@
                                {% if settings.activity_level == 'athlete' %}checked{% endif %}>
                         <label for="activity_athlete">Athletic training + physical job</label>
                     </div>
-                </div>
-            </div>
-
-            <div class="form-section">
-                <h3>Calorie Intake Goal</h3>
-                <p class="helper-text">If you want to lose weight, you need to spend more calories than you take in.</p>
-                <input type="hidden" id="max-calories" name="max_calories" value="{{ settings.max_calories }}">
-                <input type="hidden" id="height" value="{{ settings.height_inches * 2.54 }}">
-                <input type="hidden" id="age" value="{{ settings.age }}">
-                <input type="hidden" id="gender" value="{{ settings.gender }}">
-                <input type="hidden" id="current_weight" value="{{ current_weight_kg }}">
-                <input type="hidden" id="target_weight" value="{{ settings.target_weight_kg }}">
-                <input type="hidden" id="goal_months" value="{{ settings.goal_months }}">
-                <button type="button" class="btn-calculate-calories" onclick="calculateCalories()">
-                    Click to calculate your daily calories goal
-                </button>            
-                <div id="calories-result" class="calories-result" style="display: none;">
-                    <p class="calories-total">Your recommended daily calories: <span id="recommended-calories">-</span></p>
-                    <p class="calories-details">Based on your:</p>
-                    <ul class="calories-breakdown">
-                        <li>Current weight: <span id="calc-weight">-</span></li>
-                        <li>Height: <span id="calc-height">-</span></li>
-                        <li>Age: <span id="calc-age">-</span></li>
-                        <li>Activity level: <span id="calc-activity">-</span></li>
-                        <li>Goal: <span id="calc-goal">-</span></li>
-                    </ul>
                 </div>
             </div>
         </div>
