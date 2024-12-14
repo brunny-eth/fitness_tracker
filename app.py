@@ -382,20 +382,16 @@ def add_nutrition():
 def workouts():
     today = date.today()
     
-    todays_workouts = Workout.query.filter(
-        Workout.user_id == current_user.id,
-        Workout.date >= datetime.combine(today, datetime.min.time()),
-        Workout.date < datetime.combine(today, datetime.max.time())
-    ).order_by(Workout.date.desc()).all()
+    def workouts_on_date(target_date):
+        return Workout.query.filter(
+            Workout.user_id == current_user.id,
+            Workout.date >= datetime.combine(target_date, datetime.min.time()),
+            Workout.date < datetime.combine(target_date, datetime.max.time())
+        ).order_by(Workout.date.desc()).all()
     
-    worked_out_today = len(todays_workouts) > 0
-    
-    workout_summary = None
-    if worked_out_today:
-        total_exercises = sum(len(json.loads(w.exercises)) for w in todays_workouts)
-        workout_types = [w.type for w in todays_workouts]
-        workout_summary = f"{', '.join(workout_types)}; {total_exercises} exercises total"
-    
+    todays_workouts = workouts_on_date(today)
+    worked_out_today = len(todays_workouts) > 0  # Define this variable here
+        
     workout_categories = WorkoutCategory.query.filter_by(user_id=current_user.id).all()
     
     for category in workout_categories:
@@ -413,9 +409,10 @@ def workouts():
                          active_tab='workouts',
                          date=today.strftime("%B %d, %Y"),
                          worked_out_today=worked_out_today,
-                         workout_summary=workout_summary,
                          todays_workouts=todays_workouts,
                          workout_categories=workout_categories,
+                         workouts_on_date=workouts_on_date,
+                         now=datetime.now(),
                          json=json)
 
 @app.route('/log_workout', methods=['POST'])
