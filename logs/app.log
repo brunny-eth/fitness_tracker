@@ -2364,3 +2364,71 @@
 2024-12-13 10:26:36,433 INFO: 127.0.0.1 - - [13/Dec/2024 10:26:36] "GET /workouts HTTP/1.1" 200 -
 2024-12-13 10:26:37,263 INFO: 127.0.0.1 - - [13/Dec/2024 10:26:37] "GET /workouts HTTP/1.1" 200 -
 2024-12-13 10:26:38,339 INFO: 127.0.0.1 - - [13/Dec/2024 10:26:38] "GET /nutrition HTTP/1.1" 200 -
+2024-12-14 08:43:04,855 INFO: Application startup
+2024-12-14 08:43:04,976 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.99:5001
+2024-12-14 08:43:04,977 INFO: [33mPress CTRL+C to quit[0m
+2024-12-14 08:43:04,977 INFO:  * Restarting with stat
+2024-12-14 08:43:05,327 INFO: Application startup
+2024-12-14 08:43:05,368 WARNING:  * Debugger is active!
+2024-12-14 08:43:05,378 INFO:  * Debugger PIN: 133-619-259
+2024-12-14 08:43:06,541 INFO: 127.0.0.1 - - [14/Dec/2024 08:43:06] "[32mGET / HTTP/1.1[0m" 302 -
+2024-12-14 08:43:06,556 INFO: 127.0.0.1 - - [14/Dec/2024 08:43:06] "GET /nutrition HTTP/1.1" 200 -
+2024-12-14 08:43:09,267 INFO: 127.0.0.1 - - [14/Dec/2024 08:43:09] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:43:10,176 INFO: 127.0.0.1 - - [14/Dec/2024 08:43:10] "GET /history HTTP/1.1" 200 -
+2024-12-14 08:43:11,738 INFO: 127.0.0.1 - - [14/Dec/2024 08:43:11] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:44:59,606 INFO: 127.0.0.1 - - [14/Dec/2024 08:44:59] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:44:59,613 INFO: 127.0.0.1 - - [14/Dec/2024 08:44:59] "[33mGET /get_last_workout/High%20Intensity%20Interval%20Training HTTP/1.1[0m" 404 -
+2024-12-14 08:44:59,618 INFO: 127.0.0.1 - - [14/Dec/2024 08:44:59] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:01,979 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:01] "GET /history HTTP/1.1" 200 -
+2024-12-14 08:45:02,924 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:02] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:45:03,973 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:03] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:03,979 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:03] "GET /get_last_workout/Upper%20Body HTTP/1.1" 200 -
+2024-12-14 08:45:03,984 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:03] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:06,542 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:06] "GET /history HTTP/1.1" 200 -
+2024-12-14 08:45:09,983 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:09] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:45:10,796 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:10] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:10,805 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:10] "[33mGET /get_last_workout/Lower%20Body HTTP/1.1[0m" 404 -
+2024-12-14 08:45:10,809 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:10] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:12,048 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:12] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:12,825 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:12] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:13,579 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:13] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:31,088 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:31] "[35m[1mPOST /log_workout HTTP/1.1[0m" 201 -
+2024-12-14 08:45:31,104 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:31] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:45:33,010 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:33] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:33,017 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:33] "GET /get_last_workout/Lower%20Body HTTP/1.1" 200 -
+2024-12-14 08:45:33,023 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:33] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:33,025 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:33] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:33,027 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:33] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:33,030 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:33] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:36,663 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:36] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:45:36,670 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:36] "[33mGET /get_last_workout/Abs HTTP/1.1[0m" 404 -
+2024-12-14 08:45:36,675 INFO: 127.0.0.1 - - [14/Dec/2024 08:45:36] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:46:05,769 INFO: 127.0.0.1 - - [14/Dec/2024 08:46:05] "GET /nutrition HTTP/1.1" 200 -
+2024-12-14 08:46:12,001 INFO: HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2024-12-14 08:46:12,012 INFO: 127.0.0.1 - - [14/Dec/2024 08:46:12] "POST /analyze_meal HTTP/1.1" 200 -
+2024-12-14 08:46:13,547 INFO: Received nutrition data: {'protein_amount': 51.5, 'calorie_amount': 670, 'meal_name': 'steak and eggs'}
+2024-12-14 08:46:13,551 INFO: Successfully added nutrition entry
+2024-12-14 08:46:13,551 INFO: 127.0.0.1 - - [14/Dec/2024 08:46:13] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-12-14 08:46:13,568 INFO: 127.0.0.1 - - [14/Dec/2024 08:46:13] "GET /nutrition HTTP/1.1" 200 -
+2024-12-14 08:46:19,897 INFO: 127.0.0.1 - - [14/Dec/2024 08:46:19] "POST /add_weight HTTP/1.1" 200 -
+2024-12-14 08:46:19,914 INFO: 127.0.0.1 - - [14/Dec/2024 08:46:19] "GET /nutrition HTTP/1.1" 200 -
+2024-12-14 08:48:04,226 INFO: 127.0.0.1 - - [14/Dec/2024 08:48:04] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:48:18,807 INFO: 127.0.0.1 - - [14/Dec/2024 08:48:18] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:48:18,821 INFO: 127.0.0.1 - - [14/Dec/2024 08:48:18] "GET /get_last_workout/Lower%20Body HTTP/1.1" 200 -
+2024-12-14 08:48:18,826 INFO: 127.0.0.1 - - [14/Dec/2024 08:48:18] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:48:18,829 INFO: 127.0.0.1 - - [14/Dec/2024 08:48:18] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:48:18,832 INFO: 127.0.0.1 - - [14/Dec/2024 08:48:18] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:48:18,836 INFO: 127.0.0.1 - - [14/Dec/2024 08:48:18] "GET /get_workout_categories HTTP/1.1" 200 -
+2024-12-14 08:48:20,101 INFO: 127.0.0.1 - - [14/Dec/2024 08:48:20] "[35m[1mPOST /log_workout HTTP/1.1[0m" 201 -
+2024-12-14 08:48:20,115 INFO: 127.0.0.1 - - [14/Dec/2024 08:48:20] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:50:19,862 INFO: 127.0.0.1 - - [14/Dec/2024 08:50:19] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:50:34,028 INFO: 127.0.0.1 - - [14/Dec/2024 08:50:34] "POST /delete_workout/3 HTTP/1.1" 200 -
+2024-12-14 08:50:34,051 INFO: 127.0.0.1 - - [14/Dec/2024 08:50:34] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:51:15,643 INFO: 127.0.0.1 - - [14/Dec/2024 08:51:15] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:51:16,553 INFO: 127.0.0.1 - - [14/Dec/2024 08:51:16] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:51:25,514 INFO: 127.0.0.1 - - [14/Dec/2024 08:51:25] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:51:26,122 INFO: 127.0.0.1 - - [14/Dec/2024 08:51:26] "GET /workouts HTTP/1.1" 200 -
+2024-12-14 08:51:44,181 INFO: 127.0.0.1 - - [14/Dec/2024 08:51:44] "GET /workouts HTTP/1.1" 200 -
