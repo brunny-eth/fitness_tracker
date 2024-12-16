@@ -134,8 +134,15 @@ canvas {
     user-select: none;
     color: #374151;
     font-weight: 500;
+    width: 100%;
 }
 
+.workout-type {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 0.25rem;
+}
 
 .workout-content {
     display: none;
@@ -218,6 +225,40 @@ canvas {
     padding: 8px;
     background: #f3f4f6;
     border-radius: 4px;
+}
+
+#editForm div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+#editForm label {
+    width: 100px;  
+    text-align: right;
+}
+
+#editForm input {
+    flex: 1;      
+    max-width: 200px; 
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    white-space: nowrap;  
+}
+
+.form-row label {
+    width: 120px;  
+    text-align: right;
+    margin-right: 1rem;
+}
+
+.form-row input {
+    width: 200px;
 }
 
 @media (max-width: 640px) {
@@ -430,10 +471,13 @@ canvas {
             {% if entry.workout %}
             <div class="workout-section">
                 <div class="workout-header" onclick="toggleWorkout(this)">
-                    <span class="chevron">›</span>
-                    <strong>Workout:</strong> {{ entry.workout.type }}
+                    <strong>Workout:</strong>
+                    <div class="workout-type">
+                        {{ entry.workout.type }}
+                        <span class="chevron">›</span>
+                    </div>
                 </div>
-                <div class="workout-content">
+                <div class="workout-content">    
                     <div class="exercise-list">
                         {% for exercise in entry.workout.exercises %}
                         <div class="exercise-item">
@@ -454,18 +498,15 @@ canvas {
         <h3>Edit Nutrition Data</h3>
         <form id="editForm">
             <input type="hidden" id="editDate">
-            <div>
-                <label for="editProtein">Protein (g):</label>
+            <div class="form-row">
+                <label for="editProtein">Protein (grams):</label>
                 <input type="number" id="editProtein" step="0.1" required>
             </div>
-            <div>
-                <label for="editCalories">Calories:</label>
+            <div class="form-row">
+                <label for="editCalories">Calories (kCal):</label>
                 <input type="number" id="editCalories" required>
             </div>
             <div style="margin-top: 20px; text-align: center;">
-                <p style="margin-bottom: 15px; color: #666;">
-                    Want to edit workout data? <a href="/workouts" style="color: #4a90e2; text-decoration: none;">Visit the Workouts page</a>
-                </p>
                 <button type="button" onclick="submitEdit()">Save</button>
                 <button type="button" onclick="closeEditModal()">Cancel</button>
             </div>
@@ -586,7 +627,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             yAxisID: 'y-weight',
                             fill: false
                         } : null
-                    ].filter(Boolean),  // Remove null datasets
+                    ].filter(Boolean), 
                 },
                 options: {
                     ...commonConfig,

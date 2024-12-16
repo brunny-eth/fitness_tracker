@@ -140,7 +140,7 @@
             <div class="workout-content">
               <div class="workout-info">
                 <div class="workout-header">
-                  <h3>{{ workout.type }}</h3>
+                  <h5>{{ workout.type }}</h5>
                   <button class="delete-btn" onclick="deleteWorkout({{ workout.id }})">×</button>
                 </div>
                 <div class="exercises-list">
@@ -426,13 +426,13 @@ h2:first-of-type {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin: 24px 0;
+  margin: 16px 0;
 }
 
 .workout-card {
     background: white;
     border-radius: 8px;
-    padding: 16px;
+    padding: 12px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
@@ -442,7 +442,8 @@ h2:first-of-type {
 
 .exercise-detail {
     display: block; 
-    padding: 4px 0;
+    padding: 2px 0;
+    margin-top: 0px;
     border-bottom: 1px solid #f3f4f6;
 }
 
@@ -464,10 +465,15 @@ h2:first-of-type {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   font-size: 24px;
   font-weight: 600;
-  margin: 0;
+  margin: 0 0 2px 0;
+}
+
+.workout-header h5 {
+  margin: 0; 
+  font-size: 20px;  
 }
 
 .delete-btn {
