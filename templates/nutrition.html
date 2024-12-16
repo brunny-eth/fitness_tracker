@@ -1,51 +1,46 @@
 {% extends "base.html" %}
 {% block content %}
 
+<h2>{{ date }}</h2>
+
 <div class="section">
-  <h2>{{ date }}</h2>
   <div class="stats-grid">
     <div class="stat-card">
-        <div class="stat-header">
-          <div class="stat-icon protein">
-            <span>P</span>
-          </div>
-          <div class="stat-info">
-            <h3>Protein</h3>
-            <p>{{ total_protein }}g / {{ goal_amount }}g</p>
-          </div>
+      <div class="stat-header">
+        <div class="stat-info">
+          <h3>Protein</h3>
+          <p>{{ total_protein }}g / {{ goal_amount }}g</p>
         </div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: {{ (total_protein/goal_amount) * 100 }}%;
-               background-color: {% if total_protein >= goal_amount %}#22c55e{% else %}#3b82f6{% endif %};">
-          </div>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" style="width: {{ (total_protein/goal_amount) * 100 }}%;
+             background-color: {% if total_protein >= goal_amount %}#22c55e{% else %}#3b82f6{% endif %};">
         </div>
-        <p class="stat-detail {% if total_protein >= goal_amount %}success{% else %}info{% endif %}">
-          {{ 'Daily goal reached!' if total_protein >= goal_amount else 'Still working toward goal' }}
-        </p>
-  </div>
-      
-      <div class="stat-card">
-        <div class="stat-header">
-          <div class="stat-icon calories">
-            <span>C</span>
-          </div>
-          <div class="stat-info">
-            <h3>Calories</h3>
-            <p>{{ total_calories }} / {{ max_calories }}</p>
-          </div>
+      </div>
+      <p class="stat-detail {% if total_protein >= goal_amount %}success{% else %}info{% endif %}">
+        {{ 'Daily goal reached!' if total_protein >= goal_amount else 'Still working toward goal' }}
+      </p>
+    </div>
+        
+    <div class="stat-card">
+      <div class="stat-header">
+        <div class="stat-info">
+          <h3>Calories</h3>
+          <p>{{ total_calories }} / {{ max_calories }}</p>
         </div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: {{ (total_calories/max_calories) * 100 }}%;
-               background-color: {% if total_calories > max_calories %}#ef4444{% else %}#3b82f6{% endif %};">
-          </div>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" style="width: {{ (total_calories/max_calories) * 100 }}%;
+             background-color: {% if total_calories > max_calories %}#ef4444{% else %}#3b82f6{% endif %};">
         </div>
-        <p class="stat-detail {% if total_calories > max_calories %}warning{% else %}info{% endif %}">
-          {% if total_calories > max_calories %}
-            Over by {{ total_calories - max_calories }} calories
-          {% else %}
-            {{ max_calories - total_calories }} calories remaining
-          {% endif %}
-        </p>
+      </div>
+      <p class="stat-detail {% if total_calories > max_calories %}warning{% else %}info{% endif %}">
+        {% if total_calories > max_calories %}
+          Over by {{ total_calories - max_calories }} calories
+        {% else %}
+          {{ max_calories - total_calories }} calories remaining
+        {% endif %}
+      </p>
     </div>
   </div>
 </div>
@@ -193,17 +188,25 @@
   </div>
 
 <style>
+
+h2:first-of-type {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 24px 0;
+  color: #111827;
+}
+
 /* Core Layout */
 .section {
   background: white;
   border-radius: 8px;
   margin-bottom: 24px;
-  padding: 24px;
+  padding: 32px;
   border: 1px solid #e5e7eb;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
-/* Stats Cards */
+/* Core Layout */
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -214,53 +217,45 @@
 .stat-card {
   background: white;
   border-radius: 12px;
-  padding: 16px;
+  padding: 24x;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
+/* Stat Header and Info Alignment */
 .stat-header {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  align-items: flex-start;
   margin-bottom: 12px;
 }
 
-.stat-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.stat-icon.protein {
-  background-color: #ebf5ff;
-  color: #3b82f6;
-}
-
-.stat-icon.calories {
-  background-color: #fef2f2;
-  color: #ef4444;
+.stat-info {
+  width: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 .stat-info h3 {
   margin: 0;
-  font-size: 14px;
+  padding: 0;
+  font-size: 18px;
+  font-weight: 600;
   color: #6b7280;
+  line-height: 1.5;
 }
 
 .stat-info p {
   margin: 4px 0 0;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
+  line-height: 1.5;
 }
 
 .stat-detail {
-  margin: 8px 0 0;
+  color: #6b7280;
   font-size: 14px;
+  padding: 4px 0;
+  line-height: 1.5;
+  margin-top: 4px;
 }
 
 .stat-detail.info { color: #3b82f6; }
@@ -736,6 +731,14 @@
   button {
     padding: 12px 16px;
     min-height: 44px;
+  }
+
+  .section {
+    padding: 24px;
+  }
+  
+  .stat-card {
+    padding: 20px;
   }
   
 }
