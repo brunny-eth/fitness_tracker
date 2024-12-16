@@ -2,14 +2,16 @@
 {% block content %}
 
 <div class="section">
+  <h2>{{ date }}</h2>
+
   <div class="summary-grid">
     <div class="summary-card">
       {% if worked_out_today %}
         <div class="status-header">
           <div class="stat-header">
             <div class="stat-info">
-              <h3 class="section-title">Today's Status</h3>
-              <span class="status-badge success">Worked out today!</span>
+              <h3 class="section-title">Today</h3>
+              <span class="status-badge success">Worked out!</span>
             </div>
           </div>
         </div>
@@ -24,8 +26,8 @@
         <div class="status-header">
           <div class="stat-header">
             <div class="stat-info">
-              <h3 class="section-title">Today's Status</h3>
-              <span class="status-badge warning">Haven't worked out yet today</span>
+              <h3 class="section-title">Today</h3>
+              <span class="status-badge warning">Haven't worked out yet</span>
             </div>
           </div>
         </div>
@@ -498,9 +500,9 @@
 
 .summary-card {
   background: white;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .status-badge {

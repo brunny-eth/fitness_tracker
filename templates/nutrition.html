@@ -3,7 +3,6 @@
 
 <div class="section">
   <h2>{{ date }}</h2>
-
   <div class="stats-grid">
     <div class="stat-card">
         <div class="stat-header">
@@ -23,7 +22,7 @@
         <p class="stat-detail {% if total_protein >= goal_amount %}success{% else %}info{% endif %}">
           {{ 'Daily goal reached!' if total_protein >= goal_amount else 'Still working toward goal' }}
         </p>
-      </div>
+  </div>
       
       <div class="stat-card">
         <div class="stat-header">
@@ -49,9 +48,10 @@
         </p>
     </div>
   </div>
+</div>
 
-  <div class="section weight-section">
-    <h2>Today's Weight</h2>
+<div class="section">
+  <h2>Today's Weight</h2>
     <div class="weight-input-container">
         {% if todays_weight %}
           <p class="weight-status">Already weighed yourself at {{ todays_weight.weight|round(1) }} kg today</p>
@@ -191,7 +191,6 @@
       </div>
     {% endif %}
   </div>
-</div>
 
 <style>
 /* Core Layout */
