@@ -9,15 +9,15 @@
         <div class="stat-info">
           <h3>Today</h3>
           {% if worked_out_today %}
-            <p>Worked out today</p>
+            <p class="success">Worked out today</p>
             {% for workout in todays_workouts %}
-              <div class="stat-detail info">
+              <div class="stat-detail muted">  
                 {{ workout.type }}; {{ json.loads(workout.exercises)|length }} exercises
               </div>
             {% endfor %}
           {% else %}
-            <p>Haven't worked out yet</p>
-            <div class="stat-detail info">Try to get some exercise in!</div>
+            <p class="warning">Haven't worked out yet</p>  
+            <div class="stat-detail muted">Try to get some exercise in!</div> 
           {% endif %}
         </div>
       </div>
@@ -28,20 +28,20 @@
         <div class="stat-info">
           <h3>Last Workout</h3>
           {% if last_workout %}
-            <p>{{ last_workout.strftime('%B %d, %Y') }}
+            <p class="success">{{ last_workout.strftime('%B %d, %Y') }}
               {% set days_ago = ((now - last_workout).total_seconds() / 86400)|int %}
               {% if days_ago > 0 %}
                 ({{ days_ago }} day{{ 's' if days_ago != 1 }} ago)
               {% endif %}
             </p>
             {% for workout in workouts_on_date(last_workout.date()) %}
-              <div class="stat-detail info">
+              <div class="stat-detail muted">  
                 {{ workout.type }}; {{ json.loads(workout.exercises)|length }} exercises
               </div>
             {% endfor %}
           {% else %}
-            <p>No previous workouts</p>
-            <div class="stat-detail info">No workout history found</div>
+            <p class="warning">No previous workouts</p>  
+            <div class="stat-detail muted">No workout history found</div>
           {% endif %}
         </div>
       </div>
@@ -317,6 +317,18 @@ h2:first-of-type {
   margin-bottom: 8px;
 }
 
+.success { 
+  color: #22c55e; 
+}
+
+.warning {
+  color: #ef4444;
+}
+
+.stat-detail.muted {
+  color: #6b7280;
+}
+
 .remove-exercise {
   padding: 0 8px;
   background: #f3f4f6;
@@ -532,12 +544,17 @@ h2:first-of-type {
   margin-top: 4px;
 }
 
-.stat-detail.info {
-  color: #3b82f6;
+.stat-card .stat-header .stat-info h3 {
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #6b7280;
+  line-height: 1.5;
 }
 
-.stat-detail.muted {
-  font-style: italic;
+.stat-detail.info {
+  color: #3b82f6;
 }
 
 @media (max-width: 640px) {
@@ -564,7 +581,7 @@ h2:first-of-type {
   }
   
   .stat-card {
-    padding: 20px;
+    padding: 24px;
   }
 
   .category-card {

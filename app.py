@@ -390,7 +390,7 @@ def workouts():
         ).order_by(Workout.date.desc()).all()
     
     todays_workouts = workouts_on_date(today)
-    worked_out_today = len(todays_workouts) > 0  # Define this variable here
+    worked_out_today = len(todays_workouts) > 0 
         
     workout_categories = WorkoutCategory.query.filter_by(user_id=current_user.id).all()
     
@@ -405,6 +405,11 @@ def workouts():
         else:
             category.last_completed = None
     
+    last_workout = Workout.query.filter(
+        Workout.user_id == current_user.id,
+        Workout.date < datetime.combine(today, datetime.min.time())
+    ).order_by(Workout.date.desc()).first()
+
     return render_template('workouts.html',
                          active_tab='workouts',
                          date=today.strftime("%B %d, %Y"),
