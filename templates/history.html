@@ -2,12 +2,96 @@
 {% block content %}
 <style>
 .section {
-    overflow-x: auto;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    padding: 32px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 0px;
+    margin: 0;
+    padding: 0;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.stat-header {
+    margin-bottom: 0px;
+}
+
+#content {
+    padding: 0;
+    margin: 0;
+}
+
+/* Text Styles */
+.stat-info h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.stat-info .weight-status {
+    margin: 4px 0 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #374151;
+}
+
+.stat-info .date-info {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #9ca3af;
+    line-height: 1.5;
+}
+
+.stat-info p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+.stat-content p {
+    margin: 8px 0;
+    font-size: 16px;
+    color: #374151;
+}
+
+.progress-text {
+    color: #059669;
+    font-weight: 500;
+}
+
+.reminder-text {
+    color: #6b7280;
+    font-style: italic;
 }
 
 canvas {
     max-width: 100%;
     height: auto !important;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 24px 0;
+    color: #111827;
 }
 
 .modal {
@@ -336,47 +420,53 @@ canvas {
         margin-left: 0 !important;
         margin-top: 8px;
     }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section {
+        padding: 24px;
+    }
+    
+    .stat-card {
+        padding: 20px;
+    }
 }
 </style>
 
-<div class="section">
-    <h2>Summary</h2>
-    <div class="summary-grid">
-        {% if settings.start_date and settings.starting_weight_kg %}
-        <div class="summary-card">
-            <h3>On {{ settings.start_date.strftime('%B %d, %Y') }}, you started at:</h3>
-            <p>Weight: {{ settings.starting_weight_kg }} kg</p>
-        </div>
-        {% else %}
-        <div class="summary-card">
-            <h3>Get Started</h3>
-            <p><a href="/settings" class="summary-link">Set your goals on the Settings page</a></p>
-        </div>
-        {% endif %}
+<h2>Goals and History</h2>
 
-        <div class="summary-card">
-            {% if latest_weight_entry %}
-            <h3>Today, you are at:</h3>
-            <p>Weight: {{ latest_weight_entry.weight|round(1) }} kg</p>
-            {% else %}
-            <p class="weight-reminder">
-                <a href="/nutrition" class="summary-link">Weigh yourself every day to get the most accurate tracking</a>
-            </p>
-            {% endif %}
-            {% if settings.target_weight and settings.starting_weight %}
-            {% if total_change != 0 and total_change is not none and current_change is not none %}
-                {% set progress = ((current_change / total_change) * 100)|round(1) %}
-                <p>
-                {% if progress > 100 %}
-                    You've exceeded your goal!
-                {% elif progress < 0 %}
-                    Keep working towards your goal
-                {% else %}
-                    {{ progress }}% of the way to your goal
-                {% endif %}
-                </p>
-            {% endif %}
-        {% endif %}
+<div class="section">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-info">
+                    <h3>Initial Goal</h3>
+                    <p class="weight-status">Weight: {{ settings.starting_weight_kg }} kg</p>
+                    <p class="date-info">{{ settings.start_date.strftime('%B %d, %Y') }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-info">
+                    <h3>Current Stats</h3>
+                    {% if latest_weight_entry %}
+                        <p class="weight-status">Weight: {{ latest_weight_entry.weight|round(1) }} kg</p>
+                        {% if settings.target_weight and settings.starting_weight %}
+                            {% if total_change != 0 and total_change is not none and current_change is not none %}
+                                {% set progress = ((current_change / total_change) * 100)|round(1) %}
+                                <p class="weight-status">{{ progress }}% to goal</p>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        <p class="weight-status">No weight logged today</p>
+                    {% endif %}
+                    <p class="date-info">Today</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
