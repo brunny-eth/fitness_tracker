@@ -6,7 +6,12 @@
     <div class="summary-card">
       {% if worked_out_today %}
         <div class="status-header">
-          <span class="status-badge success">Worked out today!</span>
+          <div class="stat-header">
+            <div class="stat-info">
+              <h3 class="section-title">Today's Status</h3>
+              <span class="status-badge success">Worked out today!</span>
+            </div>
+          </div>
         </div>
         <div class="workout-summary-list">
           {% for workout in todays_workouts %}
@@ -17,7 +22,12 @@
         </div>
       {% else %}
         <div class="status-header">
-          <span class="status-badge warning">Haven't worked out yet today</span>
+          <div class="stat-header">
+            <div class="stat-info">
+              <h3 class="section-title">Today's Status</h3>
+              <span class="status-badge warning">Haven't worked out yet today</span>
+            </div>
+          </div>
         </div>
         <div class="summary-detail">Try to get some exercise in!</div>
       {% endif %}
@@ -26,58 +36,62 @@
     <div class="summary-card">
       {% set last_workout = workout_categories|map('attr', 'last_completed')|reject('none')|sort(reverse=true)|first %}
       {% if last_workout %}
-          <div class="last-workout-header">
-              Last workout: {{ last_workout.strftime('%B %d, %Y') }}
+        <div class="stat-header">
+          <div class="stat-info">
+            <h3 class="section-title">Last Workout</h3>
+            <p>{{ last_workout.strftime('%B %d, %Y') }}
               {% set days_ago = ((now - last_workout).total_seconds() / 86400)|int %}
               {% if days_ago > 0 %}
-                  ({{ days_ago }} day{{ 's' if days_ago != 1 }} ago)
+                ({{ days_ago }} day{{ 's' if days_ago != 1 }} ago)
               {% endif %}
+            </p>
           </div>
-          {% for workout in workouts_on_date(last_workout.date()) %}
-              <div class="summary-detail">
-                  {{ workout.type }}; {{ json.loads(workout.exercises)|length }} exercises
-              </div>
-          {% endfor %}
+        </div>
+        {% for workout in workouts_on_date(last_workout.date()) %}
+          <div class="summary-detail">
+            {{ workout.type }}; {{ json.loads(workout.exercises)|length }} exercises
+          </div>
+        {% endfor %}
       {% else %}
-          <div class="summary-detail muted">No previous workouts found</div>
+        <div class="summary-detail muted">No previous workouts found</div>
       {% endif %}
-  </div>
-  </div>
-</div>
-
-<div class="workout-categories">
-  {% for category in workout_categories %}
-    <div class="category-card" onclick="showWorkoutForm('{{ category.name }}')">
-      <div class="category-content">
-        <div class="category-icon">
-          <span>{{ category.get_exercises()|length }}</span>
-        </div>
-        <div class="category-info">
-          <h3>{{ category.name }}</h3>
-          <p>
-            {{ category.get_exercises()|length }} exercises • 
-            {% if category.last_completed %}
-              Last completed {{ category.last_completed.strftime('%B %d, %Y') }}
-            {% else %}
-              Not completed yet
-            {% endif %}
-          </p>
-        </div>
-      </div>
-      <div class="category-actions">
-        <button class="edit-btn" onclick="event.stopPropagation(); editCategory('{{ category.name }}')">
-          Edit
-        </button>
-        <span class="chevron">›</span>
-      </div>
     </div>
-  {% endfor %}
-
-  <button class="add-category-btn" onclick="showCategoryModal()">
-    + Add New Workout Day
-  </button>
-
+  </div>
 </div>
+
+<div class="section">
+  <h2 class="section-title">Workout Categories</h2>
+  <div class="workout-categories">
+    {% for category in workout_categories %}
+      <div class="category-card" onclick="showWorkoutForm('{{ category.name }}')">
+        <div class="category-content">
+          <div class="category-info">
+            <h3>{{ category.name }}</h3>
+            <p>
+              {{ category.get_exercises()|length }} exercises • 
+              {% if category.last_completed %}
+                Last completed {{ category.last_completed.strftime('%B %d, %Y') }}
+              {% else %}
+                Not completed yet
+              {% endif %}
+            </p>
+          </div>
+        </div>
+        <div class="category-actions">
+          <button class="edit-btn" onclick="event.stopPropagation(); editCategory('{{ category.name }}')">
+            Edit
+          </button>
+          <span class="chevron">›</span>
+        </div>
+      </div>
+    {% endfor %}
+
+    <button class="add-category-btn" onclick="showCategoryModal()">
+      + Add New Workout Day
+    </button>
+  </div>
+</div>
+
 
 <div id="categoryModal" class="modal">
   <div class="modal-content">
@@ -132,24 +146,24 @@
     <div class="workouts-container">
       {% if todays_workouts %}
         {% for workout in todays_workouts %}
-        <div class="workout-card">
-          <div class="workout-content">
+          <div class="workout-card">
+            <div class="workout-content">
               <div class="workout-info">
-                  <div class="workout-header">
-                      <h3>{{ workout.type }}</h3>
-                      <button class="delete-btn" onclick="deleteWorkout({{ workout.id }})">×</button>
-                  </div>
-                  <div class="exercises-list">
-                      {% for exercise in json.loads(workout.exercises) %}
-                          <div class="exercise-detail">
-                              <span class="exercise-name">{{ exercise.name }}</span>
-                              <span class="exercise-stats">{{ exercise.weight }}lbs • {{ exercise.sets }}x{{ exercise.reps }}</span>
-                          </div>
-                      {% endfor %}
-                  </div>
+                <div class="workout-header">
+                  <h3>{{ workout.type }}</h3>
+                  <button class="delete-btn" onclick="deleteWorkout({{ workout.id }})">×</button>
+                </div>
+                <div class="exercises-list">
+                  {% for exercise in json.loads(workout.exercises) %}
+                    <div class="exercise-detail">
+                      <span class="exercise-name">{{ exercise.name }}</span>
+                      <span class="exercise-stats">{{ exercise.weight }}lbs • {{ exercise.sets }}x{{ exercise.reps }}</span>
+                    </div>
+                  {% endfor %}
+                </div>
               </div>
+            </div>
           </div>
-        </div>
         {% endfor %}
       {% else %}
         <div class="empty-state">
@@ -157,13 +171,12 @@
         </div>
       {% endif %}
     </div>
-  </div>
+  </div>  
 <style>
 
 .workout-categories {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
 }
 
 .add-category-btn {
@@ -183,10 +196,17 @@
   background-color: #2563eb;
 }
 
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 16px 0;
+}
+
 .category-card {
   background: white;
   border-radius: 8px;
-  padding: 16px;
+  padding: 20px;
   margin-bottom: 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   cursor: pointer;
@@ -196,6 +216,15 @@
   align-items: center;
 }
 
+.section {
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 32px;
+  padding: 32px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
 .category-card:hover {
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
@@ -203,26 +232,24 @@
 .category-content {
   display: flex;
   align-items: center;
-  gap: 16px;
-}
-
-.category-icon {
-  background-color: #eff6ff;
-  color: #3b82f6;
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 500;
+  gap: 20px;
 }
 
 .category-info h3 {
   margin: 0;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.category-info {
+  flex: 1;
+}
+
+.stat-info h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
 .category-info p {
@@ -392,12 +419,6 @@
     margin-bottom: 4px;
 }
 
-.workout-summary {
-  font-size: 0.9em;
-  color: #4b5563;
-  margin-top: 4px;
-}
-
 .workouts-container {
   display: flex;
   flex-direction: column;
@@ -411,36 +432,6 @@
     padding: 16px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-
-.workout-content {
-    display: block;
-}
-
-.workout-icon {
-  background-color: #eff6ff;
-  color: #3b82f6;
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 500;
-  flex-shrink: 0;
-}
-
-.workout-info {
-  flex: 1;
-}
-
-.workout-info h3.workout-day {
-    font-size: 18px;a
-    font-weight: 500;
-    color: #111827;
-    margin: 0 0 8px 0;
-}
-
 
 .exercises-list {
     margin-top: 4px;
@@ -467,16 +458,13 @@
 }
 
 .workout-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-}
-
-.workout-header h3 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
 }
 
 .delete-btn {
@@ -509,10 +497,10 @@
 }
 
 .summary-card {
-    background: white;
-    padding: 16px;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
 }
 
 .status-badge {
@@ -539,27 +527,21 @@
 }
 
 .summary-detail {
-    color: #6b7280;
-    font-size: 14px;
-    padding: 4px 0;
-    line-height: 1.5;
+  color: #6b7280;
+  font-size: 14px;
+  padding: 4px 0;
+  line-height: 1.5;
 }
 
-.last-workout-header {
-    color: #4b5563;
-    font-weight: 500;
-    margin-bottom: 16px;
-    padding: 6px 12px;
+.summary-detail.muted {
+  font-style: italic;
 }
 
 .status-header, .last-workout-header {
-    padding: 0 12px;  
+  margin-bottom: 16px;
+  padding: 0 12px;
 }
 
-.muted {
-    color: #9ca3af;
-    font-style: italic;
-}
 
 @media (max-width: 640px) {
     .exercise-row {
@@ -574,6 +556,19 @@
     .summary-grid {
         grid-template-columns: 1fr;
     }
+
+    .section-title {
+    font-size: 20px;
+  }
+  
+  .section {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .category-card {
+    padding: 16px;
+  }
 }
 </style>
 
