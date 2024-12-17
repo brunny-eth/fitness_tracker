@@ -406,8 +406,7 @@ def workouts():
             category.last_completed = None
     
     last_workout = Workout.query.filter(
-        Workout.user_id == current_user.id,
-        Workout.date < datetime.combine(today, datetime.min.time())
+        Workout.user_id == current_user.id
     ).order_by(Workout.date.desc()).first()
 
     return render_template('workouts.html',
@@ -418,6 +417,7 @@ def workouts():
                          workout_categories=workout_categories,
                          workouts_on_date=workouts_on_date,
                          now=datetime.now(),
+                         last_workout=last_workout,  
                          json=json)
 
 @app.route('/log_workout', methods=['POST'])

@@ -28,14 +28,14 @@
         <div class="stat-info">
           <h3>Last Workout</h3>
           {% if last_workout %}
-            <p class="success">{{ last_workout.strftime('%B %d, %Y') }}
-              {% set days_ago = ((now - last_workout).total_seconds() / 86400)|int %}
+          <p class="success">{{ last_workout.date.strftime('%B %d, %Y') }}
+            {% set days_ago = ((now - last_workout.date).total_seconds() / 86400)|int %}
               {% if days_ago > 0 %}
                 ({{ days_ago }} day{{ 's' if days_ago != 1 }} ago)
               {% endif %}
             </p>
-            {% for workout in workouts_on_date(last_workout.date()) %}
-              <div class="stat-detail muted">  
+            {% for workout in workouts_on_date(last_workout.date.date()) %}
+            <div class="stat-detail muted">  
                 {{ workout.type }}; {{ json.loads(workout.exercises)|length }} exercises
               </div>
             {% endfor %}
