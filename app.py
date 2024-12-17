@@ -587,6 +587,26 @@ def history():
         })
         current_date += timedelta(days=1)
     
+    history = []
+    current_date = end_date
+    while current_date >= start_date:
+        nutrition = nutrition_by_date.get(current_date)
+        day_workout = next((w for w in workouts if w.date.date() == current_date), None)
+        
+        history.append({
+            'date': current_date,
+            'nutrition': {
+                'protein': nutrition['protein'] if nutrition else 0,
+                'calories': nutrition['calories'] if nutrition else 0,
+                'protein_goal': protein_goal
+            },  
+            'workout': {
+                'type': day_workout.type,
+                'exercises': json.loads(day_workout.exercises)
+            } if day_workout else None
+        })
+        current_date -= timedelta(days=1)
+    
     progress = None
     total_change = None
     current_change = None
@@ -599,27 +619,6 @@ def history():
         if total_change != 0:
             current_change = latest_kg - starting_kg
             progress = round((current_change / total_change) * 100, 1)
-    
-    history = []
-    current_date = end_date
-    while current_date >= start_date:
-        nutrition = nutrition_by_date.get(current_date)
-        day_workout = next((w for w in workouts if w.date.date() == current_date), None)
-        
-        if nutrition or day_workout:
-            history.append({
-                'date': current_date,
-                'nutrition': {
-                    'protein': nutrition['protein'] if nutrition else 0,
-                    'calories': nutrition['calories'] if nutrition else 0,
-                    'protein_goal': protein_goal
-                } if nutrition else None,
-                'workout': {
-                    'type': day_workout.type,
-                    'exercises': json.loads(day_workout.exercises)
-                } if day_workout else None
-            })
-        current_date -= timedelta(days=1)
     
     print(f"Date range: {start_date} to {end_date}")
     print(f"Chart data points: {len(chart_data)}")

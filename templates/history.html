@@ -455,36 +455,30 @@ h2 {
                     <h3>Current Stats</h3>
                     {% if latest_weight_entry %}
                         <p class="weight-status">Weight: {{ latest_weight_entry.weight|round(1) }} kg</p>
-                        {% if settings.target_weight and settings.starting_weight %}
+                        {% if settings.target_weight_kg and settings.starting_weight_kg %}
                             {% if total_change != 0 and total_change is not none and current_change is not none %}
                                 {% set progress = ((current_change / total_change) * 100)|round(1) %}
                                 <p class="weight-status">{{ progress }}% to goal</p>
                             {% endif %}
                         {% endif %}
+                        <p class="date-info">Today</p>
                     {% else %}
                         <p class="weight-status">No weight logged today</p>
+                        <p class="date-info">Today</p>
                     {% endif %}
-                    <p class="date-info">Today</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-{% with has_valid_data = chart_data and chart_data|length >= 3 %}
+{% if chart_data and chart_data|length >= 3 %}
     <div class="section">
         <h2>Weight and Calories</h2>
-        {% if has_valid_data %}
-            {% set valid_weight_points = chart_data|selectattr('weight', 'defined')|selectattr('weight', 'ne', None)|list %}
-            {% set valid_calorie_points = chart_data|selectattr('calories', 'defined')|selectattr('calories', 'ne', None)|list %}
-            {% if valid_weight_points|length >= 3 or valid_calorie_points|length >= 3 %}
-                <canvas id="weightCaloriesChart"></canvas>
-            {% else %}
-                <div class="chart-placeholder">
-                    <p>Charts will appear here once you have at least 3 days of data.</p>
-                    <p class="placeholder-subtitle">This helps show meaningful trends in your progress!</p>
-                </div>
-            {% endif %}
+        {% set valid_weight_points = chart_data|selectattr('weight', 'defined')|selectattr('weight', 'ne', None)|list %}
+        {% set valid_calorie_points = chart_data|selectattr('calories', 'defined')|selectattr('calories', 'ne', None)|list %}
+        {% if valid_weight_points|length >= 3 or valid_calorie_points|length >= 3 %}
+            <canvas id="weightCaloriesChart"></canvas>
         {% else %}
             <div class="chart-placeholder">
                 <p>Charts will appear here once you have at least 3 days of data.</p>
@@ -495,16 +489,9 @@ h2 {
 
     <div class="section">
         <h2>Protein Intake</h2>
-        {% if has_valid_data %}
-            {% set valid_protein_points = chart_data|selectattr('protein', 'defined')|selectattr('protein', 'ne', None)|list %}
-            {% if valid_protein_points|length >= 3 %}
-                <canvas id="proteinChart"></canvas>
-            {% else %}
-                <div class="chart-placeholder">
-                    <p>Charts will appear here once you have at least 3 days of data.</p>
-                    <p class="placeholder-subtitle">This helps show meaningful trends in your progress!</p>
-                </div>
-            {% endif %}
+        {% set valid_protein_points = chart_data|selectattr('protein', 'defined')|selectattr('protein', 'ne', None)|list %}
+        {% if valid_protein_points|length >= 3 %}
+            <canvas id="proteinChart"></canvas>
         {% else %}
             <div class="chart-placeholder">
                 <p>Charts will appear here once you have at least 3 days of data.</p>
@@ -512,7 +499,23 @@ h2 {
             </div>
         {% endif %}
     </div>
-{% endwith %}
+{% else %}
+    <div class="section">
+        <h2>Weight and Calories</h2>
+        <div class="chart-placeholder">
+            <p>Charts will appear here once you have at least 3 days of data.</p>
+            <p class="placeholder-subtitle">This helps show meaningful trends in your progress!</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Protein Intake</h2>
+        <div class="chart-placeholder">
+            <p>Charts will appear here once you have at least 3 days of data.</p>
+            <p class="placeholder-subtitle">This helps show meaningful trends in your progress!</p>
+        </div>
+    </div>
+{% endif %}
 
 <div class="history-cards">
     {% for entry in history %}
@@ -529,29 +532,35 @@ h2 {
             <div class="nutrition-section">
                 <div class="nutrition-stat">
                     <div class="stat-with-goal">
-                        <strong>Protein:</strong> {{ entry.nutrition.protein }}g
-                        {% if entry.nutrition.protein_goal %}
+                        <strong>Protein:</strong> 
+                        {% if entry.nutrition.protein != 0 %}
+                            {{ entry.nutrition.protein }}g
                             {% if entry.nutrition.protein >= entry.nutrition.protein_goal %}
-                            <span class="goal-indicator goal-reached">Goal reached</span>
+                                <span class="goal-indicator goal-reached">Goal reached</span>
                             {% else %}
-                            <span class="goal-indicator goal-not-reached">
-                                {{ entry.nutrition.protein }}g/{{ entry.nutrition.protein_goal }}g
-                            </span>
+                                <span class="goal-indicator goal-not-reached">
+                                    {{ entry.nutrition.protein }}g/{{ entry.nutrition.protein_goal }}g
+                                </span>
                             {% endif %}
+                        {% else %}
+                            No entries yet
                         {% endif %}
                     </div>
                 </div>
                 <div class="nutrition-stat">
                     <div class="stat-with-goal">
-                        <strong>Calories:</strong> {{ entry.nutrition.calories }}
-                        {% if entry.nutrition.protein_goal %}
+                        <strong>Calories:</strong>
+                        {% if entry.nutrition.calories != 0 %}
+                            {{ entry.nutrition.calories }}
                             {% if entry.nutrition.calories <= max_calories %}
-                            <span class="goal-indicator goal-reached">Goal reached</span>
+                                <span class="goal-indicator goal-reached">Goal reached</span>
                             {% else %}
-                            <span class="goal-indicator goal-not-reached">
-                                Over by {{ entry.nutrition.calories - max_calories }}
-                            </span>
+                                <span class="goal-indicator goal-not-reached">
+                                    Over by {{ entry.nutrition.calories - max_calories }}
+                                </span>
                             {% endif %}
+                        {% else %}
+                            No entries yet
                         {% endif %}
                     </div>
                 </div>
@@ -584,7 +593,7 @@ h2 {
 </div>
 
 <div id="editModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
-    <div id="editModal" class="modal-content" style="background-color: white; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px;">
+    <div class="modal-content" style="background-color: white; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px;">
         <h3>Edit Nutrition Data</h3>
         <form id="editForm">
             <input type="hidden" id="editDate">

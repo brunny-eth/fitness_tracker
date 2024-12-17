@@ -3273,3 +3273,76 @@
 2024-12-17 11:15:47,410 INFO: 127.0.0.1 - - [17/Dec/2024 11:15:47] "[35m[1mPOST /log_workout HTTP/1.1[0m" 201 -
 2024-12-17 11:15:47,426 INFO: 127.0.0.1 - - [17/Dec/2024 11:15:47] "GET /workouts HTTP/1.1" 200 -
 2024-12-17 11:15:53,759 INFO: 127.0.0.1 - - [17/Dec/2024 11:15:53] "GET /history HTTP/1.1" 200 -
+2024-12-17 11:18:24,349 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-17 11:18:24,450 INFO:  * Restarting with stat
+2024-12-17 11:20:51,389 INFO: Application startup
+2024-12-17 11:20:51,440 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.99:5001
+2024-12-17 11:20:51,440 INFO: [33mPress CTRL+C to quit[0m
+2024-12-17 11:20:51,440 INFO:  * Restarting with stat
+2024-12-17 11:20:51,782 INFO: Application startup
+2024-12-17 11:20:51,815 WARNING:  * Debugger is active!
+2024-12-17 11:20:51,820 INFO:  * Debugger PIN: 133-619-259
+2024-12-17 11:20:53,170 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:53] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-12-17 11:20:53,183 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:53] "GET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2024-12-17 11:20:53,183 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:53] "GET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2024-12-17 11:20:53,317 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:53] "GET /history?__debugger__=yes&cmd=resource&f=console.png&s=yMgylEgrLX05DuxQSfQ6 HTTP/1.1" 200 -
+2024-12-17 11:20:53,318 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:53] "GET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2024-12-17 11:20:53,465 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:53] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,207 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-12-17 11:20:54,220 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,221 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,277 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=yMgylEgrLX05DuxQSfQ6 HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,278 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,318 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,401 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-12-17 11:20:54,412 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,412 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,464 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=yMgylEgrLX05DuxQSfQ6 HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,466 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,507 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,596 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-12-17 11:20:54,608 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,609 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,661 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=yMgylEgrLX05DuxQSfQ6 HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,661 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:20:54,697 INFO: 127.0.0.1 - - [17/Dec/2024 11:20:54] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:22:09,020 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-17 11:22:09,150 INFO:  * Restarting with stat
+2024-12-17 11:22:09,530 INFO: Application startup
+2024-12-17 11:22:09,560 WARNING:  * Debugger is active!
+2024-12-17 11:22:09,566 INFO:  * Debugger PIN: 133-619-259
+2024-12-17 11:22:09,865 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:09] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-12-17 11:22:09,878 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:09] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-17 11:22:09,880 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:09] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-17 11:22:09,980 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:09] "GET /history?__debugger__=yes&cmd=resource&f=console.png&s=kGot6kLyOJN7qDBMNawN HTTP/1.1" 200 -
+2024-12-17 11:22:09,981 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:09] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:22:10,003 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:10] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:22:10,572 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:10] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-12-17 11:22:10,582 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:10] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-17 11:22:10,586 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:10] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-17 11:22:10,637 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:10] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png&s=kGot6kLyOJN7qDBMNawN HTTP/1.1[0m" 304 -
+2024-12-17 11:22:10,637 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:10] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:22:10,678 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:10] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:22:12,618 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-17 11:22:12,748 INFO:  * Restarting with stat
+2024-12-17 11:22:13,118 INFO: Application startup
+2024-12-17 11:22:13,151 WARNING:  * Debugger is active!
+2024-12-17 11:22:13,155 INFO:  * Debugger PIN: 133-619-259
+2024-12-17 11:22:16,343 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:16] "[35m[1mGET /history HTTP/1.1[0m" 500 -
+2024-12-17 11:22:16,354 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:16] "[36mGET /history?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-17 11:22:16,356 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:16] "[36mGET /history?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-17 11:22:16,403 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:16] "GET /history?__debugger__=yes&cmd=resource&f=console.png&s=p2Cw55F5d2Oc4XH5lXWF HTTP/1.1" 200 -
+2024-12-17 11:22:16,403 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:16] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:22:16,445 INFO: 127.0.0.1 - - [17/Dec/2024 11:22:16] "[36mGET /history?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:24:29,823 INFO: 127.0.0.1 - - [17/Dec/2024 11:24:29] "GET /history HTTP/1.1" 200 -
+2024-12-17 11:24:34,699 INFO: 127.0.0.1 - - [17/Dec/2024 11:24:34] "GET /nutrition HTTP/1.1" 200 -
+2024-12-17 11:24:39,349 INFO: HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2024-12-17 11:24:39,354 INFO: 127.0.0.1 - - [17/Dec/2024 11:24:39] "POST /analyze_meal HTTP/1.1" 200 -
+2024-12-17 11:24:40,672 INFO: Received nutrition data: {'protein_amount': 31, 'calorie_amount': 170, 'meal_name': 'chicken'}
+2024-12-17 11:24:40,677 INFO: Successfully added nutrition entry
+2024-12-17 11:24:40,677 INFO: 127.0.0.1 - - [17/Dec/2024 11:24:40] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
+2024-12-17 11:24:40,689 INFO: 127.0.0.1 - - [17/Dec/2024 11:24:40] "GET /nutrition HTTP/1.1" 200 -
+2024-12-17 11:24:42,593 INFO: 127.0.0.1 - - [17/Dec/2024 11:24:42] "GET /history HTTP/1.1" 200 -
