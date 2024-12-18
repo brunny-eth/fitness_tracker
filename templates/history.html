@@ -552,12 +552,22 @@ h2 {
                         <strong>Calories:</strong>
                         {% if entry.nutrition.calories != 0 %}
                             {{ entry.nutrition.calories }}
-                            {% if entry.nutrition.calories <= max_calories %}
-                                <span class="goal-indicator goal-reached">Goal reached</span>
-                            {% else %}
-                                <span class="goal-indicator goal-not-reached">
-                                    Over by {{ entry.nutrition.calories - max_calories }}
-                                </span>
+                            {% if weight_direction == 'loss' %}
+                                {% if entry.nutrition.calories <= max_calories %}
+                                    <span class="goal-indicator goal-reached">On target</span>
+                                {% else %}
+                                    <span class="goal-indicator goal-not-reached">
+                                        Over by {{ entry.nutrition.calories - max_calories }}
+                                    </span>
+                                {% endif %}
+                            {% else %}  {# gain mode #}
+                                {% if entry.nutrition.calories >= max_calories %}
+                                    <span class="goal-indicator goal-reached">Goal reached</span>
+                                {% else %}
+                                    <span class="goal-indicator goal-not-reached">
+                                        Need {{ max_calories - entry.nutrition.calories }} more
+                                    </span>
+                                {% endif %}
                             {% endif %}
                         {% else %}
                             No entries yet
@@ -662,7 +672,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const caloriesData = getDataPoints('calories');
         const proteinData = getDataPoints('protein');
 
-        const validWeightData = weightData.filter(w => w !== null).map(w => w * 0.453592);
+        const validWeightData = weightData.filter(w => w !== null);
         const validCaloriesData = caloriesData.filter(c => c !== null);
         const validProteinData = proteinData.filter(p => p !== null);
 
@@ -718,7 +728,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         },
                         weightGoal ? {
                             label: 'Weight Goal',
-                            data: Array(dates.length).fill(weightGoal * 0.453592),
+                            data: weightData, 
                             borderColor: '#ef4444',
                             borderDash: [5, 5],
                             borderWidth: 2,
@@ -739,8 +749,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                 text: 'Weight (kg)',
                                 color: '#2196F3'
                             },
-                            min: Math.min(...validWeightData) * 0.99,
-                            max: Math.max(...validWeightData) * 1.01,
+                            min: Math.min(...validWeightData) * 0.95,
+                            max: Math.max(...validWeightData) * 1.05,
                             ticks: {
                                 padding: 10,
                                 callback: value => value.toFixed(1)
@@ -758,7 +768,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 color: '#9E9E9E'
                             },
                             min: 0,
-                            max: Math.max(...validCaloriesData) * 1.1 || 2500,
+                            max: Math.max(...validCaloriesData) * 1.2 || 4500,
                             ticks: {
                                 padding: 10,
                                 callback: value => Math.round(value)
@@ -837,7 +847,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             data: Array(dates.length).fill(proteinGoal),
                             borderColor: '#ef4444',
                             borderDash: [5, 5],
-                            borderWidth: 2,
+                            borderWidth: 3,
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
                             pointRadius: 0,
                             fill: false
                         }
