@@ -3,6 +3,11 @@
 
 <h2>{{ date }}</h2>
 
+<div class="goal-indicator-banner">
+  Currently in {{ weight_direction }} weight mode • 
+  Target: {{ settings.target_weight_kg|round(1) }} kg
+</div>
+
 <div class="section">
   <div class="stats-grid">
     <div class="stat-card">
@@ -31,14 +36,31 @@
       </div>
       <div class="progress-bar-container">
         <div class="progress-bar" style="width: {{ (total_calories/max_calories) * 100 }}%;
-             background-color: {% if total_calories > max_calories %}#ef4444{% else %}#3b82f6{% endif %};">
+             background-color: {% if weight_direction == 'loss' %}
+               {% if total_calories > max_calories %}#ef4444{% else %}#3b82f6{% endif %}
+             {% else %}
+               {% if total_calories < max_calories %}#ef4444{% else %}#3b82f6{% endif %}
+             {% endif %};">
         </div>
       </div>
-      <p class="stat-detail {% if total_calories > max_calories %}warning{% else %}info{% endif %}">
-        {% if total_calories > max_calories %}
-          Over by {{ total_calories - max_calories }} calories
+      <p class="stat-detail 
+        {% if weight_direction == 'loss' %}
+          {% if total_calories > max_calories %}warning{% else %}info{% endif %}
         {% else %}
-          {{ max_calories - total_calories }} calories remaining
+          {% if total_calories < max_calories %}warning{% else %}info{% endif %}
+        {% endif %}">
+        {% if weight_direction == 'loss' %}
+          {% if total_calories > max_calories %}
+            Over by {{ total_calories - max_calories }} calories
+          {% else %}
+            {{ max_calories - total_calories }} calories remaining
+          {% endif %}
+        {% else %}  {# weight gain #}
+          {% if total_calories < max_calories %}
+            {{ max_calories - total_calories }} calories needed
+          {% else %}
+            Goal reached! ({{ total_calories - max_calories }} extra calories)
+          {% endif %}
         {% endif %}
       </p>
     </div>
@@ -509,6 +531,18 @@ h2:first-of-type {
     display: flex;
     gap: 12px;
     flex: 1;
+}
+
+.goal-indicator-banner {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 8px;
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 8px 0;
 }
 
 /* Modal Components */

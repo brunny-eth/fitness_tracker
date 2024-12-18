@@ -3346,3 +3346,95 @@
 2024-12-17 11:24:40,677 INFO: 127.0.0.1 - - [17/Dec/2024 11:24:40] "[35m[1mPOST /add_nutrition HTTP/1.1[0m" 201 -
 2024-12-17 11:24:40,689 INFO: 127.0.0.1 - - [17/Dec/2024 11:24:40] "GET /nutrition HTTP/1.1" 200 -
 2024-12-17 11:24:42,593 INFO: 127.0.0.1 - - [17/Dec/2024 11:24:42] "GET /history HTTP/1.1" 200 -
+2024-12-17 11:31:57,283 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-17 11:31:57,406 INFO:  * Restarting with stat
+2024-12-17 11:31:57,906 INFO: Application startup
+2024-12-17 11:31:57,941 WARNING:  * Debugger is active!
+2024-12-17 11:31:57,947 INFO:  * Debugger PIN: 133-619-259
+2024-12-17 11:32:27,313 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-17 11:32:27,408 INFO:  * Restarting with stat
+2024-12-17 11:32:27,764 INFO: Application startup
+2024-12-17 11:32:27,797 WARNING:  * Debugger is active!
+2024-12-17 11:32:27,801 INFO:  * Debugger PIN: 133-619-259
+2024-12-17 11:32:44,053 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-17 11:32:44,144 INFO:  * Restarting with stat
+2024-12-17 11:32:44,514 INFO: Application startup
+2024-12-17 11:32:44,548 WARNING:  * Debugger is active!
+2024-12-17 11:32:44,553 INFO:  * Debugger PIN: 133-619-259
+2024-12-17 11:33:23,094 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-17 11:33:23,215 INFO:  * Restarting with stat
+2024-12-17 11:33:23,588 INFO: Application startup
+2024-12-17 11:33:23,620 WARNING:  * Debugger is active!
+2024-12-17 11:33:23,625 INFO:  * Debugger PIN: 133-619-259
+2024-12-17 11:33:32,759 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-17 11:33:32,881 INFO:  * Restarting with stat
+2024-12-17 11:33:33,259 INFO: Application startup
+2024-12-17 11:33:33,291 WARNING:  * Debugger is active!
+2024-12-17 11:33:33,296 INFO:  * Debugger PIN: 133-619-259
+2024-12-17 11:34:12,830 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-17 11:34:12,913 INFO:  * Restarting with stat
+2024-12-17 11:34:13,367 INFO: Application startup
+2024-12-17 11:34:13,399 WARNING:  * Debugger is active!
+2024-12-17 11:34:13,404 INFO:  * Debugger PIN: 133-619-259
+2024-12-17 11:35:37,676 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-17 11:35:37,799 INFO:  * Restarting with stat
+2024-12-17 11:35:38,340 INFO: Application startup
+2024-12-17 11:35:38,375 WARNING:  * Debugger is active!
+2024-12-17 11:35:38,381 INFO:  * Debugger PIN: 133-619-259
+2024-12-17 11:38:32,366 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:32] "GET /history HTTP/1.1" 200 -
+2024-12-17 11:38:34,371 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:34] "[35m[1mGET /nutrition HTTP/1.1[0m" 500 -
+2024-12-17 11:38:34,391 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:34] "GET /nutrition?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2024-12-17 11:38:34,391 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:34] "GET /nutrition?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2024-12-17 11:38:34,439 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:34] "GET /nutrition?__debugger__=yes&cmd=resource&f=console.png&s=AsYPZL7DY5f1sl3l31Z4 HTTP/1.1" 200 -
+2024-12-17 11:38:34,440 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:34] "GET /nutrition?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2024-12-17 11:38:34,484 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:34] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:38:35,654 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:35] "[35m[1mGET /nutrition HTTP/1.1[0m" 500 -
+2024-12-17 11:38:35,664 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:35] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-17 11:38:35,666 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:35] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-17 11:38:35,760 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:35] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png&s=AsYPZL7DY5f1sl3l31Z4 HTTP/1.1[0m" 304 -
+2024-12-17 11:38:35,761 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:35] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:38:35,779 INFO: 127.0.0.1 - - [17/Dec/2024 11:38:35] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-17 11:39:36,990 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-17 11:39:37,101 INFO:  * Restarting with stat
+2024-12-17 11:39:37,615 INFO: Application startup
+2024-12-17 11:39:37,650 WARNING:  * Debugger is active!
+2024-12-17 11:39:37,655 INFO:  * Debugger PIN: 133-619-259
+2024-12-17 11:39:51,225 INFO: 127.0.0.1 - - [17/Dec/2024 11:39:51] "GET /nutrition HTTP/1.1" 200 -
+2024-12-17 11:41:15,468 INFO: 127.0.0.1 - - [17/Dec/2024 11:41:15] "GET /nutrition HTTP/1.1" 200 -
+2024-12-17 11:41:48,692 INFO: 127.0.0.1 - - [17/Dec/2024 11:41:48] "GET /nutrition HTTP/1.1" 200 -
+2024-12-17 11:41:54,239 INFO: 127.0.0.1 - - [17/Dec/2024 11:41:54] "GET /nutrition HTTP/1.1" 200 -
+2024-12-18 11:46:12,550 INFO: 127.0.0.1 - - [18/Dec/2024 11:46:12] "GET /nutrition HTTP/1.1" 200 -
+2024-12-18 11:47:15,220 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:15] "[35m[1mGET /nutrition HTTP/1.1[0m" 500 -
+2024-12-18 11:47:15,234 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:15] "GET /nutrition?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2024-12-18 11:47:15,234 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:15] "GET /nutrition?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2024-12-18 11:47:15,290 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:15] "GET /nutrition?__debugger__=yes&cmd=resource&f=console.png&s=ohZafv6ix2uRxqak7zON HTTP/1.1" 200 -
+2024-12-18 11:47:15,291 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:15] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-18 11:47:15,340 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:15] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,138 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[35m[1mGET /nutrition HTTP/1.1[0m" 500 -
+2024-12-18 11:47:16,153 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,155 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,212 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png&s=ohZafv6ix2uRxqak7zON HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,213 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,253 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,308 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[35m[1mGET /nutrition HTTP/1.1[0m" 500 -
+2024-12-18 11:47:16,318 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,320 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,371 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png&s=ohZafv6ix2uRxqak7zON HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,373 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,415 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,507 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[35m[1mGET /nutrition HTTP/1.1[0m" 500 -
+2024-12-18 11:47:16,516 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,519 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,569 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png&s=ohZafv6ix2uRxqak7zON HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,571 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-18 11:47:16,610 INFO: 127.0.0.1 - - [18/Dec/2024 11:47:16] "[36mGET /nutrition?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-12-18 11:48:08,315 INFO:  * Detected change in '/Users/blulinski/code/fitness-tracker/app.py', reloading
+2024-12-18 11:48:08,409 INFO:  * Restarting with stat
+2024-12-18 11:48:08,944 INFO: Application startup
+2024-12-18 11:48:08,983 WARNING:  * Debugger is active!
+2024-12-18 11:48:08,990 INFO:  * Debugger PIN: 133-619-259
+2024-12-18 11:48:09,368 INFO: 127.0.0.1 - - [18/Dec/2024 11:48:09] "GET /nutrition HTTP/1.1" 200 -
+2024-12-18 11:48:26,940 INFO: 127.0.0.1 - - [18/Dec/2024 11:48:26] "GET /nutrition HTTP/1.1" 200 -
+2024-12-18 11:48:40,688 INFO: 127.0.0.1 - - [18/Dec/2024 11:48:40] "GET /nutrition HTTP/1.1" 200 -
+2024-12-18 11:48:48,828 INFO: 127.0.0.1 - - [18/Dec/2024 11:48:48] "POST /add_weight HTTP/1.1" 200 -
+2024-12-18 11:48:48,842 INFO: 127.0.0.1 - - [18/Dec/2024 11:48:48] "GET /nutrition HTTP/1.1" 200 -

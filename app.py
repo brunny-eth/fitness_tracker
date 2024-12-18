@@ -115,39 +115,56 @@ class WorkoutCategory(db.Model):
     def set_exercises(self, exercises_list):
         self.exercises = json.dumps(exercises_list)
 
-def calculate_protein_goal(weight_kg, ratio):
-    return round(weight_kg * ratio)
+def determine_weight_direction(current_weight_kg, target_weight_kg):
+    """
+    Determines if user is trying to lose or gain weight
+    Returns: 'loss' if trying to lose weight, 'gain' if trying to gain
+    """
+    if current_weight_kg > target_weight_kg:
+        return 'loss'
+    elif current_weight_kg < target_weight_kg:
+        return 'gain'
+    return 'maintain'
+
+def calculate_protein_goal(weight_kg, ratio, direction='loss'):
+    """
+    Calculate protein goal based on weight and direction
+    For weight loss: use target weight for calculation
+    For weight gain: use current weight + 10% for muscle growth support
+    """
+    if direction == 'gain':
+        weight_for_calculation = weight_kg * 1.1  
+    else:
+        weight_for_calculation = weight_kg
+        
+    return round(weight_for_calculation * ratio)
 
 def calculate_calorie_target(current_weight_kg, settings):
     """Calculate daily calorie target based on current weight and goals"""
     try:
-        # Validate required settings
         if not all([
             settings.gender,
             settings.height_inches,
             settings.age,
             settings.activity_level,
-            settings.target_weight_kg,  # Changed from target_weight
+            settings.target_weight_kg,
             settings.goal_months,
             settings.start_date
         ]):
             raise ValueError("Missing required settings")
             
-        # Calculate time remaining
         goal_date = settings.start_date + timedelta(days=settings.goal_months * 30.44)
         days_remaining = (goal_date - datetime.utcnow()).days
         
         if days_remaining <= 0:
             raise ValueError("Goal date has passed")
             
-        # Calculate BMR using Harris-Benedict equation
         height_cm = settings.height_inches * 2.54
         if settings.gender == 'male':
             bmr = 88.362 + (13.397 * current_weight_kg) + (4.799 * height_cm) - (5.677 * settings.age)
         else:
             bmr = 447.593 + (9.247 * current_weight_kg) + (3.098 * height_cm) - (4.330 * settings.age)
             
-        # Apply activity multiplier
         activity_multipliers = {
             'sedentary': 1.2,
             'light': 1.375,
@@ -158,15 +175,16 @@ def calculate_calorie_target(current_weight_kg, settings):
         
         maintenance = bmr * activity_multipliers[settings.activity_level]
         
-        # Calculate required deficit - use target_weight_kg directly
-        total_weight_change = current_weight_kg - settings.target_weight_kg
+        direction = determine_weight_direction(current_weight_kg, settings.target_weight_kg)
+        total_weight_change = abs(current_weight_kg - settings.target_weight_kg)
         total_calories_needed = total_weight_change * 7700  # 7700 calories per kg
-        daily_deficit = total_calories_needed / days_remaining
+        daily_caloric_change = total_calories_needed / days_remaining
         
-        # Calculate target calories (round to nearest 50)
-        target_calories = round((maintenance - daily_deficit) / 50) * 50
+        if direction == 'gain':
+            target_calories = round((maintenance + daily_caloric_change) / 50) * 50
+        else:  
+            target_calories = round((maintenance - daily_caloric_change) / 50) * 50
         
-        # Ensure minimum safe calories
         return max(1200, target_calories)
         
     except Exception as e:
@@ -273,6 +291,13 @@ def nutrition():
     if not settings:
         return redirect(url_for('register'))
         
+    print("Debug - Settings object:", settings)  
+    print("Debug - Settings attributes:", {
+        'target_weight': settings.target_weight_kg,
+        'current_weight': settings.current_weight_kg,
+        'starting_weight': settings.starting_weight_kg
+    })
+
     # Get latest weight entry for today    
     today = date.today()
     todays_weight = WeightEntry.query.filter_by(
@@ -290,21 +315,31 @@ def nutrition():
     total_protein = sum(entry.protein_amount for entry in entries)
     total_calories = sum(entry.calorie_amount for entry in entries)
 
-    # Calculate protein goal based on current weight
+    # Calculate goals based on current weight and direction
     current_weight_kg = todays_weight.weight if todays_weight else settings.current_weight_kg
-    protein_goal = calculate_protein_goal(settings.target_weight_kg, settings.protein_ratio)
+    weight_direction = determine_weight_direction(current_weight_kg, settings.target_weight_kg)
+    
+    # Calculate protein goal considering direction
+    protein_goal = calculate_protein_goal(
+        settings.target_weight_kg, 
+        settings.protein_ratio,
+        direction=weight_direction
+    )
     
     saved_meals = SavedMeal.query.filter_by(user_id=current_user.id).all()
 
     return render_template('nutrition.html',
                          active_tab='nutrition',
                          date=today.strftime("%B %d, %Y"),
+                         settings=settings,
                          total_protein=total_protein,
                          total_calories=total_calories,
                          goal_amount=round(protein_goal, 1),
                          max_calories=settings.max_calories,
+                         weight_direction=weight_direction,
                          protein_goal_reached=total_protein >= protein_goal,
-                         calories_exceeded=total_calories > settings.max_calories,
+                         calories_exceeded=(total_calories > settings.max_calories) if weight_direction == 'loss' 
+                                        else (total_calories < settings.max_calories),
                          current_weight_kg=current_weight_kg,
                          ratio=settings.protein_ratio,
                          saved_meals=saved_meals,
@@ -440,13 +475,11 @@ def add_weight():
         data = request.json
         today = date.today()
         
-        # Validate weight input
         if 'weight' not in data:
             return jsonify({"error": "Weight is required"}), 400
             
         weight_kg = float(data['weight'])
         
-        # Check for existing entry today
         existing_entry = WeightEntry.query.filter_by(
             user_id=current_user.id,
             date=today
@@ -457,24 +490,24 @@ def add_weight():
                 "error": f"Already logged weight of {existing_entry.weight:.1f} kg today"
             }), 400
             
-        # Create new weight entry
         entry = WeightEntry(
             user_id=current_user.id,
             date=today,
             weight=weight_kg
         )
         
-        # Update current weight in settings
         settings = UserSettings.query.filter_by(user_id=current_user.id).first()
         settings.current_weight_kg = weight_kg
         
-        # Calculate new calorie target based on current weight
+        # Determine new direction based on latest weight
+        weight_direction = determine_weight_direction(weight_kg, settings.target_weight_kg)
+        
+        # Calculate new calorie target based on current weight and direction
         new_calories = calculate_calorie_target(
             current_weight_kg=weight_kg,
             settings=settings
         )
         
-        # Update settings with new calorie target
         settings.max_calories = new_calories
         
         db.session.add(entry)
@@ -482,7 +515,8 @@ def add_weight():
         
         return jsonify({
             "message": "Weight saved successfully",
-            "new_calories_target": new_calories
+            "new_calories_target": new_calories,
+            "weight_direction": weight_direction
         }), 200
         
     except ValueError:
@@ -536,23 +570,26 @@ def history():
         flash('Please configure your settings first')
         return redirect(url_for('settings'))
     
-    print("Debug - Settings:", {
-        'start_date': settings.start_date,
-        'starting_weight': settings.starting_weight_kg,
-        'target_weight': settings.target_weight_kg
-    })
+    # Get latest weight for direction calculation
+    latest_weight_entry = WeightEntry.query.filter_by(
+        user_id=current_user.id
+    ).order_by(WeightEntry.date.desc()).first()
     
-    protein_goal = calculate_protein_goal(settings.target_weight_kg, settings.protein_ratio)
+    current_weight_kg = latest_weight_entry.weight if latest_weight_entry else settings.current_weight_kg
+    weight_direction = determine_weight_direction(current_weight_kg, settings.target_weight_kg)
+    
+    # Calculate protein goal with direction
+    protein_goal = calculate_protein_goal(
+        settings.target_weight_kg, 
+        settings.protein_ratio,
+        direction=weight_direction
+    )
     
     weight_entries = WeightEntry.query.filter(
         WeightEntry.user_id == current_user.id,
         WeightEntry.date >= start_date,
         WeightEntry.date <= end_date
     ).all()
-    
-    latest_weight_entry = WeightEntry.query.filter_by(
-        user_id=current_user.id
-    ).order_by(WeightEntry.date.desc()).first()
     
     nutrition_entries = NutritionEntry.query.filter(
         NutritionEntry.user_id == current_user.id,
@@ -593,12 +630,22 @@ def history():
         nutrition = nutrition_by_date.get(current_date)
         day_workout = next((w for w in workouts if w.date.date() == current_date), None)
         
+        if nutrition:
+            calories_status = (
+                'under_goal' if weight_direction == 'gain' and nutrition['calories'] < settings.max_calories else
+                'over_goal' if weight_direction == 'loss' and nutrition['calories'] > settings.max_calories else
+                'on_target'
+            )
+        else:
+            calories_status = None
+            
         history.append({
             'date': current_date,
             'nutrition': {
                 'protein': nutrition['protein'] if nutrition else 0,
                 'calories': nutrition['calories'] if nutrition else 0,
-                'protein_goal': protein_goal
+                'protein_goal': protein_goal,
+                'calories_status': calories_status
             },  
             'workout': {
                 'type': day_workout.type,
@@ -607,22 +654,27 @@ def history():
         })
         current_date -= timedelta(days=1)
     
+    # Calculate progress differently based on direction
     progress = None
     total_change = None
     current_change = None
     if latest_weight_entry and settings.target_weight_kg and settings.starting_weight_kg:
         latest_kg = latest_weight_entry.weight
         target_kg = settings.target_weight_kg
-        starting_kg = settings.starting_weight_kg  
-              
-        total_change = target_kg - starting_kg
+        starting_kg = settings.starting_weight_kg
+        
+        # Calculate changes based on direction
+        if weight_direction == 'loss':
+            total_change = starting_kg - target_kg  # Positive number for weight loss goal
+            current_change = starting_kg - latest_kg  # Positive number means weight lost
+        else:  # gain or maintain
+            total_change = target_kg - starting_kg  # Positive number for weight gain goal
+            current_change = latest_kg - starting_kg  # Positive number means weight gained
+            
         if total_change != 0:
-            current_change = latest_kg - starting_kg
             progress = round((current_change / total_change) * 100, 1)
-    
-    print(f"Date range: {start_date} to {end_date}")
-    print(f"Chart data points: {len(chart_data)}")
-    print(f"Sample data point: {chart_data[0] if chart_data else 'No data'}")
+            # Cap progress at 100% if goal is exceeded
+            progress = min(progress, 100) if progress > 0 else max(progress, -100)
     
     return render_template('history.html',
                          active_tab='history',
@@ -634,7 +686,8 @@ def history():
                          latest_weight_entry=latest_weight_entry,
                          progress=progress,
                          total_change=total_change,
-                         current_change=current_change)
+                         current_change=current_change,
+                         weight_direction=weight_direction)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -654,9 +707,6 @@ def login():
 def register():
     if request.method == 'POST':
         try:
-            # Print all form data for debugging
-            print("Form data received:", request.form)
-            
             # Basic validation
             required_fields = [
                 'email', 'password', 'starting_weight', 'target_weight',
@@ -665,7 +715,6 @@ def register():
             
             for field in required_fields:
                 if not request.form.get(field):
-                    print(f"Missing required field: {field}")  
                     flash(f'{field.replace("_", " ").title()} is required')
                     return redirect(url_for('register'))
 
@@ -677,20 +726,23 @@ def register():
                 flash('Email already registered')
                 return redirect(url_for('register'))
 
-            # Add and commit user first to get ID
             db.session.add(user)
             db.session.commit()
 
-            # Now get settings data
+            # Get settings data
             starting_weight_kg = float(request.form.get('starting_weight'))
             target_weight_kg = float(request.form.get('target_weight'))
+            
+            # Determine initial direction
+            weight_direction = determine_weight_direction(starting_weight_kg, target_weight_kg)
+            
             goal_months = int(request.form.get('goal_months'))
             activity_level = request.form.get('activity_level')
             age = int(request.form.get('age'))
             gender = request.form.get('gender')
             height_cm = float(request.form.get('height'))
             
-            # Get protein ratio
+            # Get protein ratio based on direction
             protein_goal = request.form.get('protein_goal', 'medium')
             if protein_goal == 'high':
                 protein_ratio = 1.6
@@ -714,7 +766,7 @@ def register():
                 start_date=datetime.utcnow()
             )
             
-            # Calculate initial calories
+            # Calculate initial calories considering direction
             try:
                 initial_calories = calculate_calorie_target(
                     current_weight_kg=starting_weight_kg,
@@ -723,13 +775,12 @@ def register():
                 settings.max_calories = initial_calories
             except Exception as e:
                 print(f"Calorie calculation error: {str(e)}")
-                settings.max_calories = 2500
+                # Set a reasonable default based on direction
+                settings.max_calories = 2000 if weight_direction == 'loss' else 2800
 
-            # Add settings
             db.session.add(settings)
             db.session.commit()
 
-            # Now create workout categories with the valid user.id
             create_default_workout_categories(user.id)
             db.session.commit()
 
@@ -739,8 +790,6 @@ def register():
         except Exception as e:
             db.session.rollback()
             print(f"Registration failed with error: {str(e)}")
-            import traceback
-            print("Full traceback:", traceback.format_exc())
             flash('Error during registration. Please try again.')
             return redirect(url_for('register'))
         
@@ -801,12 +850,10 @@ def update_settings():
     settings = UserSettings.query.filter_by(user_id=current_user.id).first()
     
     try:
-        print("Before update - Current calories:", settings.max_calories)  
-        
         if not settings.start_date:
             settings.start_date = datetime.utcnow()
             
-        # Update weight goals (values come in as kg)
+        # Update weight goals
         if data.get('target_weight'):
             settings.target_weight_kg = float(data['target_weight'])
             
@@ -819,24 +866,27 @@ def update_settings():
         if data.get('activity_level'):
             settings.activity_level = data['activity_level']
             
+        # Determine new direction based on current weight and new target
+        weight_direction = determine_weight_direction(
+            settings.current_weight_kg,
+            settings.target_weight_kg
+        )
+            
         # Recalculate calories based on current weight and new goals
         new_calories = calculate_calorie_target(
             current_weight_kg=settings.current_weight_kg,
             settings=settings
         )
 
-        print("Calculated new calories:", new_calories)  # Add this
         settings.max_calories = new_calories
-            
         db.session.commit()
-        
-        print("After update - Current calories:", settings.max_calories)  # Add this
 
         return jsonify({
             "message": "Settings updated successfully",
             "target_weight": settings.target_weight_kg,
             "goal_months": settings.goal_months,
-            "new_calories": new_calories
+            "new_calories": new_calories,
+            "weight_direction": weight_direction
         }), 200
         
     except ValueError as e:
